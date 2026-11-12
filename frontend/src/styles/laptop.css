@@ -1,0 +1,474 @@
+/* =====================================================================
+ * PENYESUAIAN LAPTOP — dimuat paling akhir. Semua aturan ada di dalam
+ * media query lebar/tinggi agar tampilan HP tidak berubah.
+ * Prinsip: ukuran mengikuti TINGGI layar (vh) pada bagian yang harus muat
+ * satu layar, bukan sekadar mengecilkan semuanya.
+ * ===================================================================== */
+
+/* Sampul buku: isi penuh halaman (semua ukuran) */
+.bk-page--cover {
+  padding: 0;
+}
+
+.bk-cover {
+  margin: 0;
+  min-height: 460px;
+  height: 100%;
+}
+
+/* ---------------- 1. WELCOME PAGE: bagian utama muat 1 layar ---------------- */
+@media (min-width: 860px) {
+  .welcome-screen {
+    height: 100dvh;
+    min-height: 560px;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    gap: clamp(8px, 2vh, 22px);
+    padding: clamp(14px, 2.6vh, 26px) clamp(32px, 4vw, 64px) clamp(10px, 2vh, 20px);
+  }
+
+  .welcome-screen__top,
+  .welcome-hero,
+  .welcome-steps,
+  .welcome-screen__foot {
+    max-width: 1240px;
+  }
+
+  .welcome-hero {
+    margin-top: 0;
+    align-self: center;
+    grid-template-columns: 1.2fr 1fr;
+    gap: clamp(16px, 3vw, 48px);
+  }
+
+  .welcome-hero__stage .mascot-live svg {
+    width: clamp(190px, 40vh, 340px);
+  }
+
+  .welcome-hero__halo {
+    width: clamp(230px, 52vh, 430px);
+  }
+
+  .welcome-hero__eyebrow {
+    font-size: clamp(0.72rem, 1.6vh, 0.85rem);
+  }
+
+  .welcome-hero__title {
+    font-size: clamp(1.4rem, 3.8vh, 2.5rem);
+  }
+
+  .welcome-hero__title .wordmark {
+    font-size: clamp(3rem, 11.5vh, 6.6rem);
+    padding-bottom: 2px;
+  }
+
+  .welcome-hero__lead {
+    font-size: clamp(0.98rem, 2.2vh, 1.15rem);
+  }
+
+  .welcome-hero__actions {
+    margin-top: clamp(4px, 1.4vh, 14px);
+  }
+
+  .welcome-hero__actions .btn--lg {
+    min-height: clamp(48px, 6.8vh, 58px);
+  }
+
+  .welcome-hero .feature-pills {
+    margin-top: clamp(6px, 1.6vh, 16px);
+  }
+
+  .welcome-steps {
+    gap: 14px;
+  }
+
+  /* Kartu langkah: ikon di samping judul agar lebih pendek */
+  .step-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 14px;
+    align-items: center;
+    padding: clamp(12px, 2vh, 20px) 20px;
+  }
+
+  .step-card__icon {
+    position: static;
+    margin: 0;
+    grid-row: span 2;
+    width: 46px;
+    height: 46px;
+  }
+
+  .step-card p {
+    font-size: 0.9rem;
+  }
+
+  .welcome-screen__foot {
+    margin: 0;
+  }
+}
+
+/* Layar laptop yang pendek: sembunyikan bagian pelengkap, bukan memperkecil tulisan utama */
+@media (min-width: 860px) and (max-height: 640px) {
+  .welcome-hero__eyebrow,
+  .welcome-foot__meta,
+  .step-card p {
+    display: none;
+  }
+
+  .welcome-hero__stage .mascot-live svg {
+    width: clamp(170px, 36vh, 230px);
+  }
+}
+
+/* ---------------- 2. BUKU MATERI: dua halaman + navigasi tanpa scroll ---------------- */
+@media (min-width: 1024px) {
+  .shell__main .page--book {
+    padding-top: 18px;
+  }
+
+  .book-viewport {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 12px 14px;
+    height: calc(100dvh - 36px);
+    min-height: 540px;
+    max-height: 980px;
+  }
+
+  .book-viewport > * + * {
+    margin-top: 0;
+  }
+
+  .book-hero {
+    grid-column: 1;
+    padding: 10px 16px;
+    gap: 12px;
+    min-height: 0;
+  }
+
+  .book-hero .page-hero__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+  }
+
+  .book-hero h1 {
+    font-size: 1.4rem;
+  }
+
+  /* Laptop: cukup judul; deskripsi panjang disembunyikan agar buku mendapat ruang. */
+  .book-hero .page-hero__text p {
+    display: none;
+  }
+
+  .book-hero .page-hero__text {
+    flex: none;
+    padding-right: 8px;
+  }
+
+  .book-hero__mascot {
+    margin: -6px 0 -14px auto;
+  }
+
+  .book-hero__mascot .mascot-live svg {
+    width: 64px;
+  }
+
+  .book-toc {
+    grid-column: 2;
+    align-self: center;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    overflow-x: auto;
+    padding: 2px;
+  }
+
+  /* Empat bab: label pendek ("3. Nol di Tengah") agar daftar isi muat sebaris di samping kepala halaman */
+  .book-toc__full {
+    display: none;
+  }
+
+  .book-toc__short {
+    display: inline;
+  }
+
+  .book {
+    grid-column: 1 / -1;
+    min-height: 0;
+    display: flex;
+  }
+
+  .book__spread {
+    flex: 1;
+    min-height: 0;
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .book--two .bk-page {
+    height: auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: clamp(14px, 2.6vh, 26px) clamp(18px, 2vw, 28px) 34px;
+    scrollbar-width: thin;
+  }
+
+  .book--two .bk-page--cover {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .book--two .bk-cover {
+    min-height: 100%;
+  }
+
+  .bk-body {
+    font-size: clamp(0.92rem, 1.95vh, 1.06rem);
+    gap: clamp(8px, 1.5vh, 14px);
+    line-height: 1.55;
+  }
+
+  .bk-h {
+    font-size: clamp(1.1rem, 2.7vh, 1.4rem);
+  }
+
+  .bk-running {
+    margin-bottom: clamp(4px, 1vh, 10px);
+  }
+
+  .bk-formula__main {
+    font-size: clamp(1.8rem, 5vh, 2.6rem);
+  }
+
+  .bk-anatomy__formula {
+    font-size: clamp(2.6rem, 7vh, 4rem);
+  }
+
+  .bk-power,
+  .bk-convert__eq,
+  .bk-back {
+    font-size: clamp(1rem, 2.4vh, 1.3rem);
+  }
+
+  .bk-table {
+    font-size: clamp(0.92rem, 2vh, 1.05rem);
+  }
+
+  .bk-table td {
+    padding: clamp(2px, 0.5vh, 4px) 10px;
+  }
+
+  .bk-cover__title {
+    font-size: clamp(1.9rem, 5vh, 2.6rem);
+  }
+
+  .bk-cover__art svg {
+    width: clamp(100px, 20vh, 150px);
+    height: auto;
+  }
+
+  .book--two .bk-page:not(.bk-page--cover) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Nomor halaman tetap di dasar halaman, tetapi tidak menimpa isi. */
+  .book--two .bk-folio {
+    position: static;
+    margin-top: auto;
+    padding-top: 10px;
+  }
+
+  .book-nav {
+    grid-column: 1 / -1;
+  }
+
+  .book-nav .btn--lg {
+    min-height: 48px;
+    min-width: 170px;
+  }
+
+  .book-nav__info {
+    grid-template-columns: auto minmax(120px, 360px) auto;
+    justify-content: center;
+    align-items: center;
+    gap: 4px 14px;
+  }
+}
+
+/* ---------------- 3. DASHBOARD LAPTOP: sidebar berwarna, latar berhias, komposisi Beranda ---------------- */
+@media (min-width: 960px) {
+  /* --- Sidebar --- */
+  .sidenav {
+    background: var(--side-grad);
+    border-right: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
+    box-shadow: 6px 0 30px rgb(83 72 190 / 7%);
+  }
+
+  .sidenav__brand {
+    display: flex;
+    justify-content: center;
+    padding: 0 8px 10px;
+    border-bottom: 2px dashed color-mix(in srgb, var(--primary) 22%, transparent);
+  }
+
+  .sidenav__links a {
+    padding: 0 10px;
+    transition: background 0.15s, transform 0.15s;
+  }
+
+  .sidenav__ico {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ico-bg, var(--primary-soft));
+    color: var(--ico-fg, var(--primary-ink));
+  }
+
+  .sidenav__links a svg,
+  .sidenav__ico svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .sidenav__links a:hover {
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+  }
+
+  [data-motion='on'] .sidenav__links a:hover {
+    transform: translateX(3px);
+  }
+
+  .sidenav__links a.active {
+    background: linear-gradient(120deg, var(--primary-strong), var(--primary) 60%, #a58cf8);
+  }
+
+  .sidenav__links a.active .sidenav__ico {
+    background: rgb(255 255 255 / 22%);
+    color: #fff;
+  }
+
+  .sidenav__cheer {
+    position: relative;
+    padding: 18px 6px 6px;
+    border-radius: 22px;
+    background:
+      radial-gradient(circle at 50% 66%, color-mix(in srgb, var(--cta) 32%, transparent) 0 46px, transparent 47px),
+      color-mix(in srgb, var(--surface) 55%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary) 14%, transparent);
+  }
+
+  .sidenav__cheer > :not(.decor) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .sidenav__cheer .deco--text,
+  .sidenav__cheer .deco--ring,
+  .sidenav__cheer .deco--plus {
+    color: var(--primary);
+  }
+
+  .sidenav__user {
+    background: color-mix(in srgb, var(--surface) 80%, transparent);
+  }
+
+  .dash-backdrop {
+    left: var(--sidebar);
+  }
+}
+
+/* Beranda ≥1100px: "Minggu ini" + jalan pintas berdampingan agar layar terisi rapi */
+@media (min-width: 1100px) {
+  .page--home {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 16px;
+    align-content: start;
+  }
+
+  .page--home > * + * {
+    margin-top: 0;
+  }
+
+  .page--home > * {
+    grid-column: 1 / -1;
+  }
+
+  .page--home > .home-week {
+    grid-column: 1 / span 8;
+  }
+
+  .page--home > .home-mini {
+    grid-column: 9 / -1;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  .page--home .mini-card {
+    min-height: 0;
+    padding: 14px 18px;
+  }
+}
+
+/* Layar lebar (≥1440px): konten lebih lebar; statistik 2×2 di samping kepala Beranda */
+@media (min-width: 1440px) {
+  .shell__main .page--home {
+    max-width: 1320px;
+  }
+
+  .page--home > .home-hero {
+    grid-column: 1 / span 8;
+  }
+
+  .page--home > .home-stats {
+    grid-column: 9 / -1;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 1fr;
+  }
+
+  .page--home .home-stats li {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    align-content: center;
+    row-gap: 2px;
+  }
+
+  .page--home .home-stats__icon {
+    grid-row: auto;
+    margin-bottom: 6px;
+  }
+}
+
+/* Logo sidebar: ukuran mengikuti tinggi layar; laptop pendek merapatkan menu agar kartu siswa tetap terlihat */
+@media (min-width: 960px) {
+  .sidenav__brand .logo__img {
+    width: clamp(84px, 12vh, 132px);
+    height: auto;
+  }
+}
+
+@media (min-width: 960px) and (max-height: 860px) {
+  .sidenav {
+    gap: 10px;
+    padding-top: 14px;
+    padding-bottom: 12px;
+  }
+
+  .sidenav__links {
+    gap: 2px;
+  }
+
+  .sidenav__links a {
+    min-height: 44px;
+  }
+
+  .sidenav__cheer {
+    padding-top: 10px;
+  }
+}

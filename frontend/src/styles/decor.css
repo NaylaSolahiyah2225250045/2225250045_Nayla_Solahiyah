@@ -1,0 +1,186 @@
+/* =====================================================================
+ * TABURAN BINTANG (Decor.jsx) — ukuran, bentuk, jarak, dan ritme berbeda-beda.
+ * Kilau & gerak hanya bila [data-motion='on']. Dimuat setelah pages.css.
+ * ===================================================================== */
+
+.deco--star,
+.deco--spark,
+.deco--glint {
+  transform: translate(-50%, -50%);
+}
+
+.deco.is-gold {
+  color: var(--cta);
+}
+
+.deco.is-pink {
+  color: var(--star-pink);
+}
+
+.deco.is-soft {
+  color: var(--primary);
+}
+
+.home-hero .deco.is-soft,
+.profile-hero .deco.is-soft,
+.welcome-screen .deco.is-soft {
+  color: #fff;
+}
+
+.deco--star,
+.deco--spark {
+  filter: drop-shadow(0 0 3px color-mix(in srgb, currentColor 45%, transparent));
+}
+
+.deco--star {
+  opacity: 0.85;
+}
+
+.deco--spark {
+  opacity: 0.9;
+}
+
+/* Kilau kecil: titik bercahaya berbentuk silang tipis */
+.deco--glint {
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: radial-gradient(circle, currentColor 0 22%, transparent 60%);
+  opacity: 0.85;
+}
+
+.deco--glint::before,
+.deco--glint::after {
+  content: '';
+  position: absolute;
+  inset: 45% -40%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+}
+
+.deco--glint::after {
+  inset: -40% 45%;
+  background: linear-gradient(180deg, transparent, currentColor, transparent);
+}
+
+@keyframes star-twinkle {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.7) rotate(0deg);
+    opacity: 0.45;
+  }
+  45% {
+    transform: translate(-50%, -50%) scale(1.12) rotate(14deg);
+    opacity: 1;
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(0.95) rotate(8deg);
+    opacity: 0.85;
+  }
+}
+
+@keyframes star-drift {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 3px -6px;
+  }
+}
+
+@keyframes glint-pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.15);
+    opacity: 1;
+  }
+}
+
+[data-motion='on'] .deco--star,
+[data-motion='on'] .deco--spark {
+  animation: star-twinkle var(--dur, 3s) ease-in-out var(--delay, 0s) infinite;
+}
+
+[data-motion='on'] .deco--star.is-drift,
+[data-motion='on'] .deco--spark.is-drift {
+  animation:
+    star-twinkle var(--dur, 3s) ease-in-out var(--delay, 0s) infinite,
+    star-drift calc(var(--dur, 3s) * 2.2) ease-in-out var(--delay, 0s) infinite;
+}
+
+[data-motion='on'] .deco--glint {
+  animation: glint-pulse var(--dur, 3s) ease-in-out var(--delay, 0s) infinite;
+}
+
+/* Bintang jatuh: garis cahaya tipis yang melintas sesekali (setiap ±11 detik). */
+.deco--meteor {
+  display: none;
+}
+
+@keyframes meteor {
+  0%,
+  86% {
+    transform: translate(0, 0) rotate(-24deg);
+    opacity: 0;
+  }
+  88% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 0;
+    transform: translate(-220px, 100px) rotate(-24deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-220px, 100px) rotate(-24deg);
+  }
+}
+
+[data-motion='on'] .deco--meteor {
+  display: block;
+  left: 88%;
+  top: 8%;
+  width: 70px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #fff, rgb(255 255 255 / 0%));
+  box-shadow: 0 0 6px rgb(255 255 255 / 70%);
+  animation: meteor 11s linear 2s infinite;
+}
+
+.page-hero--decor .deco--meteor {
+  background: linear-gradient(90deg, var(--cta), transparent);
+}
+
+/* Latar sambutan: bintang di seluruh layar, di belakang konten */
+.welcome-screen > .decor {
+  z-index: 0;
+}
+
+/* Bintang di sudut panggung Lab Koma: tiga ukuran & posisi berbeda (tidak menutupi angka) */
+.lab-sparkles--stage .lab-sparkle:nth-child(3) {
+  width: 12px;
+  height: 12px;
+  top: 38%;
+  right: -7px;
+  color: var(--tone-lab);
+}
+
+.lab-sparkles--stage .lab-sparkle:nth-child(1) {
+  width: 24px;
+  height: 24px;
+  top: -13px;
+  right: 18%;
+}
+
+.lab-sparkles--stage .lab-sparkle:nth-child(2) {
+  width: 15px;
+  height: 15px;
+  bottom: -8px;
+  left: 9%;
+}

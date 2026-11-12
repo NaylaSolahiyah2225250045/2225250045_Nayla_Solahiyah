@@ -1,0 +1,305 @@
+/* =====================================================================
+ * GERAK KAPIBARA PER POSE — setiap pose punya gerakan khas, berganti pose
+ * dengan transisi "pop" kecil. Semua hanya aktif bila [data-motion='on']
+ * dan pada maskot utama halaman (.is-alive).
+ * ===================================================================== */
+
+/* Kedipan genit (pose wink): saat diam tampil mata tertutup. */
+.mascot-live .m-wink-open,
+.mascot-live .m-eye {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.m-wink-open {
+  opacity: 0;
+}
+
+/* Transisi ganti pose */
+@keyframes ml-swap {
+  0% {
+    transform: scale(0.88, 1.08) translateY(4px);
+    opacity: 0.4;
+  }
+  55% {
+    transform: scale(1.06, 0.95);
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+  }
+}
+
+.ml-swap {
+  display: inline-block;
+  transform-origin: 50% 100%;
+}
+
+[data-motion='on'] .ml-swap {
+  animation: ml-swap 0.5s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+/* ---------- Gerak tubuh ---------- */
+@keyframes ml-sway {
+  0%,
+  100% {
+    transform: rotate(-2.5deg) translateX(-2px);
+  }
+  50% {
+    transform: rotate(2.5deg) translateX(2px);
+  }
+}
+
+@keyframes ml-jump {
+  0%,
+  55%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  62% {
+    transform: translateY(0) scale(1.08, 0.9);
+  }
+  72% {
+    transform: translateY(-22px) scale(0.95, 1.06) rotate(-3deg);
+  }
+  82% {
+    transform: translateY(0) scale(1.06, 0.94);
+  }
+  90% {
+    transform: translateY(-5px) scale(1, 1);
+  }
+}
+
+@keyframes ml-tilt-body {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  35%,
+  65% {
+    transform: rotate(-5deg) translateX(-2px);
+  }
+}
+
+@keyframes ml-nod {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  25% {
+    transform: translateY(2px) rotate(1.5deg);
+  }
+  50% {
+    transform: translateY(0) rotate(0);
+  }
+  75% {
+    transform: translateY(2px) rotate(-1.5deg);
+  }
+}
+
+@keyframes ml-pump {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(-6px) scale(1.02);
+  }
+  40% {
+    transform: translateY(0);
+  }
+  60% {
+    transform: translateY(-6px) scale(1.02);
+  }
+  80% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes ml-shake {
+  0%,
+  80%,
+  100% {
+    transform: translateX(0);
+  }
+  84% {
+    transform: translateX(-3px) rotate(-2deg);
+  }
+  88% {
+    transform: translateX(3px) rotate(2deg);
+  }
+  92% {
+    transform: translateX(-2px);
+  }
+  96% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes ml-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+[data-motion='on'] .ml-idle--sway {
+  animation: ml-sway 3.2s ease-in-out 1s infinite;
+}
+
+[data-motion='on'] .ml-idle--jump {
+  animation: ml-jump 3.4s ease-in-out 1s infinite;
+}
+
+[data-motion='on'] .ml-idle--tilt {
+  animation: ml-tilt-body 4.5s ease-in-out 1s infinite;
+}
+
+[data-motion='on'] .ml-idle--nod {
+  animation: ml-nod 3s ease-in-out 1s infinite;
+}
+
+[data-motion='on'] .ml-idle--pump {
+  animation: ml-pump 2.6s ease-in-out 1s infinite;
+}
+
+[data-motion='on'] .ml-idle--shake {
+  animation: ml-shake 3.5s ease-in-out 1s infinite;
+}
+
+[data-motion='on'] .ml-idle--float {
+  animation: ml-float 3s ease-in-out 1s infinite;
+}
+
+/* ---------- Gerak bagian tubuh per pose ---------- */
+@keyframes ml-wave-fast {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  15% {
+    transform: rotate(-22deg);
+  }
+  30% {
+    transform: rotate(14deg);
+  }
+  45% {
+    transform: rotate(-18deg);
+  }
+  60% {
+    transform: rotate(8deg);
+  }
+  75% {
+    transform: rotate(0);
+  }
+}
+
+@keyframes ml-fist {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  20%,
+  60% {
+    transform: translateY(-8px);
+  }
+  40%,
+  80% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes ml-point {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes ml-bulb {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0 rgb(255 200 61 / 0%));
+  }
+  50% {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 8px rgb(255 200 61 / 90%));
+  }
+}
+
+@keyframes ml-wink {
+  0%,
+  58%,
+  80%,
+  100% {
+    opacity: 1;
+  }
+  62%,
+  76% {
+    opacity: 0;
+  }
+}
+
+@keyframes ml-wink-closed {
+  0%,
+  58%,
+  80%,
+  100% {
+    opacity: 0;
+  }
+  62%,
+  76% {
+    opacity: 1;
+  }
+}
+
+[data-motion='on'] .mascot-live.is-alive.pose-wave .m-arm {
+  transform-origin: 50% 100%;
+  animation: ml-wave-fast 1.8s ease-in-out 0.8s infinite;
+}
+
+[data-motion='on'] .mascot-live.is-alive.pose-cheer .m-arm {
+  animation: ml-fist 2.6s ease-in-out 1s infinite;
+}
+
+[data-motion='on'] .mascot-live.is-alive.pose-point .m-arm {
+  animation: ml-point 1.6s ease-in-out 1s infinite;
+}
+
+[data-motion='on'] .mascot-live.is-alive .m-bulb {
+  transform-box: fill-box;
+  transform-origin: 50% 80%;
+  animation: ml-bulb 2.2s ease-in-out infinite;
+}
+
+[data-motion='on'] .mascot-live.is-alive.pose-wink .m-eyes {
+  animation: none;
+}
+
+[data-motion='on'] .mascot-live.is-alive.pose-wink .m-wink-open {
+  animation: ml-wink 3.2s ease-in-out 1s infinite;
+}
+
+[data-motion='on'] .mascot-live.is-alive.pose-wink .m-wink-closed {
+  animation: ml-wink-closed 3.2s ease-in-out 1s infinite;
+}
+
+[data-motion='on'] .mascot-live.is-alive.pose-wink .m-wink-open {
+  opacity: 1;
+}
+
+[data-motion='on'] .mascot-live.is-alive.pose-wink .m-wink-closed {
+  opacity: 0;
+}
+
+/* Pose berpikir: kepala miring lebih jelas */
+[data-motion='on'] .mascot-live.is-alive.pose-think .m-head {
+  animation: ml-tilt 3.6s ease-in-out 0.6s infinite;
+}

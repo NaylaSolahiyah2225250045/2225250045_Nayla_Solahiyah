@@ -1,0 +1,26 @@
+{
+  "name": "komaku-frontend",
+  "private": true,
+  "version": "0.1.0-alpha",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:preview": "node scripts/build-preview.mjs",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@fontsource/nunito": "5.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router-dom": "6.28.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "4.3.4",
+    "vite": "5.4.11",
+    "vite-plugin-pwa": "0.21.1",
+    "vitest": "2.1.8"
+  }
+}

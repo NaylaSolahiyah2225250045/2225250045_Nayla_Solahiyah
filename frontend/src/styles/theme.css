@@ -1,0 +1,953 @@
+/* =====================================================================
+ * TEMA NOBAKU — mengikuti mockup UI/UX (ungu-lavender, CTA kuning,
+ * kartu putih membulat, font Nunito, sidebar di desktop).
+ * Dimuat setelah app.css sehingga menimpa gaya dasar.
+ * ===================================================================== */
+
+body {
+  background:
+    radial-gradient(1200px 520px at -10% -10%, var(--bg-blob-1) 0, transparent 60%),
+    radial-gradient(900px 480px at 110% 0%, var(--bg-blob-2) 0, transparent 60%),
+    radial-gradient(800px 420px at 50% 115%, var(--bg-blob-1) 0, transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Logo & wordmark ---------- */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.logo__text {
+  font-weight: 900;
+  font-size: 1.3rem;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.wordmark {
+  font-size: clamp(3rem, 13vw, 5.2rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  background: linear-gradient(100deg, var(--primary-strong), var(--primary) 55%, #9b8cff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  font-weight: 800;
+  border-radius: 999px;
+}
+
+.btn--primary {
+  background: linear-gradient(180deg, var(--primary), var(--primary-strong));
+  border-color: transparent;
+  box-shadow: var(--shadow-btn);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--primary-strong);
+}
+
+.btn--cta {
+  background: var(--cta);
+  color: var(--on-cta);
+  border-color: transparent;
+  box-shadow: 0 8px 20px rgb(255 196 51 / 35%);
+}
+
+.btn--cta:hover {
+  background: var(--cta-strong);
+}
+
+.btn--outline {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  color: var(--text);
+}
+
+.btn--outline:hover:not(:disabled) {
+  border-color: var(--primary);
+}
+
+.btn--lg {
+  min-height: 56px;
+  padding: 12px 30px;
+  font-size: 1.15rem;
+}
+
+.btn--sm {
+  min-height: 44px;
+  padding: 6px 16px;
+  font-size: 0.92rem;
+}
+
+.btn--ghost {
+  color: var(--primary-ink);
+}
+
+.btn--hint {
+  background: var(--hint-soft);
+  border-color: transparent;
+}
+
+/* ---------- Cards, chips, meters ---------- */
+.card {
+  border-radius: var(--radius-m);
+  border-color: var(--border);
+}
+
+.card--hero {
+  background: var(--hero-grad);
+  color: #fff;
+}
+
+.card--hero .muted {
+  color: rgb(255 255 255 / 85%);
+}
+
+.card--soft {
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  border: 1px solid var(--border);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+}
+
+.chip--yellow {
+  background: var(--chip-yellow);
+  color: var(--on-chip-yellow);
+}
+
+.meter {
+  display: block;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  overflow: hidden;
+  min-width: 60px;
+}
+
+.meter > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--primary), #9b8cff);
+}
+
+.meter--light {
+  background: rgb(255 255 255 / 30%);
+}
+
+.meter--light > span {
+  background: var(--cta);
+}
+
+.eyebrow {
+  color: var(--primary-ink);
+}
+
+.callout {
+  background: var(--primary-soft);
+  border-left-color: var(--primary);
+}
+
+/* ---------- App shell ---------- */
+.shell {
+  min-height: 100dvh;
+}
+
+.mobile-top {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: calc(14px + env(safe-area-inset-top)) 16px 0;
+}
+
+.sidenav {
+  display: none;
+}
+
+.page-head {
+  display: grid;
+  gap: 2px;
+}
+
+.page-head h1 {
+  font-size: clamp(1.5rem, 5.5vw, 2rem);
+}
+
+.bottomnav {
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.bottomnav__inner {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.bottomnav a.active {
+  color: var(--primary-ink);
+}
+
+.bottomnav a.active svg {
+  background: var(--primary-soft);
+  border-radius: 10px;
+  padding: 2px 10px;
+  width: 46px;
+}
+
+@media (min-width: 960px) {
+  .shell {
+    display: grid;
+    grid-template-columns: var(--sidebar) minmax(0, 1fr);
+  }
+
+  .shell__main .page {
+    max-width: 1080px;
+    padding: 28px 32px 40px;
+  }
+
+  .mobile-top,
+  .bottomnav {
+    display: none;
+  }
+
+  .sidenav {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px 16px;
+    background: color-mix(in srgb, var(--surface) 75%, transparent);
+    border-right: 1px solid var(--border);
+    backdrop-filter: blur(8px);
+  }
+
+  .sidenav__brand {
+    text-decoration: none;
+    padding: 0 8px;
+  }
+
+  .sidenav__links {
+    display: grid;
+    gap: 6px;
+  }
+
+  .sidenav__links a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 46px;
+    padding: 0 14px;
+    border-radius: 14px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  .sidenav__links a:hover {
+    background: var(--primary-soft);
+  }
+
+  .sidenav__links a.active {
+    background: linear-gradient(180deg, var(--primary), var(--primary-strong));
+    color: #fff;
+    box-shadow: var(--shadow-btn);
+  }
+
+  .sidenav__cheer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .sidenav__cheer p {
+    margin-top: -6px;
+    background: var(--chip-yellow);
+    color: var(--on-chip-yellow);
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 8px 14px;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+  }
+}
+
+/* ---------- Beranda: sambutan (mockup panel 1) ---------- */
+.welcome {
+  display: grid;
+  gap: 8px;
+  padding: 24px 20px;
+  border-radius: var(--radius-l);
+  background:
+    radial-gradient(400px 220px at 85% 20%, rgb(255 255 255 / 80%) 0, transparent 70%),
+    linear-gradient(135deg, #e9ecff 0%, #f1e9ff 55%, #e6f0ff 100%);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .welcome {
+    background: linear-gradient(135deg, #22224a 0%, #2a2150 55%, #1f2a50 100%);
+  }
+}
+
+:root[data-theme='dark'] .welcome {
+  background: linear-gradient(135deg, #22224a 0%, #2a2150 55%, #1f2a50 100%);
+}
+
+.welcome__hello {
+  font-size: clamp(1.3rem, 5vw, 1.9rem);
+  font-weight: 800;
+}
+
+.welcome__hello::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 6px;
+  margin-right: 10px;
+  border-radius: 4px;
+  background: var(--cta);
+  transform: rotate(-35deg) translateY(-6px);
+}
+
+.welcome__sub {
+  font-size: clamp(1.2rem, 4.6vw, 1.6rem);
+  font-weight: 900;
+}
+
+.welcome__lead {
+  max-width: 34ch;
+  margin-bottom: 12px;
+}
+
+.welcome .btn--cta {
+  justify-self: start;
+}
+
+.welcome__art {
+  display: flex;
+  justify-content: center;
+  /* HP: maskot kecil di atas, agar tombol "Mulai Belajar" tetap terlihat tanpa menggulir */
+  order: -1;
+}
+
+.welcome__art svg {
+  width: clamp(120px, 34vw, 150px);
+  height: auto;
+}
+
+.feature-pills {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.feature-pills li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 6px;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--primary-ink);
+}
+
+.feature-pills__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 720px) {
+  .welcome {
+    grid-template-columns: 1.3fr 1fr;
+    align-items: center;
+    padding: 40px 44px;
+  }
+
+  .welcome__art {
+    order: 0;
+  }
+
+  .welcome__art svg {
+    width: 220px;
+  }
+}
+
+/* ---------- Beranda: dasbor (mockup panel 3) ---------- */
+.stats-banner {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-radius: var(--radius-l);
+  background: var(--hero-grad);
+  color: #fff;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.stats-banner__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+}
+
+.stats-banner__item + .stats-banner__item {
+  border-top: 1px solid rgb(255 255 255 / 25%);
+}
+
+.stats-banner__item > span:last-child {
+  display: grid;
+  gap: 2px;
+  flex: 1;
+}
+
+.stats-banner__label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  opacity: 0.92;
+}
+
+.stats-banner__value {
+  font-size: 1.6rem;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.stats-banner__icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  background: rgb(255 255 255 / 22%);
+}
+
+.stats-banner__icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.stats-banner__icon--star {
+  color: var(--cta);
+}
+
+.stats-banner__icon--check {
+  background: #34c38f;
+}
+
+.stats-banner__icon--badge {
+  background: rgb(255 255 255 / 85%);
+}
+
+.stats-banner__value small {
+  font-size: 0.6em;
+  font-weight: 800;
+  opacity: 0.9;
+}
+
+.stats-banner__sub {
+  font-size: 0.75rem;
+  font-weight: 700;
+  opacity: 0.85;
+  justify-self: end;
+}
+
+/* ---------- Lencana ---------- */
+.badges {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.badges--compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px 10px 10px;
+  border-radius: var(--radius-m);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.badges--compact .badge-item {
+  padding: 6px 14px 6px 6px;
+  border-radius: 999px;
+}
+
+.badge-item.is-locked {
+  box-shadow: none;
+  background: var(--surface-2);
+}
+
+.badge-item__text {
+  display: grid;
+  gap: 1px;
+}
+
+.badge-item__name {
+  font-weight: 800;
+  font-size: 0.92rem;
+}
+
+.badge-item.is-locked .badge-item__name {
+  color: var(--text-muted);
+}
+
+/* HP: tiga statistik berdampingan, ringkas */
+@media (max-width: 639px) {
+  .stats-banner {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .stats-banner__item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    padding: 14px 6px;
+  }
+
+  .stats-banner__item + .stats-banner__item {
+    border-top: none;
+    border-left: 1px solid rgb(255 255 255 / 25%);
+  }
+
+  .stats-banner__icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .stats-banner__value {
+    font-size: 1.25rem;
+  }
+
+  .stats-banner__label {
+    font-size: 0.75rem;
+  }
+
+  .stats-banner .meter {
+    display: none;
+  }
+
+  .stats-banner__sub {
+    justify-self: center;
+  }
+}
+
+@media (min-width: 640px) {
+  .stats-banner {
+    grid-template-columns: 1.3fr 1fr 1fr;
+  }
+
+  .stats-banner__item + .stats-banner__item {
+    border-top: none;
+    border-left: 1px solid rgb(255 255 255 / 25%);
+  }
+}
+
+.dash-grid {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 1100px) {
+  .dash-grid {
+    grid-template-columns: 1.4fr 1fr;
+    align-items: start;
+  }
+}
+
+.continue-card {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  border-radius: var(--radius-m);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.continue-card > svg {
+  flex: none;
+  width: clamp(84px, 24vw, 124px);
+  height: auto;
+}
+
+.continue-card__body {
+  display: grid;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.continue-card__body .chip {
+  justify-self: start;
+}
+
+.continue-card__foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.continue-card__foot .meter {
+  flex: 1;
+}
+
+.install-card {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+/* ---------- Daftar modul ---------- */
+.module-item {
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow);
+}
+
+.module-item__body {
+  display: grid;
+  gap: 2px;
+}
+
+.module-item__num {
+  border-radius: 14px;
+  font-weight: 900;
+}
+
+.module-item .meter {
+  margin-top: 4px;
+  height: 6px;
+}
+
+/* ---------- Layar materi (mockup panel 4) ---------- */
+.lesson-shell {
+  min-height: 100dvh;
+}
+
+.lesson-top {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: calc(10px + env(safe-area-inset-top)) 12px 6px;
+}
+
+.lesson-top__brand,
+.lesson-top__home {
+  display: none;
+}
+
+.lesson-top__title {
+  flex: 1;
+  min-width: 0;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lesson-layout {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 16px calc(16px + env(safe-area-inset-bottom));
+}
+
+.lesson-aside,
+.lesson-mascot {
+  display: none;
+}
+
+.lesson-progress-mobile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.lesson-progress-mobile .meter {
+  flex: 1;
+}
+
+.lesson-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow);
+  padding: 18px 16px 20px;
+  outline: none;
+}
+
+@media (max-width: 420px) {
+  .lesson-card {
+    padding: 16px 12px 18px;
+  }
+
+  .lesson-card .viz {
+    padding: 12px 6px;
+  }
+}
+
+.lesson-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lesson-card__mascot {
+  flex: none;
+  margin: -6px -2px 0 0;
+  line-height: 0;
+}
+
+@media (min-width: 1240px) {
+  .lesson-card__mascot {
+    display: none;
+  }
+}
+
+.lesson-card__chip {
+  margin-bottom: 14px;
+  font-size: 0.95rem;
+  padding: 6px 14px;
+}
+
+.lesson-card .card {
+  box-shadow: none;
+  background: var(--surface-2);
+}
+
+.lesson-nav {
+  position: sticky;
+  bottom: 0;
+  margin-top: 4px;
+  padding: 14px 0 calc(12px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--bg) 65%, transparent);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lesson-nav .btn {
+  flex: 1;
+  min-height: 50px;
+}
+
+@media (min-width: 960px) {
+  .lesson-top {
+    padding: 18px 28px 10px;
+  }
+
+  .lesson-top__brand {
+    display: inline-flex;
+    text-decoration: none;
+  }
+
+  .lesson-top__home {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .lesson-top__back,
+  .lesson-top__title,
+  .lesson-progress-mobile {
+    display: none;
+  }
+
+  .lesson-layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 24px;
+    padding: 8px 28px 28px;
+    align-items: start;
+  }
+
+  .lesson-aside {
+    display: grid;
+    gap: 8px;
+    position: sticky;
+    top: 16px;
+    padding: 20px;
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-l);
+  }
+
+  .lesson-aside__title {
+    font-size: 1.45rem;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .lesson-card {
+    padding: 26px 28px 30px;
+  }
+
+  .lesson-nav {
+    position: static;
+    background: none;
+    padding: 18px 0 0;
+  }
+
+  .lesson-nav .btn {
+    flex: 0 0 auto;
+    min-width: 170px;
+  }
+}
+
+@media (min-width: 1240px) {
+  .lesson-layout {
+    grid-template-columns: 260px minmax(0, 1fr) 170px;
+  }
+
+  .lesson-mascot {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+  }
+}
+
+.section-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  gap: 4px;
+}
+
+.section-list__btn {
+  width: 100%;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  text-align: left;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.section-list__btn:hover {
+  background: var(--primary-soft);
+}
+
+.section-list__btn.is-current {
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+}
+
+.section-list__btn.is-done {
+  color: var(--text);
+}
+
+.section-list__dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border);
+  background: var(--surface);
+}
+
+.section-list__btn.is-done .section-list__dot {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+}
+
+.section-list__btn.is-done .section-list__dot svg {
+  width: 16px;
+  height: 16px;
+}
+
+.section-list__btn.is-current .section-list__dot {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 4px var(--surface), inset 0 0 0 12px var(--primary);
+}
+
+/* ---------- Penyesuaian komponen belajar ---------- */
+.appbar {
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+}
+
+.steps li::before {
+  background: linear-gradient(180deg, var(--primary), var(--primary-strong));
+}
+
+.steps li {
+  border-radius: 14px;
+}
+
+.field {
+  border-radius: 14px;
+}
+
+.option,
+.level {
+  border-radius: 16px;
+}

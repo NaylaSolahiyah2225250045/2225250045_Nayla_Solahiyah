@@ -1,0 +1,342 @@
+/* =====================================================================
+ * IDENTITAS VISUAL BERSAMA (HP & laptop) — logo resmi, warna khas tiap menu,
+ * kartu Beranda berwarna, dan latar berhias. Dimuat setelah decor.css, sebelum laptop.css.
+ * Warna khas menu (sama di sidebar laptop, navigasi bawah HP, dan panel "Lainnya"):
+ *   Beranda & Profil ungu · Materi merah muda · Latihan tosca muda · Catatan oranye ·
+ *   Riwayat hijau tosca · Kalender kuning (Catatan/Riwayat/Kalender = warna kepala halamannya).
+ * ===================================================================== */
+
+/* ---------- Logo resmi (gambar) ---------- */
+.logo__img {
+  display: block;
+  flex: none;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 10px rgb(83 72 190 / 18%));
+  user-select: none;
+}
+
+.mobile-top {
+  padding-top: calc(8px + env(safe-area-inset-top));
+}
+
+/* ---------- Maskot Sambutan: lebih besar, balon langsung muncul saat diketuk ---------- */
+.welcome-hero__stage .mascot-live svg {
+  width: clamp(180px, 56vw, 270px);
+}
+
+.welcome-hero__halo {
+  width: clamp(210px, 66vw, 330px);
+}
+
+.welcome-hero__stage .mascot-bubble {
+  max-width: 230px;
+  font-size: 0.95rem;
+}
+
+[data-motion='on'] .mascot-bubble.is-now {
+  animation-delay: 0s;
+}
+
+/* ---------- Warna khas menu (sama dengan warna kepala halamannya) ---------- */
+.tone-home,
+.tone-profile,
+.tone-more {
+  --ico-bg: var(--primary-soft);
+  --ico-fg: var(--primary-ink);
+}
+
+.tone-book {
+  --ico-bg: var(--tone-account-soft);
+  --ico-fg: var(--tone-account-ink);
+}
+
+.tone-path {
+  --ico-bg: var(--lead-digit-soft);
+  --ico-fg: var(--tone-progress-ink);
+}
+
+.tone-notes {
+  --ico-bg: var(--tone-lab-soft);
+  --ico-fg: var(--tone-lab-ink);
+}
+
+.tone-history {
+  --ico-bg: var(--tone-progress-soft);
+  --ico-fg: var(--tone-progress-ink);
+}
+
+.tone-calendar {
+  --ico-bg: var(--tone-install-soft);
+  --ico-fg: var(--tone-install-ink);
+}
+
+/* ---------- Navigasi bawah HP: ikon dalam chip berwarna (susunan 5 menu tetap) ---------- */
+@media (max-width: 959px) {
+  .bottomnav {
+    background: var(--nav-grad);
+    border-top: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
+    box-shadow: 0 -6px 24px rgb(83 72 190 / 9%);
+  }
+
+  .bottomnav a,
+  .bottomnav__more {
+    gap: 4px;
+    font-size: 0.78rem;
+  }
+
+  .bottomnav__ico {
+    width: 44px;
+    height: 30px;
+    border-radius: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ico-bg);
+    color: var(--ico-fg);
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .bottomnav a svg,
+  .bottomnav__more svg,
+  .bottomnav a.active svg,
+  .bottomnav__more.active svg {
+    width: 21px;
+    height: 21px;
+    padding: 0;
+    background: none;
+    border-radius: 0;
+  }
+
+  .bottomnav a.active .bottomnav__ico,
+  .bottomnav__more.active .bottomnav__ico {
+    background: linear-gradient(120deg, var(--primary-strong), var(--primary) 60%, #a58cf8);
+    color: #fff;
+    box-shadow: var(--shadow-btn);
+  }
+
+  [data-motion='on'] .bottomnav a.active .bottomnav__ico {
+    transform: translateY(-2px);
+  }
+
+  .bottomnav a.active,
+  .bottomnav__more.active {
+    color: var(--primary-ink);
+    font-weight: 800;
+  }
+
+  /* Panel "Lainnya": latar & ikon dengan warna yang sama seperti sidebar */
+  .sheet {
+    background:
+      radial-gradient(circle at 100% 0%, var(--dash-blob-sun), transparent 42%),
+      var(--side-grad);
+  }
+
+  .sheet__item {
+    background: color-mix(in srgb, var(--surface) 82%, transparent);
+  }
+
+  .sheet__item .sheet__icon,
+  .sheet__item--0 .sheet__icon,
+  .sheet__item--1 .sheet__icon,
+  .sheet__item--2 .sheet__icon {
+    background: var(--ico-bg);
+    color: var(--ico-fg);
+  }
+
+  /* Latar berhias di HP: hanya beberapa hiasan kecil di tepi agar tidak padat */
+  .dash-backdrop .deco:not(.bd-hp) {
+    display: none;
+  }
+
+  .dash-backdrop .deco.bd-hp {
+    --s: 13px !important;
+  }
+
+  .dash-backdrop .deco--text.bd-hp {
+    --s: 15px !important;
+  }
+}
+
+/* --- Latar area konten: gumpalan warna lembut + hiasan di tepi --- */
+.shell__main {
+  position: relative;
+  isolation: isolate;
+}
+
+.dash-backdrop {
+  display: block;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.dash-backdrop__blob {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.dash-backdrop__blob--sun {
+  width: 560px;
+  height: 560px;
+  right: -200px;
+  top: -220px;
+  background: radial-gradient(circle, var(--dash-blob-sun), transparent 68%);
+}
+
+.dash-backdrop__blob--teal {
+  width: 640px;
+  height: 640px;
+  left: -260px;
+  bottom: -280px;
+  background: radial-gradient(circle, var(--dash-blob-teal), transparent 68%);
+}
+
+.dash-backdrop__blob--pink {
+  width: 480px;
+  height: 480px;
+  right: 6%;
+  bottom: -230px;
+  background: radial-gradient(circle, var(--dash-blob-pink), transparent 68%);
+}
+
+.dash-backdrop .deco {
+  transform: translate(-50%, -50%);
+}
+
+.dash-backdrop .deco--sq {
+  transform: translate(-50%, -50%) rotate(18deg);
+}
+
+.dash-backdrop .deco--text,
+.dash-backdrop .deco--ring,
+.dash-backdrop .deco--sq,
+.dash-backdrop .deco--plus,
+.dash-backdrop .deco--dots {
+  opacity: 0.36;
+}
+
+.dash-backdrop .deco--tri {
+  opacity: 0.3;
+}
+
+.dash-backdrop .deco--hex {
+  width: var(--s);
+  height: calc(var(--s) * 0.9);
+  background: currentColor;
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  opacity: 0.22;
+}
+
+.bd-gold {
+  color: var(--cta-strong);
+}
+
+.bd-pink {
+  color: var(--star-pink);
+}
+
+.bd-violet {
+  color: var(--primary);
+}
+
+.bd-teal {
+  color: var(--tone-progress);
+}
+
+.bd-blue {
+  color: var(--deco-blue);
+}
+
+/* --- Beranda: kartu berwarna --- */
+.page--home .home-stats li {
+  position: relative;
+  overflow: hidden;
+  border: 1.5px solid color-mix(in srgb, var(--st) 30%, var(--border));
+  background: linear-gradient(140deg, var(--st-soft) 0%, var(--surface) 62%);
+}
+
+.page--home .home-stats li::after {
+  content: '';
+  position: absolute;
+  right: -18px;
+  bottom: -22px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 10px solid color-mix(in srgb, var(--st) 14%, transparent);
+}
+
+.page--home .home-stats li:nth-child(1) {
+  --st: var(--tone-lab);
+  --st-soft: var(--tone-lab-soft);
+}
+
+.page--home .home-stats li:nth-child(2) {
+  --st: var(--tone-learn);
+  --st-soft: var(--tone-learn-soft);
+}
+
+.page--home .home-stats li:nth-child(3) {
+  --st: var(--tone-install);
+  --st-soft: var(--tone-install-soft);
+}
+
+.page--home .home-stats li:nth-child(4) {
+  --st: var(--tone-progress);
+  --st-soft: var(--tone-progress-soft);
+}
+
+.page--home .home-card {
+  position: relative;
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--hc) 28%, var(--border));
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--hc) 16%, transparent) 0 70px, transparent 71px),
+    linear-gradient(120deg, var(--hc-soft) 0%, var(--surface) 55%);
+}
+
+.page--home .home-card--learn {
+  --hc: var(--tone-learn);
+  --hc-soft: var(--tone-learn-soft);
+}
+
+.page--home .home-card--path {
+  --hc: var(--tone-progress);
+  --hc-soft: var(--tone-progress-soft);
+}
+
+.page--home .home-week {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--tone-install-soft) 75%, transparent) 0, transparent 70px),
+    var(--surface);
+}
+/* ---------- Identitas pembuat di kaki Welcome Page (kecil, tidak mencolok) ---------- */
+.welcome-foot__meta,
+.welcome-credit {
+  margin: 0;
+}
+
+.welcome-credit {
+  margin-top: 10px;
+  font-size: 0.74rem;
+  line-height: 1.4;
+  color: rgb(255 255 255 / 82%);
+}
+
+.welcome-credit strong {
+  font-weight: 700;
+  color: #fff;
+}
+
+@media (min-width: 860px) {
+  .welcome-credit {
+    margin-top: 4px;
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
+}

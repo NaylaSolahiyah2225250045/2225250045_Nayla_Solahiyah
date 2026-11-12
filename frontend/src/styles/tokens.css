@@ -1,0 +1,217 @@
+/*
+ * Design tokens NoBaku — diselaraskan dengan mockup UI/UX (palet ungu-lavender,
+ * CTA kuning, kartu putih membulat, font Nunito).
+ * SEMUA warna, radius, bayangan, dan font diatur di sini.
+ *
+ * Makna warna penanda (signaling) tetap konsisten (docs/UI-UX-GUIDELINES.md):
+ *   koma = --comma, angka bukan nol pertama = --lead-digit, nol yang dibuang = --zero,
+ *   pangkat positif = --exp-pos, pangkat negatif = --exp-neg.
+ */
+:root {
+  color-scheme: light;
+  --bg: #f3f2fd;
+  --bg-blob-1: #e3e6ff;
+  --bg-blob-2: #efe4ff;
+  --surface: #ffffff;
+  --surface-2: #f5f4fe;
+  --border: #e6e4f8;
+  --text: #1f2559;
+  --text-muted: #5f6488;
+  --primary: #7b6cf0;
+  --primary-strong: #6352e4;
+  --on-primary: #ffffff;
+  --primary-soft: #ece9ff;
+  --primary-ink: #5443d6;
+  --hero-grad: linear-gradient(120deg, #8a7cf5 0%, #9d93f7 45%, #a9bdfb 100%);
+  --cta: #ffd45a;
+  --cta-strong: #ffc933;
+  --on-cta: #2b2a4c;
+  --chip-yellow: #fff2c8;
+  --on-chip-yellow: #3a3157;
+
+  --comma: #e8590c;
+  --lead-digit: #0e8f87;
+  --lead-digit-soft: #dcf5f2;
+  --zero: #9097b3;
+  --exp-pos: #1c7ed6;
+  --exp-neg: #c2255c;
+
+  --success: #23a26b;
+  --success-soft: #e2f6ec;
+  --error: #d6336c;
+  --error-soft: #fdebf1;
+  --hint: #a86400;
+  --hint-soft: #fff4d6;
+
+  --radius-s: 12px;
+  --radius-m: 20px;
+  --radius-l: 28px;
+  --shadow: 0 2px 6px rgb(83 72 190 / 6%), 0 10px 28px rgb(83 72 190 / 8%);
+  --shadow-btn: 0 6px 16px rgb(123 108 240 / 30%);
+
+  --font: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', 'Roboto Mono', Menlo, Consolas, monospace;
+  --text-base: 1.0625rem;
+  /* Ukuran sel digit: muat ±9 digit di HP 360px tanpa digeser */
+  --cell: clamp(22px, 6.6vw, 44px);
+  --cell-font: clamp(1.15rem, 5vw, 2rem);
+  --gap: clamp(6px, 2vw, 14px);
+  --tap: 44px;
+  --sidebar: 236px;
+
+  /* Nada warna per mode (Belajar, Progres, Pasang, Akun) & latar sambutan */
+  --star-pink: #ff6fae;
+  --tone-learn: #7b6cf0;
+  --tone-learn-soft: #ece9ff;
+  --tone-learn-ink: #4f3fd0;
+  --tone-progress: #12a39a;
+  --tone-progress-soft: #d9f4f1;
+  --tone-progress-ink: #0a6b65;
+  --tone-install: #f2a900;
+  --tone-install-soft: #fff1c4;
+  --tone-install-ink: #7d5300;
+  --tone-lab: #ef6c1a;
+  --tone-lab-soft: #ffe9da;
+  --tone-lab-ink: #a23d00;
+  --lab-paper: #fbfaff;
+  --tone-account: #e2629b;
+  --tone-account-soft: #fde6f1;
+  --tone-account-ink: #a8255f;
+  --welcome-grad: linear-gradient(155deg, #5f4ee0 0%, #7b6cf0 38%, #9c8ff7 70%, #b9b0fb 100%);
+  /* Dashboard laptop: sidebar & latar berwarna (laptop.css) */
+  --side-grad: linear-gradient(185deg, #f3efff 0%, #fbeefa 55%, #e9f4ff 100%);
+  --nav-grad: linear-gradient(90deg, #f6f3ff 0%, #fdf1fa 50%, #edf6ff 100%);
+  --dash-blob-sun: rgb(255 200 60 / 24%);
+  --dash-blob-teal: rgb(18 163 154 / 14%);
+  --dash-blob-pink: rgb(255 111 174 / 15%);
+  --deco-blue: #4c8df6;
+  --hero-shadow: 0 16px 36px rgb(98 82 220 / 28%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg: #15152a;
+    --bg-blob-1: #1f2142;
+    --bg-blob-2: #251d42;
+    --surface: #1e1f3a;
+    --surface-2: #26284a;
+    --border: #34365e;
+    --text: #e8e8fb;
+    --text-muted: #a8abcf;
+    --primary: #9d92ff;
+    --primary-strong: #b3aaff;
+    --on-primary: #14142b;
+    --primary-soft: #2c2a55;
+    --primary-ink: #c2bbff;
+    --hero-grad: linear-gradient(120deg, #4b3fb8 0%, #5a4fc8 50%, #4a5fb0 100%);
+    --cta: #ffd45a;
+    --cta-strong: #ffe08a;
+    --on-cta: #23203d;
+    --chip-yellow: #3d3520;
+    --on-chip-yellow: #ffe6a0;
+    --comma: #ff8a50;
+    --lead-digit: #3cc9c1;
+    --lead-digit-soft: #17383a;
+    --zero: #747a9e;
+    --exp-pos: #74b9ff;
+    --exp-neg: #ff7aa8;
+    --success: #5fd59a;
+    --success-soft: #17362a;
+    --error: #ff8fb1;
+    --error-soft: #3d1c2a;
+    --hint: #ffd43b;
+    --hint-soft: #3a3115;
+    --shadow: 0 1px 2px rgb(0 0 0 / 35%);
+    --shadow-btn: none;
+
+    --star-pink: #ff8fc0;
+    --tone-learn: #9d92ff;
+    --tone-learn-soft: #2c2a55;
+    --tone-learn-ink: #c9c3ff;
+    --tone-progress: #3cc9c1;
+    --tone-progress-soft: #163a3b;
+    --tone-progress-ink: #8be6df;
+    --tone-install: #ffd45a;
+    --tone-install-soft: #3d3520;
+    --tone-install-ink: #ffe6a0;
+    --tone-lab: #ff9a5c;
+    --tone-lab-soft: #3d2416;
+    --tone-lab-ink: #ffc29e;
+    --lab-paper: #1b1c36;
+    --tone-account: #ff8fc0;
+    --tone-account-soft: #3d1c2e;
+    --tone-account-ink: #ffc2dc;
+    --welcome-grad: linear-gradient(155deg, #241c5c 0%, #3a2e8e 45%, #4e42b6 100%);
+    --side-grad: linear-gradient(185deg, #1d1b3d 0%, #261a40 55%, #162a46 100%);
+    --nav-grad: linear-gradient(90deg, #1d1b3d 0%, #251a3f 50%, #172a45 100%);
+    --dash-blob-sun: rgb(255 212 90 / 7%);
+    --dash-blob-teal: rgb(60 210 200 / 9%);
+    --dash-blob-pink: rgb(255 120 180 / 9%);
+    --deco-blue: #84b4ff;
+    --hero-shadow: 0 1px 2px rgb(0 0 0 / 35%);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #15152a;
+  --bg-blob-1: #1f2142;
+  --bg-blob-2: #251d42;
+  --surface: #1e1f3a;
+  --surface-2: #26284a;
+  --border: #34365e;
+  --text: #e8e8fb;
+  --text-muted: #a8abcf;
+  --primary: #9d92ff;
+  --primary-strong: #b3aaff;
+  --on-primary: #14142b;
+  --primary-soft: #2c2a55;
+  --primary-ink: #c2bbff;
+  --hero-grad: linear-gradient(120deg, #4b3fb8 0%, #5a4fc8 50%, #4a5fb0 100%);
+  --cta: #ffd45a;
+  --cta-strong: #ffe08a;
+  --on-cta: #23203d;
+  --chip-yellow: #3d3520;
+  --on-chip-yellow: #ffe6a0;
+  --comma: #ff8a50;
+  --lead-digit: #3cc9c1;
+  --lead-digit-soft: #17383a;
+  --zero: #747a9e;
+  --exp-pos: #74b9ff;
+  --exp-neg: #ff7aa8;
+  --success: #5fd59a;
+  --success-soft: #17362a;
+  --error: #ff8fb1;
+  --error-soft: #3d1c2a;
+  --hint: #ffd43b;
+  --hint-soft: #3a3115;
+  --shadow: 0 1px 2px rgb(0 0 0 / 35%);
+  --shadow-btn: none;
+
+  --star-pink: #ff8fc0;
+  --tone-learn: #9d92ff;
+  --tone-learn-soft: #2c2a55;
+  --tone-learn-ink: #c9c3ff;
+  --tone-progress: #3cc9c1;
+  --tone-progress-soft: #163a3b;
+  --tone-progress-ink: #8be6df;
+  --tone-install: #ffd45a;
+  --tone-install-soft: #3d3520;
+  --tone-install-ink: #ffe6a0;
+  --tone-lab: #ff9a5c;
+  --tone-lab-soft: #3d2416;
+  --tone-lab-ink: #ffc29e;
+  --lab-paper: #1b1c36;
+  --tone-account: #ff8fc0;
+  --tone-account-soft: #3d1c2e;
+  --tone-account-ink: #ffc2dc;
+  --welcome-grad: linear-gradient(155deg, #241c5c 0%, #3a2e8e 45%, #4e42b6 100%);
+  --side-grad: linear-gradient(185deg, #1d1b3d 0%, #261a40 55%, #162a46 100%);
+  --nav-grad: linear-gradient(90deg, #1d1b3d 0%, #251a3f 50%, #172a45 100%);
+  --dash-blob-sun: rgb(255 212 90 / 7%);
+  --dash-blob-teal: rgb(60 210 200 / 9%);
+  --dash-blob-pink: rgb(255 120 180 / 9%);
+  --deco-blue: #84b4ff;
+  --hero-shadow: 0 1px 2px rgb(0 0 0 / 35%);
+}

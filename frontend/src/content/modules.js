@@ -1,0 +1,322 @@
+/**
+ * Konten modul (docs/LEARNING-DESIGN.md). Satu item = satu layar (segmenting).
+ * Tipe item: intro | concept | worked | faded | guided | practice | quiz
+ * Langkah contoh terurai untuk soal bentuk baku dibuat otomatis (workedSteps) agar selalu benar.
+ */
+
+const TABLE_POSITIVE = {
+  kind: 'table',
+  head: ['Pangkat', 'Bentuk biasa', 'Banyak nol'],
+  rows: [
+    [{ pow: 1 }, '10', '1'],
+    [{ pow: 2 }, '100', '2'],
+    [{ pow: 3 }, '1.000', '3'],
+    [{ pow: 6 }, '1.000.000', '6'],
+  ],
+};
+
+const TABLE_NEGATIVE = {
+  kind: 'table',
+  head: ['Pangkat', 'Pembagian', 'Bentuk biasa'],
+  rows: [
+    [{ pow: -1 }, '1 : 10', '0,1'],
+    [{ pow: -2 }, '1 : 100', '0,01'],
+    [{ pow: -3 }, '1 : 1.000', '0,001'],
+  ],
+};
+
+export const MODULES = [
+  {
+    id: 'm1',
+    no: 1,
+    title: 'Pangkat 10 & Nilai Tempat',
+    short: 'Prasyarat',
+    objective: 'Menentukan nilai 10ⁿ dan 10⁻ⁿ serta hubungannya dengan nilai tempat.',
+    items: [
+      {
+        type: 'intro',
+        title: 'Bilangan raksasa dan bilangan mungil',
+        text: 'Jarak Bumi ke Matahari sekitar 150.000.000 km. Tebal rambut sekitar 0,00008 m. Banyak sekali nolnya! Pangkat 10 membantu kita menulisnya lebih singkat.',
+      },
+      {
+        type: 'concept',
+        title: 'Arti pangkat',
+        text: '10³ artinya 10 dikalikan sebanyak 3 kali: 10 × 10 × 10 = 1.000.',
+        visual: TABLE_POSITIVE,
+      },
+      {
+        type: 'concept',
+        title: 'Pangkat = banyaknya nol',
+        text: 'Untuk pangkat positif, pangkatnya sama dengan banyaknya angka nol di belakang angka 1.',
+        callout: '10⁶ = 1.000.000 → ada 6 angka nol.',
+        visual: { kind: 'comma', value: '1.000.000', autoPlay: true },
+      },
+      {
+        type: 'concept',
+        title: 'Pangkat negatif = membagi',
+        text: '10⁻¹ artinya 1 dibagi 10, yaitu 0,1. Makin negatif pangkatnya, makin kecil bilangannya.',
+        visual: TABLE_NEGATIVE,
+      },
+      {
+        type: 'concept',
+        title: 'Tabel nilai tempat',
+        text: 'Setiap kolom nilai tempat punya pangkat 10 sendiri. Di kanan koma, pangkatnya negatif.',
+        visual: { kind: 'placeValue' },
+        callout: 'Angka 1 di posisi ke-3 setelah koma → 0,001 = 10⁻³.',
+      },
+      {
+        type: 'worked',
+        qtype: 'power_of_ten',
+        value: '0,001',
+        steps: ['Bilangan ini kurang dari 1, jadi pangkatnya negatif.', 'Angka 1 ada di posisi ke-3 setelah koma.', 'Jadi 0,001 = 10⁻³.'],
+      },
+      {
+        type: 'worked',
+        qtype: 'power_of_ten',
+        value: '1.000.000',
+        steps: ['Bilangan ini lebih dari 1, jadi pangkatnya positif.', 'Hitung angka nol di belakang angka 1: ada 6.', 'Jadi 1.000.000 = 10⁶.'],
+      },
+      {
+        type: 'faded',
+        qtype: 'power_of_ten',
+        value: '10.000',
+        steps: ['Bilangan ini lebih dari 1, jadi pangkatnya positif.', 'Hitung angka nol di belakang angka 1: ada 4.', 'Jadi 10.000 = 10⁴.'],
+        shown: 2,
+      },
+      {
+        type: 'faded',
+        qtype: 'power_of_ten',
+        value: '0,01',
+        steps: ['Bilangan ini kurang dari 1, jadi pangkatnya negatif.', 'Angka 1 ada di posisi ke-2 setelah koma.', 'Jadi 0,01 = 10⁻².'],
+        shown: 1,
+      },
+      { type: 'practice' },
+      { type: 'quiz' },
+    ],
+  },
+  {
+    id: 'm2',
+    no: 2,
+    title: 'Bilangan Besar (Pangkat Positif)',
+    short: 'Bilangan besar',
+    objective: 'Mengubah bilangan besar ke bentuk baku a × 10ⁿ dengan n positif.',
+    items: [
+      {
+        type: 'intro',
+        title: 'Angka besar di sekitar kita',
+        text: 'Anggaran pembangunan sebuah sekolah Rp2.500.000.000. Menulis dan membaca angka sepanjang itu mudah keliru. Bagaimana menulisnya lebih singkat?',
+      },
+      {
+        type: 'concept',
+        title: 'Apa itu bentuk baku?',
+        text: 'Bentuk baku ditulis a × 10ⁿ. Nilai a harus 1 atau lebih, tetapi kurang dari 10.',
+        callout: 'Benar: 2,5 × 10⁹. Belum baku: 25 × 10⁸ (karena 25 lebih dari 10).',
+      },
+      {
+        type: 'concept',
+        title: 'Empat langkah',
+        list: [
+          'Cari angka bukan nol pertama dari kiri.',
+          'Taruh koma tepat setelah angka itu.',
+          'Hitung berapa kali koma melompat ke kiri. Itu pangkatnya (positif).',
+          'Tulis a × 10ⁿ. Buang nol di belakang.',
+        ],
+      },
+      {
+        type: 'concept',
+        title: 'Lihat komanya melompat',
+        text: 'Pada bilangan bulat, koma asal ada di ujung kanan. Tekan Putar dan hitung lompatannya.',
+        visual: { kind: 'comma', value: '4.500.000', autoPlay: false },
+      },
+      { type: 'worked', qtype: 'to_scientific', value: '4.500.000' },
+      { type: 'worked', qtype: 'to_scientific', value: '135.000.000' },
+      { type: 'worked', qtype: 'to_scientific', value: '2.500.000.000' },
+      {
+        type: 'concept',
+        title: 'Cara cepat',
+        text: 'Pangkat = banyaknya angka sebelum koma asal, dikurangi 1.',
+        callout: '135.000.000 punya 9 angka → pangkatnya 9 − 1 = 8.',
+      },
+      { type: 'faded', qtype: 'to_scientific', value: '36.000', shown: 3 },
+      { type: 'faded', qtype: 'to_scientific', value: '720.000', shown: 2 },
+      { type: 'guided', value: '48.000' },
+      { type: 'guided', value: '1.250.000' },
+      { type: 'practice' },
+      { type: 'quiz' },
+    ],
+  },
+  {
+    id: 'm3',
+    no: 3,
+    title: 'Bilangan Kecil (Pangkat Negatif)',
+    short: 'Bilangan kecil',
+    objective: 'Mengubah bilangan antara 0 dan 1 ke bentuk baku a × 10⁻ⁿ.',
+    items: [
+      {
+        type: 'intro',
+        title: 'Benda yang sangat kecil',
+        text: 'Tebal selembar rambut sekitar 0,00008 meter. Ukuran bakteri sekitar 0,000002 meter. Banyak nolnya, ya? Yuk, tulis lebih singkat.',
+      },
+      {
+        type: 'concept',
+        title: 'Kenapa pangkatnya negatif?',
+        text: 'Bilangan kurang dari 1 didapat dengan membagi 10 berkali-kali. Itu sebabnya pangkatnya negatif.',
+        visual: TABLE_NEGATIVE,
+      },
+      {
+        type: 'concept',
+        title: 'Koma bergeser ke kanan',
+        text: 'Pada bilangan kecil, koma melompat ke kanan sampai tepat setelah angka bukan nol pertama.',
+        visual: { kind: 'comma', value: '0,00032', autoPlay: false },
+        callout: 'Ingat: ke kiri → bilangan besar (+). Ke kanan → bilangan kecil (−).',
+      },
+      {
+        type: 'concept',
+        title: 'Aturan posisi',
+        text: 'Lihat angka bukan nol pertama. Jika letaknya di posisi ke-n setelah koma, pangkatnya −n.',
+        visual: { kind: 'comma', value: '0,0000075', autoPlay: false, showPositions: true },
+        callout: 'Angka 7 di posisi ke-6 → pangkatnya −6.',
+      },
+      { type: 'worked', qtype: 'to_scientific', value: '0,0405' },
+      { type: 'worked', qtype: 'to_scientific', value: '0,00032' },
+      { type: 'worked', qtype: 'to_scientific', value: '0,0000075' },
+      {
+        type: 'concept',
+        title: 'Cek kewajaran',
+        text: 'Sebelum menjawab, periksa: bilanganmu kurang dari 1? Pangkatnya harus negatif. Bilanganmu 10 atau lebih? Pangkatnya positif.',
+      },
+      { type: 'faded', qtype: 'to_scientific', value: '0,006', shown: 3 },
+      { type: 'faded', qtype: 'to_scientific', value: '0,00047', shown: 2 },
+      { type: 'guided', value: '0,0035' },
+      { type: 'guided', value: '0,000081' },
+      { type: 'practice' },
+      { type: 'quiz' },
+    ],
+  },
+  {
+    id: 'm4',
+    no: 4,
+    title: 'Nol di Tengah',
+    short: 'Nol di tengah',
+    objective: 'Menulis bentuk baku dengan benar untuk bilangan yang memuat angka nol di antara angka bukan nol.',
+    items: [
+      {
+        type: 'intro',
+        title: 'Nol yang sering hilang',
+        text: 'Penduduk sebuah kota 3.004.000 jiwa. Ada yang menulisnya 3,4 × 10⁶. Padahal 3,4 × 10⁶ = 3.400.000. Selisihnya hampir 400 ribu orang! Di modul ini kamu belajar nol mana yang boleh dibuang.',
+      },
+      {
+        type: 'concept',
+        title: 'Tiga jenis nol',
+        text: 'Lihat letak setiap nol terhadap angka bukan nol.',
+        list: [
+          'Nol depan: sebelum angka bukan nol pertama. Hanya menentukan pangkat, lalu dibuang.',
+          'Nol tengah: diapit angka bukan nol. Tetap ditulis di a.',
+          'Nol belakang: setelah angka bukan nol terakhir. Dibuang.',
+        ],
+      },
+      {
+        type: 'concept',
+        title: 'Nol pada bilangan besar',
+        text: 'Pada 70.080.000, nol di antara 7 dan 8 adalah nol tengah. Nol setelah angka 8 adalah nol belakang.',
+        visual: { kind: 'zeros', value: '70.080.000' },
+        callout: 'Nol tengah ditulis, nol belakang dibuang → a = 7,008.',
+      },
+      {
+        type: 'concept',
+        title: 'Nol pada bilangan kecil',
+        text: 'Pada 0,000506, nol sebelum angka 5 adalah nol depan. Nol di antara 5 dan 6 adalah nol tengah.',
+        visual: { kind: 'zeros', value: '0,000506' },
+        callout: 'Nol depan menentukan pangkat, nol tengah tetap ditulis → a = 5,06.',
+      },
+      {
+        type: 'concept',
+        title: 'Aturan singkat',
+        list: [
+          'Cari angka bukan nol pertama dan angka bukan nol terakhir.',
+          'Tulis semua angka di antara keduanya, termasuk nolnya.',
+          'Taruh koma tepat setelah angka bukan nol pertama.',
+          'Hitung lompatan koma untuk pangkatnya, seperti di Modul 2 dan 3.',
+        ],
+        callout: 'Ingat: 7,05 tidak sama dengan 7,5. Membuang nol tengah mengubah nilai bilangan.',
+      },
+      { type: 'worked', qtype: 'to_scientific', focus: 'zero', value: '3.004.000' },
+      { type: 'worked', qtype: 'to_scientific', focus: 'zero', value: '70.080.000' },
+      { type: 'worked', qtype: 'to_scientific', focus: 'zero', value: '0,000506' },
+      {
+        type: 'concept',
+        title: 'Cek dengan membalik',
+        text: 'Ubah jawabanmu kembali ke bentuk biasa. Hasilnya harus sama persis dengan soal. Cara membaliknya kamu pelajari lengkap di Modul 5.',
+        callout: '3,004 × 10⁶ = 3.004.000 ✓ sama dengan soal. 3,4 × 10⁶ = 3.400.000 ✗ berbeda.',
+      },
+      { type: 'faded', qtype: 'to_scientific', focus: 'zero', value: '5.008.000', shown: 3 },
+      { type: 'faded', qtype: 'to_scientific', focus: 'zero', value: '0,0302', shown: 2 },
+      { type: 'guided', value: '60.500' },
+      { type: 'guided', value: '0,00907' },
+      { type: 'practice' },
+      { type: 'quiz' },
+    ],
+  },
+  {
+    id: 'm5',
+    no: 5,
+    title: 'Kembali ke Bentuk Biasa',
+    short: 'Bentuk biasa',
+    objective: 'Mengubah bilangan bentuk baku a × 10ⁿ menjadi bentuk biasa, untuk pangkat positif maupun negatif.',
+    items: [
+      {
+        type: 'intro',
+        title: 'Membaca bentuk baku',
+        text: 'Di sebuah berita tertulis: jarak Bumi ke Matahari sekitar 1,5 × 10⁸ km. Berapa itu jika ditulis biasa? Di modul ini kamu membalik langkah Modul 2–4: dari bentuk baku kembali ke bentuk biasa.',
+      },
+      {
+        type: 'concept',
+        title: 'Membalik arah lompatan',
+        text: 'Dulu koma melompat untuk membentuk a. Sekarang kita mulai dari a, lalu koma melompat kembali ke tempat asalnya. Banyak lompatan = angka pada pangkat.',
+        callout: 'Pangkat positif → koma ke kanan, bilangannya jadi besar. Pangkat negatif → koma ke kiri, bilangannya jadi kecil.',
+      },
+      {
+        type: 'concept',
+        title: 'Pangkat positif: geser ke kanan',
+        text: 'Pada 2,5 × 10⁸, koma melompat 8 kali ke kanan. Setelah angka 5 dilewati, tempat yang kosong diisi nol. Tekan Putar.',
+        visual: { kind: 'back', a: '2,5', n: 8 },
+      },
+      {
+        type: 'concept',
+        title: 'Pangkat negatif: geser ke kiri',
+        text: 'Pada 6,02 × 10⁻³, koma melompat 3 kali ke kiri. Tempat kosong di depan diisi nol, lalu tulis 0 sebelum koma. Tekan Putar.',
+        visual: { kind: 'back', a: '6,02', n: -3 },
+      },
+      {
+        type: 'concept',
+        title: 'Empat langkah',
+        list: [
+          'Lihat tanda pangkat: positif → ke kanan, negatif → ke kiri.',
+          'Geser koma sebanyak angka pada pangkatnya.',
+          'Isi tempat yang kosong dengan nol.',
+          'Beri titik ribuan agar mudah dibaca, lalu cek kewajarannya.',
+        ],
+        callout: 'Pangkat 0 berarti koma tidak bergeser, karena 10⁰ = 1. Jadi 4,7 × 10⁰ = 4,7.',
+      },
+      { type: 'worked', qtype: 'to_standard', a: '1,2', n: 5 },
+      { type: 'worked', qtype: 'to_standard', a: '3,456', n: 2 },
+      { type: 'worked', qtype: 'to_standard', a: '6,02', n: -3 },
+      { type: 'worked', qtype: 'to_standard', a: '7', n: -5 },
+      {
+        type: 'concept',
+        title: 'Cek kewajaran',
+        text: 'Pangkat positif n → hasilnya punya n + 1 angka sebelum koma. Pangkat negatif −n → angka bukan nol pertama ada di posisi ke-n setelah koma. Ini kebalikan cara cepat di Modul 2 dan aturan posisi di Modul 3.',
+        callout: '1,2 × 10⁵ = 120.000 → ada 6 angka, dan 6 = 5 + 1 ✓',
+      },
+      { type: 'faded', qtype: 'to_standard', a: '4,08', n: 6, shown: 2 },
+      { type: 'faded', qtype: 'to_standard', a: '9,1', n: -4, shown: 1 },
+      { type: 'practice' },
+      { type: 'quiz' },
+    ],
+  },
+  { id: 'm6', no: 6, title: 'Soal Cerita & Satuan', short: 'Soal cerita', comingSoon: true, items: [] },
+  { id: 'm7', no: 7, title: 'Kali & Bagi Bentuk Baku', short: 'Kali & bagi', comingSoon: true, items: [] },
+  { id: 'm8', no: 8, title: 'Pemodelan Matematika', short: 'Pemodelan', comingSoon: true, items: [] },
+];
+
+export const getModule = (id) => MODULES.find((m) => m.id === id);

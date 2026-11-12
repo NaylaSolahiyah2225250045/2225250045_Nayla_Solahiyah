@@ -1,0 +1,61 @@
+{
+  "conversions": [
+    { "standard": "4.500.000", "a": "4,5", "n": 6 },
+    { "standard": "135.000.000", "a": "1,35", "n": 8 },
+    { "standard": "2.500.000.000", "a": "2,5", "n": 9 },
+    { "standard": "70.080.000", "a": "7,008", "n": 7 },
+    { "standard": "3.004.000", "a": "3,004", "n": 6 },
+    { "standard": "8", "a": "8", "n": 0 },
+    { "standard": "10", "a": "1", "n": 1 },
+    { "standard": "9,99", "a": "9,99", "n": 0 },
+    { "standard": "0,0405", "a": "4,05", "n": -2 },
+    { "standard": "0,00032", "a": "3,2", "n": -4 },
+    { "standard": "0,0000075", "a": "7,5", "n": -6 },
+    { "standard": "0,000506", "a": "5,06", "n": -4 },
+    { "standard": "0,00602", "a": "6,02", "n": -3 },
+    { "standard": "0,0000000090387", "a": "9,0387", "n": -9 },
+    { "standard": "120.000", "a": "1,2", "n": 5 },
+    { "standard": "250.000.000", "a": "2,5", "n": 8 },
+    { "standard": "0,1", "a": "1", "n": -1 },
+    { "standard": "12,5", "a": "1,25", "n": 1 }
+  ],
+  "parse_equivalents": [
+    { "input": "4500000", "same_as": "4.500.000" },
+    { "input": "3,50", "same_as": "3,5" },
+    { "input": "3.5", "same_as": "3,5" },
+    { "input": " 0,000 32 ", "same_as": "0,00032" },
+    { "input": "−0,5", "same_as": "-0,5" }
+  ],
+  "parse_invalid": ["", "abc", "4,5,0", "1..2", "0", "0,000", ",", "12.34.5"],
+  "diagnosis_to_scientific": [
+    { "question": "0,0000075", "answer": { "a": "7,5", "n": 6 }, "expected": "E-TANDA" },
+    { "question": "0,0000075", "answer": { "a": "7,5", "n": -7 }, "expected": "E-PANGKAT" },
+    { "question": "135.000.000", "answer": { "a": "13,5", "n": 7 }, "expected": "E-KOMA" },
+    { "question": "135.000.000", "answer": { "a": "13,5", "n": 8 }, "expected": "E-KOMA" },
+    { "question": "70.080.000", "answer": { "a": "7,8", "n": 7 }, "expected": "E-NOL" },
+    { "question": "0,000506", "answer": { "a": "5,6", "n": -4 }, "expected": "E-NOL" },
+    { "question": "4.500.000", "answer": { "a": "4,5", "n": 6 }, "expected": null },
+    { "question": "4.500.000", "answer": { "a": "4,50", "n": 6 }, "expected": null },
+    { "question": "4.500.000", "answer": { "a": "4.5", "n": 6 }, "expected": null },
+    { "question": "4.500.000", "answer": { "a": "4,5,0", "n": 6 }, "expected": "E-FORMAT" },
+    { "question": "4.500.000", "answer": { "a": "", "n": 6 }, "expected": "E-FORMAT" },
+    { "question": "4.500.000", "answer": { "a": "9", "n": 2 }, "expected": "E-LAIN" }
+  ],
+  "diagnosis_to_standard": [
+    { "a": "2,5", "n": 8, "answer": "250.000.000", "expected": null },
+    { "a": "2,5", "n": 8, "answer": "250000000", "expected": null },
+    { "a": "2,5", "n": 8, "answer": "25.000.000", "expected": "E-PANGKAT" },
+    { "a": "6,02", "n": -3, "answer": "0,0602", "expected": "E-PANGKAT" },
+    { "a": "6,02", "n": -3, "answer": "6.020", "expected": "E-TANDA" },
+    { "a": "9,0387", "n": -9, "answer": "0,000000009387", "expected": "E-NOL" },
+    { "a": "1,2", "n": 5, "answer": "1,2,0", "expected": "E-FORMAT" }
+  ],
+  "operations": [
+    { "op": "mul", "x": { "a": "3", "n": 8 }, "y": { "a": "5", "n": 2 }, "result": { "a": "1,5", "n": 11 } },
+    { "op": "mul", "x": { "a": "4", "n": -4 }, "y": { "a": "3", "n": 1 }, "result": { "a": "1,2", "n": -2 } },
+    { "op": "mul", "x": { "a": "2,8", "n": 8 }, "y": { "a": "7", "n": -1 }, "result": { "a": "1,96", "n": 8 } },
+    { "op": "div", "x": { "a": "1,5", "n": 11 }, "y": { "a": "3", "n": 8 }, "result": { "a": "5", "n": 2 } },
+    { "op": "div", "x": { "a": "6", "n": 9 }, "y": { "a": "1,2", "n": 4 }, "result": { "a": "5", "n": 5 } },
+    { "op": "div", "x": { "a": "1", "n": -3 }, "y": { "a": "1", "n": -7 }, "result": { "a": "1", "n": 4 } }
+  ]
+}
