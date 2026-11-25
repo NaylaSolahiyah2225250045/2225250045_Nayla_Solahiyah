@@ -710,6 +710,11 @@ button.strip__gap:hover::after {
   padding: 8px 0;
 }
 
+/* Ekspresi operasi (a × 10ᵐ) × (b × 10ⁿ): lebih kecil agar muat satu-dua baris di HP */
+.big-number--expr {
+  font-size: clamp(1.15rem, 5vw, 1.7rem);
+}
+
 /* ---------- Lesson ---------- */
 .concept-title {
   font-size: clamp(1.3rem, 5vw, 1.6rem);
@@ -1129,4 +1134,40 @@ button.strip__gap:hover::after {
     transition: none !important;
     animation: none !important;
   }
+}
+
+/* Hasil Kuis Akhir: nilai per topik & langkah penyelesaian yang bisa dibuka */
+.topic-score {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.topic-score li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--surface-2);
+}
+
+.c-ok {
+  color: var(--success);
+}
+
+.quiz-steps summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--primary-ink);
+  font-weight: 700;
+}
+
+.steps--compact {
+  margin-top: 4px;
+  font-size: 0.92rem;
 }

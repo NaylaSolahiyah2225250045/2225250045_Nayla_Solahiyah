@@ -1,0 +1,284 @@
+/* =====================================================================
+ * PANDUAN AWAL (onboarding) — kartu dialog berpemandu kapibara di atas Dashboard.
+ * Bukan layar penuh: lapisan latar redup, kartu ±560px (laptop) / selebar layar di atas
+ * navigasi bawah (HP). Menu yang sedang dijelaskan disorot lewat html[data-tour-focus~='…'].
+ * Warna hanya lewat token; animasi digating [data-motion='on'].
+ * ===================================================================== */
+
+.tour {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: end center;
+  padding: 16px 12px calc(92px + env(safe-area-inset-bottom));
+}
+
+.tour__backdrop {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--text) 42%, transparent);
+}
+
+/* Navigasi tampil terang di atas latar redup (bisa dilihat, tidak bisa diklik selama panduan). */
+html[data-tour] .sidenav,
+html[data-tour] .bottomnav {
+  z-index: 61;
+  pointer-events: none;
+}
+
+html[data-tour] .sidenav {
+  position: sticky;
+}
+
+/* Sorotan menu yang sedang dijelaskan */
+html[data-tour-focus~='beranda'] [data-tour='beranda'],
+html[data-tour-focus~='materi'] [data-tour='materi'],
+html[data-tour-focus~='latihan'] [data-tour='latihan'],
+html[data-tour-focus~='catatan'] [data-tour='catatan'],
+html[data-tour-focus~='riwayat'] [data-tour='riwayat'],
+html[data-tour-focus~='kalender'] [data-tour='kalender'],
+html[data-tour-focus~='profil'] [data-tour='profil'],
+html[data-tour-focus~='lainnya'] [data-tour='lainnya'],
+html[data-tour] .is-tour-focus {
+  position: relative;
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow:
+    0 0 0 3px var(--primary),
+    0 0 0 8px color-mix(in srgb, var(--primary) 28%, transparent);
+}
+
+html[data-motion='on'][data-tour-focus] [data-tour] {
+  transition: box-shadow 0.25s ease;
+}
+
+@keyframes tour-glow {
+  50% {
+    box-shadow:
+      0 0 0 3px var(--primary),
+      0 0 0 12px color-mix(in srgb, var(--primary) 14%, transparent);
+  }
+}
+
+html[data-motion='on'][data-tour-focus~='beranda'] [data-tour='beranda'],
+html[data-motion='on'][data-tour-focus~='materi'] [data-tour='materi'],
+html[data-motion='on'][data-tour-focus~='latihan'] [data-tour='latihan'],
+html[data-motion='on'][data-tour-focus~='catatan'] [data-tour='catatan'],
+html[data-motion='on'][data-tour-focus~='riwayat'] [data-tour='riwayat'],
+html[data-motion='on'][data-tour-focus~='kalender'] [data-tour='kalender'],
+html[data-motion='on'][data-tour-focus~='profil'] [data-tour='profil'],
+html[data-motion='on'][data-tour-focus~='lainnya'] [data-tour='lainnya'],
+html[data-motion='on'][data-tour] .is-tour-focus {
+  animation: tour-glow 1.8s ease-in-out infinite;
+}
+
+/* ---------- Kartu ---------- */
+.tour__card {
+  position: relative;
+  width: min(100%, 460px);
+  max-height: calc(100dvh - 120px);
+  overflow-y: auto;
+  /* Hiasan maskot (bintang, gerak) tidak boleh membuat kartu bisa digeser ke samping */
+  overflow-x: hidden;
+  overflow-x: clip;
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--radius-l);
+  background:
+    radial-gradient(circle at 100% 0%, var(--dash-blob-sun), transparent 40%),
+    var(--side-grad);
+  border: 1.5px solid color-mix(in srgb, var(--primary) 22%, transparent);
+  box-shadow: 0 18px 48px rgb(40 30 120 / 28%);
+}
+
+[data-motion='on'] .tour__card {
+  animation: tour-in 0.35s ease-out both;
+}
+
+@keyframes tour-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+}
+
+.tour__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tour__count {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--primary-ink);
+  white-space: nowrap;
+}
+
+.tour__dots {
+  display: flex;
+  gap: 5px;
+  flex: 1;
+}
+
+.tour__dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary) 22%, transparent);
+  transition: width 0.25s ease, background 0.25s ease;
+}
+
+.tour__dots .is-done {
+  background: color-mix(in srgb, var(--primary) 55%, transparent);
+}
+
+.tour__dots .is-on {
+  width: 22px;
+  background: linear-gradient(90deg, var(--primary-strong), var(--primary));
+}
+
+.tour__skip {
+  min-height: 44px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.tour__skip:hover {
+  color: var(--primary-ink);
+}
+
+/* Maskot + balon percakapan */
+.tour__body {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+
+[data-motion='on'] .tour__body {
+  animation: tour-step 0.3s ease-out both;
+}
+
+@keyframes tour-step {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+}
+
+.tour__mascot .mascot-live svg {
+  width: 92px;
+  height: auto;
+}
+
+.tour__bubble {
+  position: relative;
+  padding: 12px 14px;
+  border-radius: var(--radius-m);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+/* Ekor balon ke arah maskot */
+.tour__bubble::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  background: var(--surface);
+  transform: translateY(-50%) rotate(45deg);
+  border-radius: 3px;
+}
+
+.tour__title {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  color: var(--primary-ink);
+}
+
+.tour__text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.tour__note {
+  margin: 8px 0 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.tour__foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.tour__foot .btn {
+  min-height: 44px;
+}
+
+.tour__foot .btn:disabled {
+  visibility: hidden;
+}
+
+/* ---------- Laptop: kartu di tengah area konten (di samping sidebar), lebih lega ---------- */
+@media (min-width: 960px) {
+  .tour {
+    place-items: center;
+    padding: 24px 32px 24px calc(var(--sidebar, 260px) + 32px);
+  }
+
+  .tour__card {
+    width: min(100%, 580px);
+    gap: 16px;
+    padding: 22px 24px;
+  }
+
+  .tour__body {
+    gap: 16px;
+  }
+
+  .tour__mascot .mascot-live svg {
+    width: 132px;
+  }
+
+  .tour__title {
+    font-size: 1.25rem;
+  }
+
+  .tour__text {
+    font-size: 1.02rem;
+  }
+}
+
+/* HP sangat sempit: maskot di atas balon */
+@media (max-width: 360px) {
+  .tour__body {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .tour__mascot .mascot-live svg {
+    width: 80px;
+  }
+
+  .tour__bubble::before {
+    left: 50%;
+    top: -8px;
+    transform: translateX(-50%) rotate(45deg);
+  }
+}

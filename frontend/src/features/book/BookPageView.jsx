@@ -3,6 +3,11 @@ import { BOOK_PAGES, CHAPTERS } from '../../content/book.js';
 import {
   backResult,
   backSteps,
+  compareValues,
+  operationKey,
+  operationSteps,
+  splitDecimal,
+  valueOf,
   groupThousands,
   parseScientific,
   parseStandard,
@@ -135,23 +140,116 @@ function BackWork({ a, n }) {
   );
 }
 
+/** Setiap angka dengan nilai tempatnya (Bab 1). Pangkat dihitung dari posisi angka terhadap koma. */
+function Places({ value }) {
+  const p = splitDecimal(value);
+  const cells = [...p.int.split('').map((d, i) => ({ d, n: p.int.length - 1 - i })), ...p.frac.split('').map((d, i) => ({ d, n: -(i + 1) }))];
+  return (
+    <div className="bk-places" role="img" aria-label={`Nilai tempat angka-angka pada ${value}`}>
+      {cells.map((c, i) => (
+        <span key={i} className={`bk-places__cell${c.n === -1 ? ' is-after-comma' : ''}`}>
+          <b>{c.d}</b>
+          <Pow10 n={c.n} />
+        </span>
+      ))}
+    </div>
+  );
+}
+
+/** Bilangan = jumlah (angka × 10ⁿ) untuk angka bukan nol (Bab 1). */
+function Expand({ value }) {
+  const p = splitDecimal(value);
+  const all = p.int + p.frac;
+  const terms = all
+    .split('')
+    .map((d, i) => ({ d, n: p.int.length - 1 - i }))
+    .filter((t) => t.d !== '0');
+  return (
+    <p className="bk-expand">
+      <span className="sci">{value}</span> ={' '}
+      {terms.map((t, i) => (
+        <span key={i}>
+          {i > 0 && ' + '}
+          <Sci a={t.d} n={t.n} />
+        </span>
+      ))}
+    </p>
+  );
+}
+
+/** Urutan bilangan bentuk baku dari terbesar, dengan bentuk biasanya (Bab 2). */
+function Compare({ items }) {
+  const sorted = [...items].sort((x, y) => compareValues(valueOf(y), valueOf(x)));
+  return (
+    <ol className="bk-compare" aria-label="Urutan dari yang terbesar">
+      {sorted.map((p, i) => (
+        <li key={i}>
+          <Sci a={p.a} n={p.n} />
+          <span className="bk-compare__eq">= {toStandard(valueOf(p))}</span>
+          {i < sorted.length - 1 && (
+            <span className="bk-compare__gt" aria-hidden="true">
+              &gt;
+            </span>
+          )}
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+/** Contoh kali/bagi bentuk baku (Bab 4–5): soal → hasil → langkah dari lib/sci. */
+function Operation({ q }) {
+  const key = operationKey(q);
+  return (
+    <div className="bk-convert">
+      {q.text && <p className="bk-p">{q.text}</p>}
+      <p className="bk-convert__eq bk-op__eq">
+        (<Sci a={q.x.a} n={q.x.n} />) {q.op === 'kali' ? '×' : ':'} (<Sci a={q.y.a} n={q.y.n} />) = <Sci a={key.a} n={key.n} />
+        {q.unit ? ` ${q.unit}` : ''}
+      </p>
+      <ol className="bk-steps">
+        {operationSteps(q).map((st) => (
+          <li key={st}>{st}</li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
 /** Latihan singkat di akhir bab: soal + pembahasan yang bisa dibuka (hasil & langkah dari lib/sci). */
 function TryIt({ items }) {
   return (
     <ol className="bk-try">
       {items.map((it) => {
-        const isBack = it.a !== undefined;
-        const answer = isBack ? backResult(it.a, it.n) : toScientific(parseStandard(it.value));
-        const steps = isBack ? backSteps(it.a, it.n) : zeroSteps(it.value);
+        const isOp = it.op !== undefined;
+        const isBack = !isOp && it.a !== undefined;
+        const answer = isOp ? operationKey(it) : isBack ? backResult(it.a, it.n) : toScientific(parseStandard(it.value));
+        const steps = isOp ? operationSteps(it) : isBack ? backSteps(it.a, it.n) : zeroSteps(it.value);
+        const key = isOp ? `${it.op}${it.x.a}e${it.x.n}${it.y.a}e${it.y.n}` : isBack ? `${it.a}e${it.n}` : it.value;
         return (
-          <li key={isBack ? `${it.a}e${it.n}` : it.value}>
+          <li key={key}>
             <details>
               <summary>
-                <span className="bk-try__q">{isBack ? <Sci a={it.a} n={it.n} /> : <span className="sci">{it.value}</span>}</span>
+                <span className="bk-try__q">
+                  {isOp ? (
+                    it.text ? (
+                      <span className="bk-try__text">{it.text}</span>
+                    ) : (
+                      <>
+                        (<Sci a={it.x.a} n={it.x.n} />) {it.op === 'kali' ? '×' : ':'} (<Sci a={it.y.a} n={it.y.n} />)
+                      </>
+                    )
+                  ) : isBack ? (
+                    <Sci a={it.a} n={it.n} />
+                  ) : (
+                    <span className="sci">{it.value}</span>
+                  )}
+                </span>
                 <span className="bk-try__open">Pembahasan</span>
               </summary>
               <p className="bk-try__a">
                 Jawaban: {isBack ? <span className="sci">{answer}</span> : <Sci a={answer.a} n={answer.n} />}
+                {isOp && it.unit ? ` ${it.unit}` : ''}
               </p>
               <ol className="bk-steps">
                 {steps.map((s) => (
@@ -212,6 +310,39 @@ function Block({ b }) {
       );
     case 'backWork':
       return <BackWork a={b.a} n={b.n} />;
+    case 'places':
+      return <Places value={b.value} />;
+    case 'expand':
+      return <Expand value={b.value} />;
+    case 'compare':
+      return <Compare items={b.items} />;
+    case 'rule':
+      return (
+        <div className="bk-rule">
+          {b.lines.map((l) => (
+            <p key={l}>{l}</p>
+          ))}
+        </div>
+      );
+    case 'op':
+      return <Operation q={b} />;
+    case 'units':
+      return (
+        <table className="bk-table bk-units">
+          <tbody>
+            {b.rows.map((r) => (
+              <tr key={r.label}>
+                <td>{r.label}</td>
+                <td aria-hidden="true">=</td>
+                <td className="bk-table__val">
+                  <Pow10 n={r.n} />
+                  {r.unit ? ` ${r.unit}` : ''}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      );
     case 'try':
       return <TryIt items={b.items} />;
     case 'back': {

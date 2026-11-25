@@ -18,6 +18,8 @@ Dokumen ini menjelaskan **apa** yang dipelajari, **urutannya**, dan **bagaimana*
 | Immediate feedback | Umpan balik segera mengoreksi skema | Diagnosis kesalahan per jawaban |
 | Self-explanation | Menjelaskan langkah memperkuat skema | Pertanyaan "Kenapa pangkatnya negatif?" (fase C) |
 
+**Rigorous Mathematical Thinking (RMT, 21 Nov 2026).** Selain CLT, NoBaku memakai RMT (Kinard & Kozulin) sebagai acuan mediasi: fungsi kognitif Fase Input/Elaborasi/Output, alat psikologis matematika, dan Mediated Learning Experience (Intensionalitas & Resiprositas, Transendensi, Pemberian Makna). Tahap 1 menambahkan tujuan & alasan penting tiap level, pertanyaan pemandu, pertanyaan balik pada umpan balik, aturan umum setelah menjawab, dan pemetaan kesalahan ke fase untuk guru — tanpa mengubah bank soal. PMSTP adalah siklus NoBaku, bukan tahapan RMT. Rincian: [RMT.md](RMT.md).
+
 ## 2. Capaian & Tujuan Pembelajaran
 
 **Capaian Pembelajaran (Kurikulum Merdeka, Fase D – Bilangan):** peserta didik dapat membaca, menulis, dan membandingkan bilangan, termasuk bilangan berpangkat dan notasi ilmiah, serta menggunakannya dalam pemecahan masalah.
@@ -37,6 +39,10 @@ Kerangka literasi (proses RUMUS/TERAP/TAFSIR/NALAR dan konteks PERSONAL/SOSBUD/S
 
 ## 3. Peta Modul
 
+> **Susunan berlaku sejak 16 Nov 2026: lima topik.** Topik 1 Pangkat Sepuluh & Nilai Tempat (= M1 + nilai angka menurut posisi) · Topik 2 Bilangan Besar & Kecil (= M2 + M3 + membandingkan) · Topik 3 Mengubah Bentuk Biasa & Baku (= M5 + M4 + bilangan berkoma) · Topik 4 Operasi Hitung Bentuk Baku (= rancangan M7) · Topik 5 Penerapan Bentuk Baku (= rancangan M6 + pemodelan sederhana dari M8). Rincian M1–M8 di bawah tetap menjadi sumber isi tiap topik. Pemodelan PMSTP penuh & Asisten AI (M8) belum dibangun.
+>
+> Latihan (1 level × 10 soal per topik (disetujui pengembang, 23 Nov 2026)): satu latihan per topik berisi 10 soal berurutan — 3 mudah (mengenali), 4 sedang (alasan, hubungan, menghitung), 3 sulit (penalaran bertahap, soal kontekstual/PMSTP); lalu **Level 5 · Kuis Akhir** 10 soal (2 per topik). Kuis topik (5 soal) tetap ada di modul interaktif.
+
 ```
 [Pre-test] → M1 Prasyarat* → M2 Bilangan Besar → M3 Bilangan Kecil → M4 Nol di Tengah
            → M5 Kembali ke Bentuk Biasa → M6 Soal Cerita & Satuan
@@ -53,7 +59,7 @@ Estimasi waktu: 10–15 menit per modul (M8 ±25 menit, dapat dibagi beberapa se
 3. **Contoh terurai** (2 contoh) — semua langkah tampil, dengan Visualisasi Geser Koma.
 4. **Contoh faded** (2 contoh) — sebagian langkah diisi siswa.
 5. **Langkah terpandu** (2–3 soal) — siswa mengerjakan per sub-langkah.
-6. **Latihan bertahap** L1–L4 (5 soal/level).
+6. **Latihan bertahap**: 10 soal per topik, mudah → sedang → sulit (23 Nov 2026).
 7. **Kuis modul** (5 soal, tanpa hint).
 8. **Kuesioner beban kognitif** (1 pertanyaan Paas, ±10 detik).
 
@@ -212,14 +218,17 @@ Modul puncak yang melatih siklus **PMSTP**: **P**ahami → **M**odelkan → **S*
 
 ## 5. Level Latihan (Expertise Reversal)
 
+> **Sejak 23 Nov 2026:** Level 1–4 per topik digabung menjadi **satu latihan 10 soal** yang naik bertahap di dalam satu sesi (soal 1–3 ≈ karakter L1, 4–7 ≈ L2–L3, 8–10 ≈ L4; field `tier` di bank soal). Lulus ≥ 6 benar. Tabel di bawah tetap menjadi acuan karakter tiap jenjang.
+
 | Level | Karakteristik | Scaffold |
 |---|---|---|
-| L1 – Pemula | Angka sederhana (1–2 digit bermakna), tanpa nol tengah | Visual geser koma aktif, penanda posisi aktif |
-| L2 – Berkembang | 2–3 digit bermakna | Penanda posisi aktif, visual bisa dibuka lewat hint |
-| L3 – Cakap | Nol di tengah, campuran positif/negatif | Hanya hint |
-| L4 – Mahir | Soal cerita / konversi balik / pengecoh | Hint terbatas (maks 2) |
+| L1 – Pemanasan | Soal dasar untuk mengenali konsep | Visual geser koma aktif, penanda posisi aktif |
+| L2 – Pemahaman | Konsep & hubungan antarbilangan (membandingkan, aturan) | Penanda posisi aktif, visual bisa dibuka lewat hint |
+| L3 – Penerapan | Perhitungan & penggunaan rumus | Hanya hint |
+| L4 – Tantangan | Penalaran, soal cerita, kehidupan sehari-hari, pengecoh | Hint terbatas (maks 2) |
+| L5 – Kuis Akhir | 10 soal dari kelima topik, tanpa petunjuk | Pembahasan di akhir |
 
-**Aturan buka level:** ≥ 3 dari 5 benar. **Aturan turun bantuan otomatis:** jika 2 salah berturut-turut di L3/L4, tawarkan "Lihat contoh lagi" (kembali ke contoh terurai terkait) — bukan memaksa.
+**Aturan lulus:** ≥ 6 dari 10 benar (60%; sebelumnya ≥ 3 per level 4–5 soal). **Aturan turun bantuan otomatis:** jika 2 salah berturut-turut di L3/L4, tawarkan "Lihat contoh lagi" (kembali ke contoh terurai terkait) — bukan memaksa.
 
 ## 6. Strategi Umpan Balik
 
@@ -236,6 +245,8 @@ Modul puncak yang melatih siklus **PMSTP**: **P**ahami → **M**odelkan → **S*
 | Salah – E-NORMAL | "Hasilmu benar nilainya, tapi a harus antara 1 dan 10. Geser lagi komanya." |
 | Salah – E-MODEL | "Coba pikirkan lagi: besaran yang ditanya didapat dengan mengalikan atau membagi?" |
 | Salah – E-INFO | "Ada angka yang tidak diperlukan untuk menjawab. Angka mana yang benar-benar dipakai?" |
+
+Setiap pesan juga memuat **pertanyaan balik** (RMT — *mediated questioning*, `ask` di `content/messages.js`) yang mengajak siswa memeriksa alasannya, mis. E-TANDA: "Bilangan ini 10 atau lebih, atau kurang dari 1? Apa artinya bagi tanda pangkatnya?". Setelah menjawab, kotak **Aturan umum** (Transendensi) merangkum prinsip yang berlaku untuk soal sejenis ([RMT.md](RMT.md#3-penerapan-tahap-1-di-nobaku)).
 
 Setelah 2 kali salah pada soal yang sama → tawarkan hint berikutnya. Setelah 3 kali → tampilkan pembahasan lengkap, soal dihitung salah, dan soal serupa diberikan kemudian (*retry with variant*).
 

@@ -159,7 +159,7 @@ erDiagram
         jsonb model_spec
         jsonb verified_answer "dari app/sci"
         string status "valid|invalid|out_of_scope|flagged|approved|rejected"
-        string model "mis. claude-opus-5-5"
+        string model "mis. openai/gpt-oss-20b"
         timestamptz created_at
     }
     ai_sessions {
@@ -203,7 +203,10 @@ erDiagram
 |---|---|---|
 | `users` | Semua akun | Siswa: `username` wajib, `email` NULL. Guru/admin: `email` wajib. `research_code` dibuat otomatis untuk anonimisasi; `research_consent` = false → dikecualikan dari ekspor penelitian. |
 | `classes` | Kelas milik guru | `join_code` 6 karakter dari alfabet `ABCDEFGHJKMNPQRSTUVWXYZ23456789`. |
-| `class_members` | Relasi siswa–kelas | PK komposit. |
+| `class_members` | Relasi siswa–kelas | PK komposit. Satu siswa hanya di satu kelas (diperiksa di `services/classes.py`). |
+| `learner_snapshots` | Ringkasan belajar terbaru tiap siswa (dibangun 17 Nov 2026, migrasi `0001_guru_kelas`) | `student_id` PK/FK, `data` JSON (`modules`, `history`, `days`, `bookRead`), `updated_at`. Aplikasi siswa offline-first mengirim ringkasan ini agar guru kelasnya bisa memantau; menggantikan sementara `attempts`/`answers`/`module_progress` sampai pencatatan per jawaban di server dibangun. |
+
+> Tabel yang sudah dibuat lewat Alembic (17 Nov 2026): `users` (tambahan kolom `school`, `status` active/pending, `preferences` JSON — musik/volume/efek suara/status panduan, migrasi `0002_preferensi` 21 Nov 2026; `research_code`/consent menyusul), `classes` (nama VIII-A–VIII-E, UNIQUE(`teacher_id`, `name`)), `class_members`, `learner_snapshots`. Tabel lain di ERD masih rencana.
 | `modules`, `lesson_items`, `questions` | Konten | Di-seed dari JSON `frontend/src/content`; `content_version` untuk melacak perubahan konten. |
 | `attempts` | Satu sesi pengerjaan (latihan per level, kuis, pre/post-test) | |
 | `answers` | Jawaban per soal (append-only) | `client_id` UNIQUE untuk mencegah duplikat saat sinkronisasi offline. |

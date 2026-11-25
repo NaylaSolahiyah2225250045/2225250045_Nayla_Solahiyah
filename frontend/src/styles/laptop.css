@@ -194,6 +194,16 @@
     display: inline;
   }
 
+  /* Lima bab + sampul: tombol sedikit lebih ringkas agar muat sebaris di 1280px */
+  .book-toc {
+    gap: 6px;
+  }
+
+  .book-toc__item {
+    padding: 8px 11px;
+    font-size: 0.84rem;
+  }
+
   .book {
     grid-column: 1 / -1;
     min-height: 0;
@@ -264,8 +274,19 @@
   }
 
   .bk-cover__art svg {
-    width: clamp(100px, 20vh, 150px);
+    width: clamp(84px, 16vh, 150px);
     height: auto;
+  }
+
+  /* Daftar isi sampul (5 bab) tetap muat di laptop pendek */
+  .bk-cover {
+    gap: clamp(4px, 1vh, 8px);
+  }
+
+  .bk-cover__toc {
+    padding: clamp(6px, 1.2vh, 10px) 14px;
+    font-size: clamp(0.8rem, 1.8vh, 0.95rem);
+    line-height: 1.4;
   }
 
   .book--two .bk-page:not(.bk-page--cover) {
@@ -470,5 +491,12 @@
 
   .sidenav__cheer {
     padding-top: 10px;
+  }
+}
+
+/* Layar belajar terfokus tidak punya sidebar: latar lembut memakai seluruh lebar (21 Nov 2026) */
+@media (min-width: 960px) {
+  .dash-backdrop--study {
+    left: 0;
   }
 }

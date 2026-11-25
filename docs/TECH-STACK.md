@@ -49,7 +49,8 @@
 | slowapi | Rate limiting (login) |
 | pytest, httpx, pytest-cov | Pengujian |
 | ruff, black, mypy | Lint, format, cek tipe |
-| anthropic | SDK resmi Claude API untuk Asisten AI (structured output, prompt caching) |
+| httpx | Klien HTTP ke Groq API (sudah dipakai untuk tes; tanpa SDK AI tambahan) |
+| python-dotenv | Memuat `backend/.env` (kunci Groq & pengaturan) |
 
 Logika notasi ilmiah, evaluator ekspresi, dan registri satuan memakai `decimal.Decimal` (standard library) — tanpa dependensi tambahan.
 
@@ -57,8 +58,8 @@ Logika notasi ilmiah, evaluator ekspresi, dan registri satuan memakai `decimal.D
 
 | Item | Pilihan | Alasan |
 |---|---|---|
-| Penyedia | Claude API (Anthropic) | Pemahaman bahasa Indonesia baik; mendukung structured output sehingga hasil dapat divalidasi skema |
-| Model | `claude-opus-5-5` (dapat diganti via `AI_MODEL`) | Model default terbaru; tarif $4 / $20 per 1 juta token input/output |
+| Penyedia | Groq API (keputusan pengembang, 21 Nov 2026) | API kompatibel OpenAI; ketentuan tidak melarang aplikasi untuk pengguna < 18 (tanggung jawab hukum pada pengembang); input/output tidak dipakai melatih model |
+| Model | `openai/gpt-oss-20b` (dapat diganti via `GROQ_MODEL`) | Model produksi Groq; dicek ke daftar model saat dipakai |
 | Pola | Satu panggilan per tugas (ekstraksi, petunjuk, draf soal) — **bukan agen** | Tugas sempit dan terdefinisi; lebih murah, cepat, dan mudah diuji |
 | Verifikasi | `app/sci` (deterministik) | AI tidak dipercaya untuk aritmetika |
 

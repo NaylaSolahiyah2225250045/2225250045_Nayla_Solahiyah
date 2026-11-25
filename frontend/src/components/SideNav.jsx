@@ -7,6 +7,7 @@ import { IconBook, IconCalendar, IconHistory, IconNote, IconRoute, IconUser } fr
 import { useSession } from '../lib/account.js';
 import { MASCOT_LINES } from '../content/messages.js';
 import Decor from './Decor.jsx';
+import AudioControl from './AudioControl.jsx';
 
 /** Tujuh menu utama (sama di laptop & HP; hanya penyajiannya yang berbeda). */
 export const NAV_ITEMS = [
@@ -42,7 +43,7 @@ export default function SideNav() {
       </NavLink>
       <nav className="sidenav__links">
         {NAV_ITEMS.map(({ to, label, Icon, tone }) => (
-          <NavLink key={to} to={to} className={`tone-${tone}`}>
+          <NavLink key={to} to={to} className={`tone-${tone}`} data-tour={to.slice(1)}>
             <span className="sidenav__ico" aria-hidden="true">
               <Icon />
             </span>
@@ -54,6 +55,10 @@ export default function SideNav() {
         <Decor set="side" />
         {/* Maskot sidebar tidak bergerak terus-menerus (idle=false) agar tidak ramai bersama maskot halaman. */}
         <MascotLive poses={['smile', 'wink', 'thumb', 'wave']} size={84} lines={MASCOT_LINES.sidebar} bubble="top" idle={false} />
+      </div>
+      <div className="sidenav__audio">
+        <AudioControl align="left" up />
+        <span className="small muted">Suara</span>
       </div>
       <NavLink to="/profil" className="sidenav__user">
         <Avatar id={session?.avatar} size={40} />

@@ -19,7 +19,7 @@ flowchart LR
     end
 
     DB[("PostgreSQL<br/>(Neon/Supabase)")]
-    CLAUDE["Claude API<br/>(Anthropic)"]
+    CLAUDE["Groq API<br/>(penyedia AI)"]
 
     API --> AIS
     AIS -->|teks soal saja| CLAUDE
@@ -39,7 +39,7 @@ flowchart LR
 - **Konten statis di klien:** materi & bank soal di-bundle sebagai JSON (`frontend/src/content`) agar cepat dan offline. Backend menyimpan salinan yang sama (di-seed dari file yang sama) untuk validasi & laporan.
 - **Pengecekan jawaban ganda:** klien memeriksa instan (umpan balik < 300 ms); server memeriksa ulang saat attempt dikirim → nilai resmi berasal dari server.
 - **Append-only attempts:** progres dihitung dari riwayat jawaban, sehingga sinkronisasi offline aman dari konflik.
-- **AI di belakang backend:** klien tidak pernah memanggil Claude API langsung; API key hanya di server. AI menghasilkan `ModelSpec`, sedangkan angka dihitung `app/sci`. Detail: [AI-TUTOR.md](AI-TUTOR.md).
+- **AI di belakang backend:** klien tidak pernah memanggil Groq API langsung; `GROQ_API_KEY` hanya di `backend/.env`. Asisten Belajar Tahap 1: `/api/v1/ai/status` & `/api/v1/ai/chat`, saringan angka & kunci jawaban di `app/ai/guardrails.py`. AI menghasilkan `ModelSpec`, sedangkan angka dihitung `app/sci`. Detail: [AI-TUTOR.md](AI-TUTOR.md).
 
 ## 2. Struktur Folder
 
@@ -101,7 +101,7 @@ backend/
 │   ├── services/              # grading.py, diagnosis.py, progress.py, reports.py, codes.py, literacy.py
 │   ├── sci/                   # parse.py, convert.py, compare.py, diagnose.py, ops.py, units.py, expr.py, modeling.py (cermin lib/sci)
 │   ├── ai/
-│   │   ├── client.py          # inisialisasi Anthropic SDK, timeout, retry
+│   │   ├── groq_client.py     # httpx → Groq (kompatibel OpenAI), timeout, galat tanpa kunci
 │   │   ├── schemas.py         # ModelSpec, QuestionDraft (Pydantic, untuk structured output)
 │   │   ├── prompts/           # extract_system.md, hint_system.md, author_system.md + contoh
 │   │   ├── tutor.py           # analyze_problem, next_hint, draft_question
@@ -113,7 +113,7 @@ backend/
 │   ├── test_sci_vectors.py    # memakai ../shared/test-vectors.json
 │   ├── test_auth.py, test_classes.py, test_attempts.py, test_reports.py
 │   ├── test_expr_units.py, test_modeling.py
-│   ├── test_ai_tutor.py       # memakai klien Claude tiruan (mock)
+│   ├── test_ai_chat.py        # klien Groq tiruan + httpx.MockTransport (tanpa API sungguhan)
 │   └── ai_eval/               # set evaluasi AI (pytest -m ai_eval, memanggil API sungguhan)
 └── requirements.txt
 ```
@@ -197,9 +197,11 @@ sequenceDiagram
 | `JWT_ACCESS_MINUTES` / `JWT_REFRESH_DAYS` | backend `.env` | `30` / `7` |
 | `CORS_ORIGINS` | backend `.env` | `https://nobaku.vercel.app,capacitor://localhost,http://localhost` |
 | `RESEARCH_MODE` | backend `.env` | `true` (aktifkan kuesioner tambahan & ekspor) |
-| `ANTHROPIC_API_KEY` | backend `.env` / secret manager | kunci API (jangan pernah di frontend/APK) |
+| `AI_ENABLED` | backend `.env` | `false` (bawaan) — nyalakan setelah persetujuan uji coba |
+| `GROQ_API_KEY` | backend `.env` / secret manager | kunci Groq (jangan pernah di frontend/APK/`VITE_*`/repo) |
+| `AI_DAILY_LIMIT` | backend `.env` | `20` pesan per siswa per hari (memori server) |
 | `AI_ENABLED` | backend `.env` | `true` / `false` (saklar global) |
-| `AI_MODEL` | backend `.env` | `claude-opus-5-5` |
+| `GROQ_MODEL` | backend `.env` | `openai/gpt-oss-20b` |
 | `AI_MONTHLY_BUDGET_USD` | backend `.env` | `50` |
 | `AI_DEFAULT_DAILY_QUOTA` | backend `.env` | `10` |
 

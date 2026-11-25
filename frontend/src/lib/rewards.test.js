@@ -13,14 +13,14 @@ describe('XP & lencana', () => {
   });
 
   it('XP = jawaban tepat + modul selesai', () => {
-    const r = computeRewards({ m1: mod({ correct: 11, completed: true, bestQuiz: 80, levelUnlocked: 3 }), m2: mod({ correct: 2 }) });
+    const r = computeRewards({ t1: mod({ correct: 11, completed: true, bestQuiz: 80, levelUnlocked: 3 }), t2: mod({ correct: 2 }) });
     expect(r.xp).toBe(13 * XP_PER_CORRECT + XP_PER_MODULE);
     const earned = r.badges.filter((b) => b.earned).map((b) => b.id);
     expect(earned).toEqual(['langkah-pertama', 'kenal-pangkat']);
   });
 
   it('naik level setiap kelipatan XP_PER_LEVEL', () => {
-    const r = computeRewards({ m1: mod({ correct: 25 }) });
+    const r = computeRewards({ t1: mod({ correct: 25 }) });
     expect(r.xp).toBe(250);
     expect(r.level).toBe(2);
     expect(r.levelStart).toBe(250);
@@ -28,7 +28,7 @@ describe('XP & lencana', () => {
   });
 
   it('lencana kuis sempurna & level mahir', () => {
-    const r = computeRewards({ m3: mod({ correct: 30, completed: true, bestQuiz: 100, levelUnlocked: 4 }) });
+    const r = computeRewards({ t3: mod({ correct: 30, completed: true, bestQuiz: 100, levelUnlocked: 4 }) });
     const earned = new Set(r.badges.filter((b) => b.earned).map((b) => b.id));
     for (const id of ['rajin-berlatih', 'pangkat-negatif', 'kuis-sempurna', 'level-mahir']) expect(earned.has(id)).toBe(true);
   });

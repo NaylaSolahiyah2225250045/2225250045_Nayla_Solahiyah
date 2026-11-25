@@ -19,6 +19,10 @@ import './styles/lab.css';
 import './styles/pages.css';
 import './styles/decor.css';
 import './styles/brand.css';
+import './styles/tour.css';
+import './styles/sky.css';
+import './styles/teacher.css';
+import './styles/audio.css';
 import './styles/laptop.css';
 
 // Service worker: cache aplikasi agar bisa dipakai offline & diperbarui otomatis.

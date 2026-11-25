@@ -14,9 +14,13 @@ export const NOTE_SECTIONS = [
 
 export const SUMMARY = [
   { title: 'Bilangan berpangkat', text: 'aⁿ berarti a dikalikan dengan dirinya sendiri sebanyak n kali. a = basis, n = pangkat.' },
+  { title: 'Nilai tempat', text: 'Setiap tempat bernilai pangkat 10. Nilai angka = angka × nilai tempatnya, mis. 7 pada 3.725 bernilai 7 × 10² = 700.' },
   { title: 'Bentuk baku', text: 'Bilangan ditulis a × 10ⁿ dengan 1 ≤ a < 10 dan n bilangan bulat.' },
   { title: 'Bilangan besar', text: 'Koma bergeser ke kiri sampai tepat setelah angka bukan nol pertama. Pangkatnya positif.' },
   { title: 'Bilangan kecil', text: 'Koma bergeser ke kanan sampai tepat setelah angka bukan nol pertama. Pangkatnya negatif.' },
+  { title: 'Kembali ke bentuk biasa', text: 'Pangkat positif: koma ke kanan. Pangkat negatif: koma ke kiri. Tempat kosong diisi nol; nol tengah tetap ditulis.' },
+  { title: 'Kali & bagi', text: 'Kali: kalikan bilangan depan, jumlahkan pangkat. Bagi: bagi bilangan depan, kurangkan pangkat. Lalu pastikan hasilnya bentuk baku.' },
+  { title: 'Penerapan', text: 'Tulis besaran dalam bentuk baku, samakan satuan, pilih model kali atau bagi, lalu hitung dan periksa satuannya.' },
 ];
 
 /** Rumus penting (ditampilkan besar). */
@@ -26,6 +30,9 @@ export const FORMULAS = [
   { formula: '10⁰ = 1', note: 'pangkat nol' },
   { formula: '10⁻ⁿ = 1 ÷ 10ⁿ', note: 'pangkat negatif = membagi' },
   { formula: 'koma ← k langkah ⇒ pangkat + k', note: 'geser kiri, pangkat bertambah' },
+  { formula: '(a × 10ᵐ) × (b × 10ⁿ) = (a × b) × 10ᵐ⁺ⁿ', note: 'kali → pangkat dijumlah' },
+  { formula: '(a × 10ᵐ) : (b × 10ⁿ) = (a : b) × 10ᵐ⁻ⁿ', note: 'bagi → pangkat dikurang' },
+  { formula: '1 km = 10³ m · 1 mm = 10⁻³ m', note: 'satuan sebagai pangkat 10' },
 ];
 
 /** Contoh singkat: bentuk biasa → bentuk baku (langkah dihitung lib/sci). */
@@ -37,6 +44,8 @@ export const TIPS = [
   'Ke kiri = pangkat positif, ke kanan = pangkat negatif.',
   'Nol di depan dan nol di belakang dibuang, tetapi nol di tengah tetap ditulis.',
   'Setelah menjawab, cek: apakah a sudah di antara 1 dan 10?',
+  'Hasil kali atau bagi belum tentu bentuk baku: 20 × 10³ = 2 × 10⁴.',
+  'Soal cerita: tulis dulu modelnya, misalnya (6 × 10⁶) : (3 × 10²), baru hitung.',
 ];
 
 /**

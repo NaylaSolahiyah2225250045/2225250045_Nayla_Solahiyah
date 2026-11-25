@@ -22,12 +22,13 @@ Pengguna utama NoBaku adalah **anak di bawah umur** (±13–15 tahun). Karena it
 | Skor beban kognitif | Siswa | Tidak (bisa dilewati) | Penelitian | — |
 | Nama, email, password (hash) | Guru | Ya | Login, aktivasi | — |
 | Alamat IP | Semua | Sementara | Rate limiting, keamanan | Tidak disimpan permanen di DB |
-| Teks soal cerita yang dimasukkan ke Asisten AI | Siswa, Guru | Tidak (fitur opsional) | Analisis soal & bimbingan | Dikirim ke Claude API (Anthropic) tanpa identitas; disimpan 180 hari |
+| Teks soal cerita yang dimasukkan ke Asisten AI | Siswa, Guru | Tidak (fitur opsional) | Analisis soal & bimbingan | Dikirim ke Groq API tanpa identitas (email/HP disensor); **tidak disimpan** di server NoBaku |
 
 **Tidak dikumpulkan:** email/telepon siswa, foto, lokasi, kontak, ID perangkat iklan, data biometrik. Tidak ada SDK analytics/iklan pihak ketiga.
 
 ### 2.1 Pemrosesan oleh Layanan AI Pihak Ketiga
-- Asisten AI memakai **Claude API (Anthropic)** sebagai pemroses data. Yang dikirim **hanya teks soal** (dan, untuk petunjuk, ringkasan langkah & kode kesalahan) — **tanpa** nama, username, ID siswa, kelas, atau sekolah.
+- **Ketentuan Groq (diperiksa 21 Nov 2026):** pemilik akun Groq wajib ≥ 18 tahun (pengembang, bukan siswa). Aplikasi untuk pengguna di bawah umur tidak dilarang, tetapi menurut Services Agreement §6.3(d) pengembang **bertanggung jawab penuh** atas kepatuhan hukum (di Indonesia: UU PDP — persetujuan orang tua/sekolah). Groq tidak memakai input/output untuk melatih model; secara bawaan tidak menyimpan data inferensi, kecuali log penyalahgunaan/gangguan ≤ 30 hari (opsi *Zero Data Retention* di Data Controls). Selama uji coba, persetujuan orang tua ditangani **di luar aplikasi**; fitur AI mati secara bawaan (`AI_ENABLED=false`).
+- Asisten AI memakai **Groq API** sebagai pemroses data. Yang dikirim **hanya teks soal** (dan, untuk petunjuk, ringkasan langkah & kode kesalahan) — **tanpa** nama, username, ID siswa, kelas, atau sekolah.
 - Sebelum dikirim, backend menyaring pola data pribadi sederhana (nomor HP, email) dan menolak teks yang tampak berisi data pribadi.
 - AI **nonaktif secara default**; guru mengaktifkan per kelas setelah sekolah dan orang tua menyetujui (formulir persetujuan menyebut penggunaan layanan AI secara eksplisit).
 - Siswa tanpa persetujuan orang tua untuk AI (`ai_consent = false`) tidak dapat membuka fitur Asisten AI, tetapi tetap dapat memakai mode terbimbing.

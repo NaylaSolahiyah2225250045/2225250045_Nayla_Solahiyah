@@ -1,27 +1,34 @@
 import { useState } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { getModule } from '../content/modules.js';
-import { BANK, LEVELS, PASS_COUNT, PER_SESSION } from '../content/bank.js';
+import { BANK, isPassed, LEVEL_NAMES, LEVELS, PASS_COUNT, PER_SESSION } from '../content/bank.js';
+import { practiceNodeId } from '../lib/path.js';
 import { progress, useProgress, getModuleProgress } from '../lib/progress.js';
-import { shuffle } from '../lib/shuffle.js';
 import { logActivity } from '../lib/activity.js';
 import { recordSession } from '../lib/history.js';
 import AppBar from '../components/AppBar.jsx';
 import QuestionCard from '../features/practice/QuestionCard.jsx';
 import Feedback from '../components/Feedback.jsx';
 import { IconLock } from '../components/Icons.jsx';
+import { playSfx } from '../lib/audio.js';
 
+/** `key={id}`: berpindah topik selalu memulai ulang dengan soal topik itu (23 Nov 2026). */
 export default function PracticePage() {
   const { id } = useParams();
+  return <TopicPractice key={id} id={id} />;
+}
+
+function TopicPractice({ id }) {
   const module = getModule(id);
   useProgress();
   const [session, setSession] = useState(null); // {level, questions, index, results}
 
-  if (!module || !BANK[id]) return <Navigate to="/beranda" replace />;
+  if (!module || !BANK[module.id]) return <Navigate to="/beranda" replace />;
+  if (module.id !== id) return <Navigate to={`/modul/${module.id}/latihan`} replace />; // tautan modul lama → topik
   const mp = getModuleProgress(id);
 
-  const start = (level) =>
-    setSession({ level, questions: shuffle(BANK[id].levels[level]).slice(0, PER_SESSION), index: 0, results: [] });
+  // Urutan tetap (mudah → sedang → sulit), tidak diacak — 23 Nov 2026.
+  const start = (level) => setSession({ level, questions: BANK[id].levels[level].slice(0, PER_SESSION), index: 0, results: [] });
 
   // ---------- Pilih level ----------
   if (!session) {
@@ -29,15 +36,17 @@ export default function PracticePage() {
       <>
         <AppBar title={`Latihan · ${module.short}`} back={`/modul/${id}`} />
         <main className="page page--focus stack">
-          <h2>Pilih level</h2>
-          <p className="muted">Mulai dari Level 1. Level berikutnya terbuka jika kamu menjawab benar minimal {PASS_COUNT} dari {PER_SESSION} soal.</p>
+          <h2>Latihan topik</h2>
+          <p className="muted">
+            {PER_SESSION} soal berurutan dari mudah ke sulit. Lulus bila minimal {PASS_COUNT} jawabanmu benar.
+          </p>
           <div className="levels">
             {LEVELS.map((l) => {
-              const locked = l.level > mp.levelUnlocked;
+              const locked = l.level > Math.max(1, mp.levelUnlocked);
               return (
                 <button key={l.level} type="button" className="level" disabled={locked} onClick={() => start(l.level)}>
                   <span className="row row--between">
-                    <span className="level__name">L{l.level}</span>
+                    <span className="level__name">{PER_SESSION} soal</span>
                     {locked && <IconLock />}
                   </span>
                   <span>{l.name}</span>
@@ -59,12 +68,12 @@ export default function PracticePage() {
   // ---------- Ringkasan sesi ----------
   if (index >= questions.length) {
     const correct = results.filter((r) => r.correct).length;
-    const passed = correct >= PASS_COUNT;
+    const passed = isPassed(correct, questions.length);
     return (
       <>
-        <AppBar title={`Latihan L${level}`} back={`/modul/${id}`} />
+        <AppBar title={`Latihan · ${module.short}`} back={`/modul/${id}`} />
         <main className="page page--focus stack">
-          <h2>Hasil Level {level}</h2>
+          <h2>Hasil latihan</h2>
           <div className="stat-grid">
             <div className="stat">
               <div className="stat__value">
@@ -78,8 +87,8 @@ export default function PracticePage() {
             </div>
           </div>
           {passed ? (
-            <Feedback kind="ok" title={level < 4 ? `Level ${level + 1} terbuka!` : 'Kamu menuntaskan semua level!'}>
-              <p>{level < 4 ? 'Lanjutkan ke level berikutnya, atau coba kuis.' : 'Saatnya mengerjakan kuis modul ini.'}</p>
+            <Feedback kind="ok" title="Kamu menuntaskan latihan topik ini!">
+              <p>Saatnya mengerjakan kuis topik ini.</p>
             </Feedback>
           ) : (
             <Feedback kind="info" title="Ayo coba sekali lagi">
@@ -87,19 +96,11 @@ export default function PracticePage() {
             </Feedback>
           )}
           <div className="stack-s">
-            {passed && level < 4 && (
-              <button type="button" className="btn btn--primary btn--block" onClick={() => start(level + 1)}>
-                Lanjut ke Level {level + 1}
-              </button>
-            )}
-            <button type="button" className={`btn btn--block${passed && level < 4 ? '' : ' btn--primary'}`} onClick={() => start(level)}>
-              Ulangi Level {level}
+            <button type="button" className={`btn btn--block${passed ? '' : ' btn--primary'}`} onClick={() => start(level)}>
+              Ulangi latihan
             </button>
-            <button type="button" className="btn btn--block" onClick={() => setSession(null)}>
-              Pilih level lain
-            </button>
-            <Link to={`/modul/${id}/kuis`} className="btn btn--ghost btn--block">
-              Ke kuis modul
+            <Link to={`/modul/${id}/kuis`} className={`btn btn--block${passed ? ' btn--primary' : ' btn--ghost'}`}>
+              Ke kuis topik
             </Link>
           </div>
         </main>
@@ -112,12 +113,15 @@ export default function PracticePage() {
     const nextResults = [...results, r];
     if (index + 1 >= questions.length) {
       const correct = nextResults.filter((x) => x.correct).length;
-      if (correct >= PASS_COUNT) progress.unlockLevel(id, level + 1);
+      if (isPassed(correct, questions.length)) {
+        progress.markPracticeDone(id);
+        setTimeout(() => playSfx('level'), 450);
+      }
       recordSession({
         kind: 'latihan',
-        nodeId: `${id}-l${level}`,
+        nodeId: practiceNodeId(id),
         moduleId: id,
-        title: `Modul ${module.no} · Level ${level}`,
+        title: `Topik ${module.no} · ${LEVEL_NAMES[level]}`,
         items: nextResults.map((x, i) => ({ q: questions[i], response: x.response, correct: x.correct, errorCode: x.errorCode })),
       });
     }
@@ -133,7 +137,7 @@ export default function PracticePage() {
           q={questions[index]}
           onAttempt={(d) => {
             progress.recordAnswer(id, { correct: d.correct, errorCode: d.errorCode });
-            logActivity('latihan', { correct: d.correct ? 1 : 0, label: `Modul ${module.no} · Level ${level}` });
+            logActivity('latihan', { correct: d.correct ? 1 : 0, label: `Topik ${module.no} · Latihan` });
           }}
           onDone={onDone}
         />

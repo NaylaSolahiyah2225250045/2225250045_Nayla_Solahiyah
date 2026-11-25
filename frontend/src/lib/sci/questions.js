@@ -1,6 +1,17 @@
 import { parseStandard, parseScientific, toScientific, toStandard, firstNonZeroPosition } from './sci.js';
 import { diagnoseToScientific, diagnoseToStandard, diagnosePowerOfTen } from './diagnose.js';
 import { zeroHints } from './steps.js';
+import {
+  compareHints,
+  diagnoseOperation,
+  normalizeHints,
+  normalizeKey,
+  operationHints,
+  operationKey,
+  placeValueHints,
+  placeValueOf,
+  valueOf,
+} from './ops.js';
 
 /**
  * Tipe soal:
@@ -9,6 +20,10 @@ import { zeroHints } from './steps.js';
  *  - power_of_ten   : { type, value: "0,001" }          (isi pangkatnya saja)
  *  - ten_to_standard: { type, n: 4 }                    (10^4 = …)
  *  - choose_correct : { type, text, options: [{key, text, errorCode?}], answer: "b" }
+ *  - place_value    : { type, value: "3.725", pos: 2 }    nilai angka di tempat 10^pos (lib/sci/ops.js)
+ *  - normalize      : { type, a: "45", n: 5 }              ubah ke bentuk baku
+ *  - operation      : { type, op: 'kali'|'bagi', x: {a,n}, y: {a,n}, text?, unit?, traps? }
+ * Semua tipe boleh punya `text` (soal cerita / konteks) — dipakai sebagai kalimat soal.
  * Opsional focus: 'zero' (Modul 4, butuh value) | 'back' (Modul 5, butuh a & n) — memilih
  * petunjuk & pembahasan khusus (lib/sci/steps.js). Soal tanpa focus (Modul 1–3) tidak berubah.
  * Kunci jawaban dihitung dari logika sci (bukan ditulis manual), kecuali choose_correct.
@@ -25,6 +40,12 @@ export function answerKey(q) {
       return parseStandard(q.value).exp;
     case 'ten_to_standard':
       return toStandard({ sign: 1, digits: '1', exp: q.n });
+    case 'place_value':
+      return placeValueOf(q.value, q.pos).answer;
+    case 'normalize':
+      return normalizeKey(q.a, q.n);
+    case 'operation':
+      return operationKey(q);
     case 'choose_correct':
       return q.answer;
     default:
@@ -43,6 +64,12 @@ export function checkAnswer(q, response) {
       return diagnosePowerOfTen(q.value, response);
     case 'ten_to_standard':
       return diagnoseToStandard({ a: '1', n: q.n }, response);
+    case 'place_value':
+      return diagnoseToStandard({ a: placeValueOf(q.value, q.pos).digit, n: q.pos }, response);
+    case 'normalize':
+      return diagnoseToScientific(toStandard(valueOf(q)), response);
+    case 'operation':
+      return diagnoseOperation(q, response);
     case 'choose_correct': {
       if (!response) return { correct: false, errorCode: 'E-FORMAT' };
       if (response === q.answer) return { correct: true, errorCode: null };
@@ -76,6 +103,10 @@ export function hintsFor(q) {
   if (q.hints) return q.hints;
   if (q.focus === 'zero') return zeroHints(q.value);
   if (q.focus === 'back' && q.type !== 'to_standard') return hintsFor({ type: 'to_standard', a: q.a, n: q.n });
+  if (q.focus === 'compare') return compareHints(q);
+  if (q.type === 'place_value') return placeValueHints(q.value, q.pos);
+  if (q.type === 'normalize') return normalizeHints(q.a, q.n);
+  if (q.type === 'operation') return operationHints(q);
   switch (q.type) {
     case 'to_scientific': {
       const x = parseStandard(q.value);
@@ -88,7 +119,9 @@ export function hintsFor(q) {
       return [
         'Cari angka bukan nol pertama dari kiri.',
         h2,
-        `Koma melompat ${Math.abs(n)} kali ke ${dirWord(n)}, jadi bentuknya ${a} × 10^(…). Tanda pangkatnya positif atau negatif?`,
+        n === 0
+          ? `Koma sudah tepat setelah ${d}, jadi tidak perlu melompat. Bentuknya ${a} × 10^(…). Berapa pangkatnya?`
+          : `Koma melompat ${Math.abs(n)} kali ke ${dirWord(n)}, jadi bentuknya ${a} × 10^(…). Tanda pangkatnya positif atau negatif?`,
       ];
     }
     case 'to_standard':
@@ -120,9 +153,15 @@ export function hintsFor(q) {
 
 /** Teks soal singkat. */
 export function promptText(q) {
+  if (q.text) return q.text;
   switch (q.type) {
     case 'to_scientific':
+    case 'normalize':
       return 'Tulis dalam bentuk baku:';
+    case 'operation':
+      return 'Hitung, lalu tulis hasilnya dalam bentuk baku:';
+    case 'place_value':
+      return `Berapa nilai angka ${placeValueOf(q.value, q.pos).digit} pada bilangan ini?`;
     case 'to_standard':
     case 'ten_to_standard':
       return 'Tulis dalam bentuk biasa:';

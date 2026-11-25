@@ -7,6 +7,7 @@ import LessonItem from '../features/lessons/LessonItem.jsx';
 import Mascot, { Logo } from '../components/Mascot.jsx';
 import { IconBack, IconCheck } from '../components/Icons.jsx';
 import { IconArrowLeft, IconArrowRight } from '../components/NavIcons.jsx';
+import AudioControl from '../components/AudioControl.jsx';
 
 /** Bagian modul (daftar di panel kiri) dan label chip per tipe item. */
 const SECTION_OF = {
@@ -59,13 +60,14 @@ export default function ModulePage() {
 
   useEffect(() => {
     if (module) progress.setPosition(id, index);
-    if (module && !firstView.current) logActivity('modul', { label: `Modul ${module.no} · ${module.short}` });
+    if (module && !firstView.current) logActivity('modul', { label: `Topik ${module.no} · ${module.short}` });
     firstView.current = false;
     window.scrollTo({ top: 0 });
     topRef.current?.focus({ preventScroll: true });
   }, [id, index, module]);
 
   if (!module || module.comingSoon) return <Navigate to="/beranda" replace />;
+  if (module.id !== id) return <Navigate to={`/modul/${module.id}`} replace />; // tautan modul lama → topik
 
   const total = module.items.length;
   const item = module.items[index];
@@ -82,6 +84,7 @@ export default function ModulePage() {
           <IconBack />
         </button>
         <p className="lesson-top__title">{module.title}</p>
+        <AudioControl />
         <Link to="/beranda" className="btn btn--outline btn--sm lesson-top__home">
           <IconArrowLeft /> Kembali ke Dashboard
         </Link>
@@ -89,7 +92,7 @@ export default function ModulePage() {
 
       <div className="lesson-layout">
         <aside className="lesson-aside" aria-label="Isi modul">
-          <p className="small muted">Modul {module.no}</p>
+          <p className="small muted">Topik {module.no}</p>
           <h1 className="lesson-aside__title">{module.title}</h1>
           <p className="small">
             <b>{pct}%</b> Selesai

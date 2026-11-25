@@ -139,7 +139,7 @@ export default function BookPage() {
         </span>
         <div className="page-hero__text">
           <h1>Materi</h1>
-          <p>Buku digital Bentuk Baku. Mulai dari pengantar bilangan berpangkat, lalu bentuk baku.</p>
+          <p>Buku digital Bentuk Baku: lima bab, dari pangkat sepuluh sampai penerapan dalam kehidupan sehari-hari.</p>
         </div>
         <div className="book-hero__mascot">
           {/* Berpikir ↔ membaca ↔ dapat ide; berganti pelan (di kepala halaman, bukan di dalam buku). */}

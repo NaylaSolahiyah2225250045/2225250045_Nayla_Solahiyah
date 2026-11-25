@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { IconBack } from './Icons.jsx';
+import AudioControl from './AudioControl.jsx';
 
 export default function AppBar({ title, back = '/beranda', meta, total, current }) {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export default function AppBar({ title, back = '/beranda', meta, total, current 
           </div>
         )}
         {meta && <span className="appbar__meta">{meta}</span>}
+        <AudioControl />
       </div>
     </header>
   );

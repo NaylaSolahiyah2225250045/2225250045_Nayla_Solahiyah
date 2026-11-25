@@ -1,6 +1,7 @@
 /**
  * Konten modul (docs/LEARNING-DESIGN.md). Satu item = satu layar (segmenting).
  * Tipe item: intro | concept | worked | faded | guided | practice | quiz
+ * worked/faded: qtype to_scientific (value, focus?) | power_of_ten | to_standard (a, n) | operation (op, x, y, text?, unit?)
  * Langkah contoh terurai untuk soal bentuk baku dibuat otomatis (workedSteps) agar selalu benar.
  */
 
@@ -25,7 +26,8 @@ const TABLE_NEGATIVE = {
   ],
 };
 
-export const MODULES = [
+/** Modul lama (Alpha) — isinya dipakai ulang oleh lima topik di bawah. */
+const OLD_MODULES = [
   {
     id: 'm1',
     no: 1,
@@ -203,7 +205,7 @@ export const MODULES = [
       {
         type: 'intro',
         title: 'Nol yang sering hilang',
-        text: 'Penduduk sebuah kota 3.004.000 jiwa. Ada yang menulisnya 3,4 × 10⁶. Padahal 3,4 × 10⁶ = 3.400.000. Selisihnya hampir 400 ribu orang! Di modul ini kamu belajar nol mana yang boleh dibuang.',
+        text: 'Penduduk sebuah kota 3.004.000 jiwa. Ada yang menulisnya 3,4 × 10⁶. Padahal 3,4 × 10⁶ = 3.400.000. Selisihnya hampir 400 ribu orang! Sekarang kamu belajar nol mana yang boleh dibuang.',
       },
       {
         type: 'concept',
@@ -236,7 +238,7 @@ export const MODULES = [
           'Cari angka bukan nol pertama dan angka bukan nol terakhir.',
           'Tulis semua angka di antara keduanya, termasuk nolnya.',
           'Taruh koma tepat setelah angka bukan nol pertama.',
-          'Hitung lompatan koma untuk pangkatnya, seperti di Modul 2 dan 3.',
+          'Hitung lompatan koma untuk pangkatnya, seperti di Topik 2.',
         ],
         callout: 'Ingat: 7,05 tidak sama dengan 7,5. Membuang nol tengah mengubah nilai bilangan.',
       },
@@ -246,7 +248,7 @@ export const MODULES = [
       {
         type: 'concept',
         title: 'Cek dengan membalik',
-        text: 'Ubah jawabanmu kembali ke bentuk biasa. Hasilnya harus sama persis dengan soal. Cara membaliknya kamu pelajari lengkap di Modul 5.',
+        text: 'Ubah jawabanmu kembali ke bentuk biasa. Hasilnya harus sama persis dengan soal. Cara membaliknya sudah kamu pelajari tadi.',
         callout: '3,004 × 10⁶ = 3.004.000 ✓ sama dengan soal. 3,4 × 10⁶ = 3.400.000 ✗ berbeda.',
       },
       { type: 'faded', qtype: 'to_scientific', focus: 'zero', value: '5.008.000', shown: 3 },
@@ -267,7 +269,7 @@ export const MODULES = [
       {
         type: 'intro',
         title: 'Membaca bentuk baku',
-        text: 'Di sebuah berita tertulis: jarak Bumi ke Matahari sekitar 1,5 × 10⁸ km. Berapa itu jika ditulis biasa? Di modul ini kamu membalik langkah Modul 2–4: dari bentuk baku kembali ke bentuk biasa.',
+        text: 'Di sebuah berita tertulis: jarak Bumi ke Matahari sekitar 1,5 × 10⁸ km. Berapa itu jika ditulis biasa? Sekarang kita membalik langkahnya: dari bentuk baku kembali ke bentuk biasa.',
       },
       {
         type: 'concept',
@@ -305,7 +307,7 @@ export const MODULES = [
       {
         type: 'concept',
         title: 'Cek kewajaran',
-        text: 'Pangkat positif n → hasilnya punya n + 1 angka sebelum koma. Pangkat negatif −n → angka bukan nol pertama ada di posisi ke-n setelah koma. Ini kebalikan cara cepat di Modul 2 dan aturan posisi di Modul 3.',
+        text: 'Pangkat positif n → hasilnya punya n + 1 angka sebelum koma. Pangkat negatif −n → angka bukan nol pertama ada di posisi ke-n setelah koma. Ini kebalikan cara cepat dan aturan posisi di Topik 2.',
         callout: '1,2 × 10⁵ = 120.000 → ada 6 angka, dan 6 = 5 + 1 ✓',
       },
       { type: 'faded', qtype: 'to_standard', a: '4,08', n: 6, shown: 2 },
@@ -314,9 +316,259 @@ export const MODULES = [
       { type: 'quiz' },
     ],
   },
-  { id: 'm6', no: 6, title: 'Soal Cerita & Satuan', short: 'Soal cerita', comingSoon: true, items: [] },
-  { id: 'm7', no: 7, title: 'Kali & Bagi Bentuk Baku', short: 'Kali & bagi', comingSoon: true, items: [] },
-  { id: 'm8', no: 8, title: 'Pemodelan Matematika', short: 'Pemodelan', comingSoon: true, items: [] },
 ];
 
-export const getModule = (id) => MODULES.find((m) => m.id === id);
+// =====================================================================================
+// LIMA TOPIK (disusun 16 Nov 2026). Layar modul lama dipakai apa adanya dan digabung:
+//   t1 = Modul 1 (+ nilai angka menurut posisi) · t2 = Modul 2 + 3 · t3 = Modul 5 + 4 ·
+//   t4 Operasi Hitung (baru) · t5 Penerapan (baru).
+// `MIGRATE` memetakan posisi layar modul lama → topik baru (dipakai lib/progress.js).
+// =====================================================================================
+
+const OLD = Object.fromEntries(OLD_MODULES.map((m) => [m.id, m]));
+const body = (id) => OLD[id].items.filter((i) => i.type !== 'practice' && i.type !== 'quiz');
+const asConcept = (it) => (it.type === 'intro' ? { ...it, type: 'concept' } : it);
+const END = () => [{ type: 'practice' }, { type: 'quiz' }];
+
+/**
+ * Susun satu topik dari potongan layar. Potongan {from, start, items} berasal dari modul lama
+ * (start = indeks layar pertamanya di modul lama), potongan lain berupa array layar baru.
+ */
+function topic(id, no, meta, parts) {
+  const items = [];
+  const segments = [];
+  for (const p of parts) {
+    if (Array.isArray(p)) items.push(...p);
+    else {
+      segments.push({ from: p.from, start: p.start ?? 0, offset: items.length, count: p.items.length });
+      items.push(...p.items);
+    }
+  }
+  items.push(...END());
+  return { id, no, ...meta, items, segments };
+}
+
+const op = (kind, x, y, extra = {}) => ({ op: kind, x: { a: x[0], n: x[1] }, y: { a: y[0], n: y[1] }, ...extra });
+
+const T1 = topic(
+  't1',
+  1,
+  {
+    title: 'Pangkat Sepuluh dan Nilai Tempat',
+    short: 'Pangkat 10',
+    objective: 'Mengenal pangkat sepuluh, hubungannya dengan nilai tempat, dan nilai angka berdasarkan posisinya.',
+  },
+  [
+    { from: 'm1', start: 0, items: body('m1').slice(0, 5) },
+    [
+      {
+        type: 'concept',
+        title: 'Nilai angka menurut posisinya',
+        text: 'Nilai sebuah angka bergantung pada tempatnya. Pada 4.836, angka 8 ada di tempat ratusan, jadi nilainya 8 × 10² = 800.',
+        callout: '4.836 = 4 × 10³ + 8 × 10² + 3 × 10¹ + 6 × 10⁰',
+      },
+    ],
+    { from: 'm1', start: 5, items: body('m1').slice(5) },
+  ],
+);
+
+const T2 = topic(
+  't2',
+  2,
+  {
+    title: 'Bilangan Besar dan Bilangan Kecil',
+    short: 'Besar & kecil',
+    objective: 'Menulis bilangan besar (pangkat positif) dan bilangan kecil (pangkat negatif) dalam bentuk baku, serta membedakan keduanya.',
+  },
+  [
+    { from: 'm2', items: body('m2') },
+    { from: 'm3', items: body('m3').map(asConcept) },
+    [
+      {
+        type: 'concept',
+        title: 'Mana yang lebih besar?',
+        text: 'Bandingkan pangkatnya dulu. Pangkat lebih besar berarti bilangan lebih besar, karena a selalu di antara 1 dan 10. Jika pangkatnya sama, bandingkan a.',
+        callout: '2 × 10⁵ lebih besar dari 9 × 10⁴, sebab pangkat 5 > 4. Pada pangkat negatif: 10⁻³ lebih besar dari 10⁻⁵.',
+      },
+    ],
+  ],
+);
+
+const T3 = topic(
+  't3',
+  3,
+  {
+    title: 'Mengubah Bentuk Biasa dan Bentuk Baku',
+    short: 'Mengubah bentuk',
+    objective: 'Mengubah bilangan biasa ke bentuk baku dan sebaliknya, serta menempatkan angka nol dengan benar.',
+  },
+  [
+    [
+      {
+        type: 'intro',
+        title: 'Bolak-balik bentuk bilangan',
+        text: 'Di Topik 2 kamu mengubah bilangan biasa menjadi bentuk baku. Sekarang kamu belajar dua arah: biasa → baku dan baku → biasa, lalu menempatkan angka nol dengan tepat.',
+      },
+      {
+        type: 'concept',
+        title: 'Dua arah perubahan',
+        list: [
+          'Biasa → baku: koma melompat sampai tepat setelah angka bukan nol pertama. Banyak lompatan = pangkat.',
+          'Baku → biasa: koma melompat kembali sebanyak pangkatnya. Tempat kosong diisi nol.',
+        ],
+        visual: { kind: 'comma', value: '5.432,1', autoPlay: false },
+        callout: 'Koma asal tidak selalu di ujung kanan. Pada 5.432,1, koma asal ada setelah angka 2.',
+      },
+    ],
+    { from: 'm5', items: body('m5').map(asConcept) },
+    { from: 'm4', items: body('m4').map(asConcept) },
+  ],
+);
+
+const T4 = topic(
+  't4',
+  4,
+  {
+    title: 'Operasi Hitung Bentuk Baku',
+    short: 'Kali & bagi',
+    objective: 'Mengalikan dan membagi bilangan bentuk baku, lalu menuliskan hasilnya kembali dalam bentuk baku.',
+  },
+  [
+    [
+      {
+        type: 'intro',
+        title: 'Menghitung tanpa banyak nol',
+        text: 'Menghitung 300.000 × 4.000.000 dengan cara biasa melelahkan karena nolnya banyak. Dengan bentuk baku, cukup kalikan bilangan depannya dan atur pangkatnya.',
+      },
+      {
+        type: 'concept',
+        title: 'Mengalikan pangkat 10',
+        text: '10³ × 10⁴ berarti tiga faktor 10 dikali empat faktor 10. Semuanya ada tujuh faktor 10, jadi hasilnya 10⁷. Banyak faktor dijumlah.',
+        callout: '10ᵐ × 10ⁿ = 10ᵐ⁺ⁿ',
+      },
+      {
+        type: 'concept',
+        title: 'Aturan perkalian',
+        text: 'Kalikan bilangan depannya, lalu jumlahkan pangkatnya.',
+        callout: '(a × 10ᵐ) × (b × 10ⁿ) = (a × b) × 10ᵐ⁺ⁿ',
+      },
+      { type: 'worked', qtype: 'operation', ...op('kali', ['2', 5], ['4', 3]) },
+      { type: 'worked', qtype: 'operation', ...op('kali', ['4', 5], ['5', -2]) },
+      {
+        type: 'concept',
+        title: 'Aturan pembagian',
+        text: 'Bagi bilangan depannya, lalu kurangkan pangkatnya: pangkat yang dibagi dikurangi pangkat pembagi.',
+        callout: '(a × 10ᵐ) : (b × 10ⁿ) = (a : b) × 10ᵐ⁻ⁿ',
+      },
+      { type: 'worked', qtype: 'operation', ...op('bagi', ['9', 7], ['3', 2]) },
+      { type: 'worked', qtype: 'operation', ...op('bagi', ['2', 4], ['8', -3]) },
+      {
+        type: 'concept',
+        title: 'Jangan lupa menormalkan',
+        text: 'Hasil kali atau bagi belum tentu bentuk baku. Jika bilangan depannya 10 atau lebih, atau kurang dari 1, geser komanya lalu sesuaikan pangkatnya.',
+        callout: '20 × 10³ = 2 × 10⁴, dan 0,25 × 10⁷ = 2,5 × 10⁶.',
+      },
+      { type: 'faded', qtype: 'operation', ...op('kali', ['3', 6], ['3', -2]), shown: 2 },
+      { type: 'faded', qtype: 'operation', ...op('bagi', ['1,8', 5], ['6', 2]), shown: 1 },
+    ],
+  ],
+);
+
+const T5 = topic(
+  't5',
+  5,
+  {
+    title: 'Penerapan Bentuk Baku',
+    short: 'Penerapan',
+    objective: 'Memakai bentuk baku untuk soal cerita, satuan sehari-hari, dan pemodelan matematika sederhana.',
+  },
+  [
+    [
+      {
+        type: 'intro',
+        title: 'Bentuk baku di sekitar kita',
+        text: 'Jarak antarplanet, ukuran virus, dan jumlah penduduk ditulis dengan bentuk baku. Di topik ini kamu memakainya untuk menyelesaikan soal cerita.',
+      },
+      {
+        type: 'concept',
+        title: 'Langkah soal cerita',
+        list: [
+          'Tulis besaran yang diketahui dalam bentuk baku.',
+          'Samakan satuannya.',
+          'Pilih model: kali atau bagi?',
+          'Hitung, lalu periksa satuan jawabannya.',
+        ],
+      },
+      {
+        type: 'concept',
+        title: 'Satuan dan pangkat 10',
+        text: 'Banyak satuan sehari-hari adalah pangkat 10. Untuk mengubah satuan, kalikan dengan pangkat 10 yang sesuai.',
+        visual: {
+          kind: 'table',
+          head: ['Satuan', 'Nilai'],
+          rows: [
+            ['1 km', { pow: 3, unit: 'm' }],
+            ['1 cm', { pow: -2, unit: 'm' }],
+            ['1 mm', { pow: -3, unit: 'm' }],
+            ['1 µm', { pow: -6, unit: 'm' }],
+            ['1 juta', { pow: 6 }],
+            ['1 miliar', { pow: 9 }],
+          ],
+        },
+      },
+      {
+        type: 'worked',
+        qtype: 'operation',
+        ...op('kali', ['3,5', 0], ['1', 3], { text: '1 km = 10³ m. Tulis 3,5 km dalam meter (bentuk baku).', unit: 'm' }),
+      },
+      {
+        type: 'concept',
+        title: 'Kali atau bagi?',
+        list: ['"Setiap …, berapa seluruhnya?" → kali.', '"Dibagi rata", "berapa bagian", atau "berapa kali lipat" → bagi.'],
+        callout: 'Tulis dulu modelnya, misalnya (8 × 10⁶) : (4 × 10²), baru hitung.',
+      },
+      {
+        type: 'worked',
+        qtype: 'operation',
+        ...op('kali', ['3', 8], ['5', 2], { text: 'Cahaya menempuh 3 × 10⁸ m setiap detik. Berapa meter yang ditempuh dalam 5 × 10² detik?', unit: 'm' }),
+      },
+      {
+        type: 'worked',
+        qtype: 'operation',
+        ...op('bagi', ['2', 12], ['4', 6], { text: 'Hard disk berkapasitas 2 × 10¹² byte diisi berkas berukuran 4 × 10⁶ byte. Berapa berkas yang muat?', unit: 'berkas' }),
+      },
+      {
+        type: 'faded',
+        qtype: 'operation',
+        ...op('kali', ['4', 2], ['3', 2], { text: 'Satu halaman buku memuat 4 × 10² kata. Berapa kata dalam 3 × 10² halaman?', unit: 'kata' }),
+        shown: 2,
+      },
+    ],
+  ],
+);
+
+/** Lima topik materi (urutan = urutan belajar). */
+export const MODULES = [T1, T2, T3, T4, T5];
+
+/** Cari topik; id modul lama (m1–m5, mis. dari tautan lama) diarahkan ke topik barunya. */
+export const getModule = (id) => MODULES.find((m) => m.id === id) ?? MODULES.find((m) => m.id === MIGRATE[id]?.to);
+
+/**
+ * Peta modul lama (m1–m5) → topik baru: { to, map(indexLama) → indexBaru }.
+ * Layar latihan/kuis lama dipetakan ke layar latihan/kuis topik.
+ */
+export const MIGRATE = Object.fromEntries(
+  Object.keys(OLD)
+    .filter((id) => !OLD[id].comingSoon)
+    .map((oldId) => {
+      const t = MODULES.find((m) => m.segments.some((s) => s.from === oldId));
+      const segs = t.segments.filter((s) => s.from === oldId);
+      const oldLen = OLD[oldId].items.length;
+      const map = (i) => {
+        const s = segs.find((g) => i >= g.start && i < g.start + g.count);
+        if (s) return s.offset + (i - s.start);
+        return Math.min(t.items.length - 1, t.items.length - 2 + Math.max(0, i - (oldLen - 2)));
+      };
+      return [oldId, { to: t.id, map }];
+    }),
+);

@@ -5,6 +5,8 @@
 - Autentikasi: `Authorization: Bearer <access_token>` kecuali endpoint bertanda 🌐 (publik).
 - Dokumentasi interaktif otomatis: `/docs` (Swagger) dan `/redoc` saat pengembangan.
 
+> **Sudah dibangun (17 Nov 2026, `backend/app/routers`):** `POST /auth/register/student` (`class_code` opsional), `POST /auth/register/teacher` (`display_name`, `login` = email atau username, `password` ≥ 8, `school`; status `pending` bila `TEACHER_REQUIRE_APPROVAL=true`), `POST /auth/login` (`login` = username siswa atau email/username guru → `user.role`), `GET/PATCH /me`; `GET/POST /classes` (nama hanya `VIII-A`…`VIII-E`, unik per guru), `GET/PATCH/DELETE /classes/{id}`, `POST /classes/{id}/regenerate-code`, `GET /classes/{id}/students`, `DELETE /classes/{id}/students/{student_id}`, `POST /classes/join`, `GET /me/classes`, `DELETE /me/classes/{id}` (siswa keluar); **sinkronisasi** `PUT/GET /sync/me` (siswa mengirim ringkasan belajar `{v, modules, history, days, bookRead, updatedAt}`); **laporan guru** `GET /reports/overview`, `GET /reports/classes/{id}`, `GET /reports/students/{student_id}`. `PATCH /me` juga menerima `preferences` (`music`, `sfx`, `volume` 0–100, `tourDone`; kunci lain ditolak) dan `user.preferences` dikembalikan saat login (migrasi `0002_preferensi`, 21 Nov 2026). Kelas/siswa milik guru lain → 404. Guru `pending` → 403 `TEACHER_PENDING` pada endpoint kelas & laporan. Endpoint lain di dokumen ini masih rencana.
+
 ## 1. Format Error
 
 ```json
@@ -305,3 +307,20 @@ Semua endpoint AI memeriksa: `AI_ENABLED`, anggaran bulanan, kelas siswa `ai_ena
 | FR-27 | `/progress/me/literacy`, `/reports/classes/{id}/literacy` |
 | FR-28 | `PATCH /classes/{id}`, `/reports/classes/{id}/ai-usage` |
 | FR-29 | `/attempts` dengan `kind` = `pretest` / `posttest` dan `question_set` = `literacy_a` / `literacy_b` |
+
+## Asisten Belajar (Groq, Tahap 1 — 21 Nov 2026)
+
+Hanya akun **siswa** (JWT). Mati secara bawaan (`AI_ENABLED=false`). Kunci Groq hanya di `backend/.env`.
+
+**GET /ai/status** → `200 { "available": true, "daily_limit": 20, "remaining": 18 }` (`available=false` bila AI mati, kunci kosong, atau model tidak tersedia).
+
+**POST /ai/chat**
+```json
+{
+  "context": { "text": "Tulis dalam bentuk baku:\n4.500.000", "skill": "keBaku", "guide": "Di mana angka bukan nol pertamanya? …", "rule": "Setiap bilangan positif …", "topic": "Topik 3 · Mengubah Bentuk Biasa dan Bentuk Baku — konsep: …", "task": "Soal ini minta kamu menulis ulang bilangan itu dalam bentuk baku …", "key_texts": ["4,5 × 10⁶"], "visuals": [{ "id": "geser-koma", "summary": "67.000 → 6,7 × 10⁴: koma melompat 4 kali ke kiri, jadi pangkatnya 4." }] },
+  "messages": [{ "role": "user", "content": "Aku bingung mulai dari mana." }]
+}
+```
+→ `200 { "reply": "…", "visual": "geser-koma" | null, "source": "ai" | "fallback", "remaining": 17 }`. `visuals` (maks. 6; `id` huruf kecil & strip, `summary` ≤ 400 karakter) = visual contoh serupa yang dibuat aplikasi; `visual` = id yang dipilih AI (atau dipasang otomatis), selalu salah satu dari `visuals` (23 Nov 2026). `topic` (≤ 200) & `task` (≤ 400, "maksud soal" bahasa sehari-hari tanpa kunci) opsional sejak 25 Nov 2026. `key_texts` hanya untuk saringan balasan (tidak diteruskan ke Groq). Pesan terakhir wajib `role: "user"`, ≤ 300 karakter. Sejak 26 Nov 2026: `messages` maks. 200 (server memakai 16 pesan terakhir; klien mengirim jendela 16 pesan yang diawali pesan siswa), dan pesan asisten boleh membawa `source: "ai" | "fallback"` (balasan cadangan ditandai untuk model).
+
+Galat: `401 UNAUTHORIZED`, `403 FORBIDDEN` (bukan siswa), `422 VALIDATION_ERROR`, `429 AI_LIMIT` (kuota harian habis), `503 AI_DISABLED`. Galat penyedia (Groq) tidak diteruskan — balasan cadangan `source: "fallback"`.

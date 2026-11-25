@@ -1,0 +1,139 @@
+/* =====================================================================
+ * KONTROL SUARA (21 Nov 2026): tombol ♪ di bilah atas / sidebar setiap halaman,
+ * membuka panel Musik ON/OFF, volume musik, Efek suara ON/OFF. Warna dari token.
+ * ===================================================================== */
+
+.audio-ctl {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+}
+
+.audio-ctl__btn {
+  width: 42px;
+  height: 42px;
+  min-width: var(--tap);
+  min-height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+.audio-ctl__btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.audio-ctl__btn.is-on {
+  color: var(--primary-ink);
+  background: var(--primary-soft);
+  border-color: color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+.audio-ctl__btn:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Di atas latar ungu (Sambutan, Masuk/Daftar) */
+.audio-ctl--light .audio-ctl__btn {
+  background: color-mix(in srgb, var(--surface) 22%, transparent);
+  border-color: color-mix(in srgb, var(--surface) 45%, transparent);
+  color: var(--on-primary);
+  box-shadow: none;
+}
+
+.audio-ctl--light .audio-ctl__btn.is-on {
+  background: color-mix(in srgb, var(--surface) 34%, transparent);
+}
+
+/* Posisi (left/top/bottom/width) dihitung di AudioControl; panel ada di <body>. */
+.audio-ctl__panel {
+  position: fixed;
+  z-index: 90;
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: var(--radius-m);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 14px 36px color-mix(in srgb, var(--primary-strong) 26%, transparent);
+  color: var(--text);
+  text-align: left;
+}
+
+.audio-ctl__title {
+  margin: 0;
+  font-weight: 800;
+}
+
+.audio-ctl__vol {
+  display: grid;
+  gap: 4px;
+}
+
+.audio-ctl__vol input[type='range'] {
+  width: 100%;
+  min-height: 32px;
+  accent-color: var(--primary);
+}
+
+.audio-ctl__vol input:disabled {
+  opacity: 0.45;
+}
+
+.audio-ctl__note {
+  margin: 0;
+}
+
+[data-motion='on'] .audio-ctl__panel {
+  animation: audio-pop 0.16s ease-out both;
+}
+
+@keyframes audio-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* ---------- Penempatan ---------- */
+.mobile-top__end {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidenav__audio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 6px;
+}
+
+.auth-art__audio {
+  position: absolute;
+  top: calc(14px + env(safe-area-inset-top));
+  right: 14px;
+  z-index: 3;
+}
+
+.appbar__inner .audio-ctl {
+  margin-left: auto;
+}
+
+.appbar__inner .audio-ctl__btn {
+  width: 40px;
+  height: 40px;
+  box-shadow: none;
+}
+
+.lesson-top .audio-ctl {
+  margin-left: auto;
+}

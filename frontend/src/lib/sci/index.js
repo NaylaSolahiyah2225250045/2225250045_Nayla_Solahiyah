@@ -6,3 +6,4 @@ export * from './worked.js';
 export * from './lab.js';
 export * from './explain.js';
 export * from './steps.js';
+export * from './ops.js';

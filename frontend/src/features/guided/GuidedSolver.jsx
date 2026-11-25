@@ -113,7 +113,7 @@ export default function GuidedSolver({ value, onComplete }) {
       onComplete?.(false);
     } else {
       setTries(t);
-      setFb({ kind: 'bad', title: m.title, text: m.text });
+      setFb({ kind: 'bad', title: m.title, text: m.text, ask: m.ask });
     }
   };
 
@@ -194,6 +194,11 @@ export default function GuidedSolver({ value, onComplete }) {
       {fb && (
         <Feedback kind={fb.kind} title={fb.title}>
           {fb.text && <p>{fb.text}</p>}
+          {fb.ask && (
+            <p className="feedback__ask">
+              <b>Coba pikirkan:</b> {fb.ask}
+            </p>
+          )}
           {done && (
             <p>
               {value} = <Sci a={key.a} n={key.n} />

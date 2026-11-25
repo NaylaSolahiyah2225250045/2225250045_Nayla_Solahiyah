@@ -7,7 +7,10 @@ import { moduleStatus } from '../components/ModuleList.jsx';
 import Avatar, { AVATARS, avatarById } from '../components/Avatar.jsx';
 import BadgeIcon from '../components/BadgeIcon.jsx';
 import MotionToggle from '../components/MotionToggle.jsx';
+import { openTour } from '../lib/onboarding.js';
+import SoundToggle from '../components/SoundToggle.jsx';
 import Decor from '../components/Decor.jsx';
+import JoinClassCard from '../components/JoinClassCard.jsx';
 import { errorLabel } from '../content/messages.js';
 import { BOOK_PAGES } from '../content/book.js';
 
@@ -109,7 +112,7 @@ export default function ProfilePage() {
               return (
                 <div key={m.id} className="prog-row">
                   <span>
-                    Modul {m.no} · {m.short}
+                    Topik {m.no} · {m.short}
                   </span>
                   <span className="meter" aria-hidden="true">
                     <span style={{ width: `${s.pct}%` }} />
@@ -118,6 +121,13 @@ export default function ProfilePage() {
                 </div>
               );
             })}
+            <div className="prog-row">
+              <span>Level 5 · Kuis Akhir</span>
+              <span className="meter" aria-hidden="true">
+                <span style={{ width: `${L.progressMap.final?.bestQuiz ?? 0}%` }} />
+              </span>
+              <b>{L.progressMap.final?.completed ? `Nilai ${L.progressMap.final.bestQuiz}` : 'Belum'}</b>
+            </div>
           </div>
           {topError && (
             <p className="small prog-focus">
@@ -189,6 +199,8 @@ export default function ProfilePage() {
         </ul>
       </section>
 
+      <JoinClassCard />
+
       <section className="card stack-s" aria-labelledby="set-title">
         <h2 id="set-title">Pengaturan</h2>
         <div className="settings-row">
@@ -197,6 +209,29 @@ export default function ProfilePage() {
             <p className="small muted">Maskot, bintang, dan balik halaman. Bila nonaktif, maskot tetap tampil tetapi diam.</p>
           </div>
           <MotionToggle />
+        </div>
+        <div className="settings-row">
+          <div>
+            <b>Musik latar</b>
+            <p className="small muted">Musik instrumental lembut di halaman Sambutan.</p>
+          </div>
+          <SoundToggle kind="music" />
+        </div>
+        <div className="settings-row">
+          <div>
+            <b>Efek suara</b>
+            <p className="small muted">Bunyi singkat saat menekan tombol, menjawab, menyelesaikan level/kuis, dan mendapat lencana.</p>
+          </div>
+          <SoundToggle kind="sfx" />
+        </div>
+        <div className="settings-row">
+          <div>
+            <b>Panduan NoBaku</b>
+            <p className="small muted">Kenalan lagi dengan menu-menu NoBaku bersama kapibara.</p>
+          </div>
+          <button type="button" className="btn btn--outline btn--sm" onClick={openTour}>
+            Buka panduan
+          </button>
         </div>
         <div className="settings-row">
           <div>

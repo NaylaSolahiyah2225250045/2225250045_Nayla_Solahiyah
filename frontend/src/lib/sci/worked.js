@@ -7,7 +7,15 @@ export function workedSteps(value) {
   const { a, n } = toScientific(x);
   const d = x.digits[0];
   const result = `Jadi ${value} = ${sciText(a, n)}.`;
-  if (n >= 0) {
+  if (n === 0) {
+    return [
+      `Angka bukan nol pertama dari kiri adalah ${d}.`,
+      `Koma sudah tepat setelah ${d} → ${a}.`,
+      'Koma tidak perlu melompat, jadi pangkatnya 0.',
+      `Ingat ${powText(0)} = 1. ${result}`,
+    ];
+  }
+  if (n > 0) {
     return [
       `Angka bukan nol pertama dari kiri adalah ${d}.`,
       `Taruh koma tepat setelah ${d} → ${a}.`,

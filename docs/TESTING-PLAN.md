@@ -85,7 +85,8 @@ Lokasi: `frontend/src/lib/sci/*.test.ts` (Vitest) dan `backend/tests/test_sci_ve
 | Siswa memanggil `/ai/problems/analyze` di kelas dengan `ai_enabled = false` | 403 |
 | Siswa melebihi kuota harian | 429 `AI_QUOTA_EXCEEDED` |
 | Respons analisis untuk siswa | Tidak mengandung `verified_answer` |
-| Soal yang sama dianalisis dua kali | Panggilan Claude hanya sekali (cache `text_hash`) |
+| Soal yang sama dianalisis dua kali (rencana "Bawa soalmu") | Panggilan Groq hanya sekali (cache `text_hash`) |
+| Asisten Belajar Tahap 1 (`tests/test_ai_chat.py`, `lib/assistant.test.js`) | Bawaan mati; hanya siswa; kuota harian; balasan berisi kunci/angka baru → cadangan; email/HP disensor; nama/username & kunci jawaban tidak dikirim ke penyedia; kunci tidak muncul di repr/galat/bundle frontend |
 | Guru menyetujui draf | Soal muncul hanya di kelas pemilik |
 
 ### A4. End-to-End (Playwright)
@@ -94,7 +95,7 @@ Lokasi: `frontend/src/lib/sci/*.test.ts` (Vitest) dan `backend/tests/test_sci_ve
 3. Offline: matikan jaringan di tengah latihan → jawab 3 soal → nyalakan → data tersinkron, progres benar.
 4. Guru melihat dashboard: siswa muncul, distribusi kesalahan sesuai jawaban.
 5. Siswa menyelesaikan satu soal pemodelan L2 (5 langkah) → skor rubrik & profil literasi diperbarui.
-6. Guru mengaktifkan AI → siswa "Bawa soalmu" (API Claude ditiru di E2E) → menyelesaikan sesi → guru melihat penggunaan AI.
+6. Guru mengaktifkan AI → siswa "Bawa soalmu" (API Groq ditiru di E2E) → menyelesaikan sesi → guru melihat penggunaan AI.
 
 ### A4b. Evaluasi Asisten AI
 Dijalankan dengan API sungguhan sebelum rilis & setiap perubahan prompt/model (`pytest -m ai_eval`). Set evaluasi, metrik, dan target ada di [AI-TUTOR.md](AI-TUTOR.md#8-evaluasi-kualitas-ai). Hasil dicatat (tanggal, model, versi prompt, skor, biaya) di `backend/tests/ai_eval/results.md`.

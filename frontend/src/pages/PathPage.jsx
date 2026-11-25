@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLearner, AVAILABLE_MODULES } from '../lib/learner.js';
-import { PASS_COUNT, PER_SESSION } from '../content/bank.js';
+import { FINAL_QUIZ, PASS_COUNT, PER_SESSION } from '../content/bank.js';
+import { nodeLabel, nodeRoute } from '../lib/path.js';
 import MascotLive from '../components/MascotLive.jsx';
 import Decor from '../components/Decor.jsx';
 import { IconCheck, IconLock } from '../components/Icons.jsx';
@@ -11,15 +12,22 @@ const SIGN_H = 96; // tinggi papan modul
 const STEP_H = 116; // jarak antar titik
 const TOP = 70; // ruang bendera start
 
-/** Susun posisi: papan modul lalu 5 titik berkelok (x dalam %, y dalam px). */
+/** Papan untuk titik Kuis Akhir di ujung jalur. */
+const FINAL_SIGN = { id: 'final', label: 'Level 5', title: 'Kuis Akhir · Semua Topik' };
+
+/** Susun posisi: papan topik lalu titik latihannya berkelok, terakhir Kuis Akhir (x dalam %, y dalam px). */
 function layout(path) {
   const rows = [];
   let y = TOP;
   let i = 0;
-  for (const m of AVAILABLE_MODULES) {
-    rows.push({ type: 'sign', module: m, y: y + SIGN_H / 2 - 14 });
+  const groups = [
+    ...AVAILABLE_MODULES.map((m) => ({ sign: { id: m.id, label: `Topik ${m.no}`, title: m.title }, nodes: path.filter((n) => n.moduleId === m.id) })),
+    { sign: FINAL_SIGN, nodes: path.filter((n) => n.kind === 'final') },
+  ];
+  for (const g of groups) {
+    rows.push({ type: 'sign', sign: g.sign, y: y + SIGN_H / 2 - 14 });
     y += SIGN_H;
-    for (const node of path.filter((n) => n.moduleId === m.id)) {
+    for (const node of g.nodes) {
       const x = 50 + Math.round(Math.sin(i * 0.95) * 27);
       rows.push({ type: 'node', node, x, y: y + STEP_H / 2 });
       y += STEP_H;
@@ -60,7 +68,7 @@ export default function PathPage() {
       setTimeout(() => setToast(null), 2600);
       return;
     }
-    navigate(node.kind === 'kuis' ? `/modul/${node.moduleId}/kuis?dari=latihan` : `/latihan/${node.id}`);
+    navigate(nodeRoute(node));
   };
 
   return (
@@ -96,11 +104,11 @@ export default function PathPage() {
             </li>
           </ul>
           <p className="small muted">
-            Setiap titik berisi {PER_SESSION} soal. Lulus bila minimal {PASS_COUNT} benar. Jawaban yang salah langsung dibahas di bawah soal.
+            Setiap topik punya satu latihan berisi {PER_SESSION} soal, berurutan dari mudah ke sulit. Lulus bila minimal {PASS_COUNT} benar. Di ujung jalur ada Level 5 · Kuis Akhir ({FINAL_QUIZ.length} soal, semua topik). Jawaban yang salah langsung dibahas.
           </p>
           {currentNode && (
             <button type="button" className="btn btn--primary btn--block" onClick={() => open(currentNode)}>
-              Lanjutkan: {currentNode.kind === 'kuis' ? `Kuis Modul ${currentNode.moduleNo}` : `M${currentNode.moduleNo} · ${currentNode.title}`}
+              Lanjutkan: {nodeLabel(currentNode)}
             </button>
           )}
         </aside>
@@ -118,9 +126,9 @@ export default function PathPage() {
 
           {rows.map((r) =>
             r.type === 'sign' ? (
-              <div key={r.module.id} className="path-sign" style={{ top: r.y }}>
-                <span className="path-sign__no">Modul {r.module.no}</span>
-                <span className="path-sign__title">{r.module.title}</span>
+              <div key={r.sign.id} className={`path-sign${r.sign.id === 'final' ? ' path-sign--final' : ''}`} style={{ top: r.y }}>
+                <span className="path-sign__no">{r.sign.label}</span>
+                <span className="path-sign__title">{r.sign.title}</span>
               </div>
             ) : (
               <button
@@ -130,7 +138,7 @@ export default function PathPage() {
                 style={{ left: `${r.x}%`, top: r.y }}
                 onClick={() => open(r.node)}
                 aria-disabled={statuses[r.node.id] === 'locked'}
-                aria-label={`${r.node.kind === 'kuis' ? `Kuis Modul ${r.node.moduleNo}` : `Modul ${r.node.moduleNo}, ${r.node.title} ${r.node.subtitle}`}: ${
+                aria-label={`${nodeLabel(r.node)}: ${
                   { done: 'sudah selesai', current: 'sedang dikerjakan, tekan untuk mulai', locked: 'terkunci' }[statuses[r.node.id]]
                 }`}
               >
@@ -139,7 +147,7 @@ export default function PathPage() {
                     <IconCheck />
                   ) : statuses[r.node.id] === 'locked' ? (
                     <IconLock />
-                  ) : r.node.kind === 'kuis' ? (
+                  ) : r.node.kind === 'final' ? (
                     <IconStar />
                   ) : (
                     <b>{r.node.level}</b>
@@ -147,7 +155,7 @@ export default function PathPage() {
                 </span>
                 {statuses[r.node.id] === 'current' && <span className="path-node__tag">Mulai!</span>}
                 <span className="path-node__label">
-                  <b>{r.node.kind === 'kuis' ? 'Kuis' : r.node.title}</b>
+                  <b>{r.node.title}</b>
                   <span>{r.node.subtitle}</span>
                 </span>
               </button>

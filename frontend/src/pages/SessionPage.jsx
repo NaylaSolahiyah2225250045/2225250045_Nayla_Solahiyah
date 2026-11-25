@@ -3,40 +3,52 @@ import { Navigate, useParams } from 'react-router-dom';
 import SessionRunner from '../features/practice/SessionRunner.jsx';
 import { BANK, PASS_COUNT, PER_SESSION } from '../content/bank.js';
 import { progress } from '../lib/progress.js';
-import { shuffle } from '../lib/shuffle.js';
-import { PATH, useLearner } from '../lib/learner.js';
+import { PATH, toTopicNodeId, useLearner } from '../lib/learner.js';
+import { nodeLabel, nodeRoute, toPracticeNodeId } from '../lib/path.js';
+import { goalFor } from '../lib/rmt.js';
 
-/** Mengerjakan satu titik Level pada jalur Latihan (#/latihan/:nodeId). */
+/** Soal latihan topik: 10 soal BERURUTAN dari mudah ke sulit (tidak diacak, 23 Nov 2026). */
+const draw = (node) => BANK[node.moduleId].levels[node.level].slice(0, PER_SESSION);
+
+/**
+ * Mengerjakan latihan satu topik pada jalur Latihan (#/latihan/:nodeId).
+ * `key={nodeId}`: tombol "Lanjut: Topik berikutnya" tetap di rute yang sama, jadi tanpa key React memakai
+ * ulang komponen dan soal topik sebelumnya ikut terbawa (perbaikan 23 Nov 2026).
+ */
 export default function SessionPage() {
-  const { nodeId } = useParams();
+  const { nodeId: rawId } = useParams();
+  // tautan lama: "m2-l1" → "t2-l1" → "t2-latihan" (Level 1–4 lama digabung menjadi satu latihan)
+  const nodeId = toPracticeNodeId(toTopicNodeId(rawId));
+  return <TopicSession key={nodeId} nodeId={nodeId} />;
+}
+
+function TopicSession({ nodeId }) {
   const { statuses } = useLearner();
   const node = PATH.find((n) => n.id === nodeId);
   const [run, setRun] = useState(0);
-  const [questions, setQuestions] = useState(() => (node?.kind === 'level' ? shuffle(BANK[node.moduleId].levels[node.level]).slice(0, PER_SESSION) : []));
+  const [questions, setQuestions] = useState(() => (node?.kind === 'level' ? draw(node) : []));
 
   if (!node || statuses[node.id] === 'locked') return <Navigate to="/latihan" replace />;
-  if (node.kind === 'kuis') return <Navigate to={`/modul/${node.moduleId}/kuis?dari=latihan`} replace />;
+  if (node.kind === 'final') return <Navigate to="/kuis-akhir" replace />;
 
-  const idx = PATH.indexOf(node);
-  const nextNode = PATH[idx + 1];
-  const next = nextNode
-    ? { to: nextNode.kind === 'kuis' ? `/modul/${nextNode.moduleId}/kuis?dari=latihan` : `/latihan/${nextNode.id}`, label: `Lanjut: ${nextNode.kind === 'kuis' ? `Kuis Modul ${nextNode.moduleNo}` : `${nextNode.title} · ${nextNode.subtitle}`}` }
-    : null;
+  const nextNode = PATH[PATH.indexOf(node) + 1];
+  const next = nextNode ? { to: nodeRoute(nextNode), label: `Lanjut: ${nodeLabel(nextNode)}` } : null;
 
   return (
     <SessionRunner
       key={`${nodeId}-${run}`}
       questions={questions}
-      title={`Modul ${node.moduleNo} · ${node.title}`}
+      title={`Topik ${node.moduleNo} · ${node.title} ${node.subtitle}`}
       kind="latihan"
       nodeId={node.id}
       moduleId={node.moduleId}
       passCount={PASS_COUNT}
+      goal={goalFor({ kind: 'level', topicId: node.moduleId, level: node.level })}
       backTo="/latihan"
       next={next}
-      onPassed={() => progress.unlockLevel(node.moduleId, node.level + 1)}
+      onPassed={() => progress.markPracticeDone(node.moduleId)}
       onRestart={() => {
-        setQuestions(shuffle(BANK[node.moduleId].levels[node.level]).slice(0, PER_SESSION));
+        setQuestions(draw(node));
         setRun((r) => r + 1);
       }}
     />

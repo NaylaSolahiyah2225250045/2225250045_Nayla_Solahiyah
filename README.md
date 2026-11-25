@@ -9,11 +9,11 @@ Aplikasi juga menumbuhkan **literasi matematika** (kerangka PISA + AKM Numerasi)
 | Item | Keterangan |
 |---|---|
 | Pengembang | Nayla Solahiyah (NIM 2225250045), Kelas 3A |
-| Status | **Alpha** — Modul 1–5 dapat dipakai (lihat "Yang sudah ada" di bawah) |
+| Status | **Alpha** — lima topik materi & jalur latihan 5 level dapat dipakai (lihat "Yang sudah ada" di bawah) |
 | Platform | PWA yang dipasang langsung dari browser di Android, iPhone/iPad, Windows, macOS — tanpa Play Store/App Store |
 | Frontend | JavaScript (React + Vite) |
 | Backend | Python (FastAPI) + PostgreSQL |
-| AI | Claude API (Anthropic), dipanggil dari backend; jawaban diverifikasi mesin |
+| AI | Groq API (model dari `GROQ_MODEL`, mis. `openai/gpt-oss-20b`), hanya dipanggil dari backend; kunci di `backend/.env`; AI tidak menghitung & tidak memberi jawaban akhir |
 | Pengguna | Siswa, Guru, Peneliti/Admin |
 
 ---
@@ -64,7 +64,8 @@ Baca dokumen dengan urutan berikut:
 
 | Fitur | Keterangan |
 |---|---|
-| Modul 1–5 | Prasyarat pangkat 10, bilangan besar, bilangan kecil (pangkat negatif), nol di tengah, kembali ke bentuk biasa — 1 konsep per layar |
+| Lima topik | 1 Pangkat Sepuluh & Nilai Tempat · 2 Bilangan Besar & Kecil · 3 Mengubah Bentuk Biasa & Baku · 4 Operasi Hitung · 5 Penerapan — buku digital Bab 1–5 + modul interaktif, 1 konsep per layar |
+| Jalur Latihan | Level 1–4 per topik (Pemanasan, Pemahaman, Penerapan, Tantangan; 4–5 soal) + Level 5 · Kuis Akhir 10 soal semua topik |
 | Visualisasi Geser Koma | Animasi lompatan koma + penghitung + tanda pangkat, mode manual, nomor posisi untuk bilangan kecil |
 | Contoh terurai & setengah jadi | Langkah dibuka satu per satu; contoh setengah jadi diselesaikan siswa |
 | Langkah terpandu | 5 sub-langkah interaktif (ketuk angka → ketuk celah koma → lompatan → arah → jawaban) |
@@ -74,7 +75,7 @@ Baca dokumen dengan urutan berikut:
 | Pasang aplikasi | Halaman panduan per platform + tombol pasang; berjalan offline |
 | Backend | API pengecekan notasi ilmiah (`/api/v1/sci/*`) — logika identik dengan frontend |
 
-Belum ada: login, kelas & dashboard guru, Modul 6–8 (termasuk pemodelan), Asisten AI, APK. Lihat [docs/ROADMAP.md](docs/ROADMAP.md).
+Belum ada: login, kelas & dashboard guru, pemodelan PMSTP terbimbing penuh, Asisten AI, APK. Lihat [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ## Struktur Repositori
 
@@ -102,14 +103,20 @@ npm run dev          # buka http://localhost:5173
 npm run test         # 178 tes: logika notasi ilmiah + validasi seluruh bank soal
 npm run build        # hasil siap-hosting di frontend/dist/
 
-# Backend (API; belum dibutuhkan oleh Alpha)
+# Backend (akun siswa/guru, kelas, laporan guru)
 cd backend
 python -m venv .venv
 .venv\Scripts\activate          # Windows  (Linux/Mac: source .venv/bin/activate)
 pip install -r requirements.txt
-pytest                           # 82 tes
+pytest                           # tes API, kelas, & hak akses guru
+alembic upgrade head             # buat/perbarui tabel database (default sqlite:///./nobaku.db)
+set JWT_SECRET=ganti-dengan-rahasia-panjang   # Linux/Mac: export JWT_SECRET=...
 uvicorn app.main:app --reload    # http://localhost:8000/docs
+python -m app.admin pending      # (opsional) guru yang menunggu verifikasi
+python -m app.admin approve guru@sekolah.sch.id
 ```
+
+**Akun Guru & Dashboard Guru.** Agar guru bisa memantau siswa yang belajar di HP masing-masing, jalankan backend lalu hubungkan website ke server itu: isi `VITE_API_URL` saat build (mis. `VITE_API_URL=https://api.sekolah.sch.id npm run build`) atau atur di halaman Masuk → "Server sekolah". Tanpa server, NoBaku berjalan dalam **mode lokal**: akun & kelas hanya ada di browser itu (cocok untuk mencoba/presentasi). Variabel backend: `DATABASE_URL` (PostgreSQL di produksi), `JWT_SECRET` (wajib di produksi), `CORS_ORIGINS` (alamat website), `TEACHER_REQUIRE_APPROVAL=true` bila akun guru harus diverifikasi admin dulu.
 
 Untuk membagikan ke siswa (hosting gratis + cara memasang di tiap perangkat), lihat [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 

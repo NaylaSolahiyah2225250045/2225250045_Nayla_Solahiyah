@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useSession } from '../lib/account.js';
 import { useLearner } from '../lib/learner.js';
+import { nodeLabel, nodeRoute } from '../lib/path.js';
 import { dateKey } from '../lib/activity.js';
 import { BOOK_PAGES } from '../content/book.js';
 import { MASCOT_LINES } from '../content/messages.js';
@@ -127,13 +128,13 @@ export default function HomePage() {
           <IconArrowRight />
         </Link>
 
-        <Link to={nextNode ? (nextNode.kind === 'kuis' ? `/modul/${nextNode.moduleId}/kuis?dari=latihan` : `/latihan/${nextNode.id}`) : '/latihan'} className="home-card home-card--path">
+        <Link to={nextNode ? nodeRoute(nextNode) : '/latihan'} className="home-card home-card--path">
           <span className="home-card__icon" aria-hidden="true">
             <IconRoute />
           </span>
           <span className="home-card__body">
             <span className="home-card__kicker">Latihan berikutnya</span>
-            <b>{nextNode ? `Modul ${nextNode.moduleNo} · ${nextNode.kind === 'kuis' ? 'Kuis' : `${nextNode.title} ${nextNode.subtitle}`}` : 'Semua titik selesai!'}</b>
+            <b>{nextNode ? nodeLabel(nextNode) : 'Semua titik selesai!'}</b>
             <span className="small muted">{nextNode ? nextNode.moduleTitle : 'Ulangi latihan kapan saja'}</span>
           </span>
           <IconArrowRight />

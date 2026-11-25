@@ -60,7 +60,14 @@ function SimpleTable({ head, rows }) {
             <tr key={i}>
               {r.map((c, j) => (
                 <td key={j} className={j === 1 ? 'sci' : undefined}>
-                  {typeof c === 'object' && c !== null && 'pow' in c ? <Pow10 n={c.pow} /> : c}
+                  {typeof c === 'object' && c !== null && 'pow' in c ? (
+                    <>
+                      <Pow10 n={c.pow} />
+                      {c.unit ? ` ${c.unit}` : ''}
+                    </>
+                  ) : (
+                    c
+                  )}
                 </td>
               ))}
             </tr>

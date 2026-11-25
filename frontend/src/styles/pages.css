@@ -1027,6 +1027,112 @@
   font-size: 0.88rem;
 }
 
+.bk-try__text {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* Bab 1: nilai tempat & penjabaran bilangan */
+.bk-places {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+
+.bk-places__cell {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-width: 38px;
+  padding: 6px 3px;
+  border-radius: 12px;
+  background: #f1eeff;
+  font-size: 0.82rem;
+}
+
+.bk-places__cell b {
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  color: #3b3486;
+}
+
+/* Garis koma: tempat pertama setelah koma */
+.bk-places__cell.is-after-comma {
+  box-shadow: -4px 0 0 #fff, -7px 0 0 var(--comma);
+  margin-left: 6px;
+}
+
+.bk-expand {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.9;
+}
+
+/* Bab 2: urutan bilangan dari yang terbesar */
+.bk-compare {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 4px;
+}
+
+.bk-compare li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: #f1eeff;
+  font-size: 1.1rem;
+}
+
+.bk-compare__eq {
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  color: #6b62a8;
+}
+
+.bk-compare__gt {
+  margin-left: auto;
+  font-weight: 800;
+  color: #6b62a8;
+}
+
+/* Bab 4: kotak rumus aturan pangkat */
+.bk-rule {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 2px dashed #b9aef5;
+  background: #fbfaff;
+  text-align: center;
+}
+
+.bk-rule p {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #3b3486;
+  overflow-wrap: anywhere;
+}
+
+.bk-op__eq {
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+
+.bk-units td {
+  padding: 3px 10px;
+}
+
 .bk-facts {
   list-style: none;
   margin: 0;
@@ -2667,4 +2773,539 @@ button.cal__cell.is-selected {
     aspect-ratio: auto;
     min-height: 58px;
   }
+}
+
+/* ---------- Mediasi RMT (docs/RMT.md) — tampilan ringkas, hanya token warna ---------- */
+/* Tujuan level di atas soal pertama: satu baris terlipat agar tidak mengganggu soal. */
+.goal-note {
+  border-radius: var(--radius-s);
+  background: var(--primary-soft);
+  border-left: 4px solid var(--primary);
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  font-size: 0.92rem;
+}
+
+.goal-note summary {
+  cursor: pointer;
+  padding: 10px 0;
+  line-height: 1.4;
+}
+
+.goal-note summary b,
+.goal-card b,
+.rule-box__title {
+  color: var(--primary-ink);
+}
+
+.goal-note p {
+  margin: 4px 0 6px;
+}
+
+/* Tujuan & alasan penting di layar pembuka kuis yang sudah ada. */
+.goal-card {
+  border-radius: var(--radius-s);
+  background: var(--primary-soft);
+  border-left: 4px solid var(--primary);
+  padding: 10px 14px;
+  display: grid;
+  gap: 6px;
+}
+
+.goal-card p {
+  margin: 0;
+}
+
+/* Aturan umum (Transendensi): setelah menjawab, di bawah pembahasan. */
+.rule-box {
+  border-radius: var(--radius-s);
+  background: var(--tone-progress-soft);
+  border-left: 4px solid var(--tone-progress);
+  padding: 10px 14px;
+  display: grid;
+  gap: 4px;
+}
+
+.rule-box p {
+  margin: 0;
+}
+
+.rule-box__title {
+  font-weight: 900;
+  font-size: 0.9rem;
+  color: var(--tone-progress-ink);
+}
+
+/* Pertanyaan balik & pertanyaan pemandu (mediated questioning). */
+.feedback__ask,
+.explain__ask {
+  margin: 0;
+}
+
+.feedback__ask b,
+.explain__ask b {
+  color: var(--primary-ink);
+}
+
+.hint-box__guide {
+  margin: 0 0 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed color-mix(in srgb, var(--hint) 35%, transparent);
+}
+
+/* Dashboard Guru: arti fase Input/Elaborasi/Output (terlipat). */
+.t-phases summary {
+  cursor: pointer;
+  color: var(--primary-ink);
+  font-weight: 800;
+  padding: 12px 0;
+}
+
+.t-phases ul {
+  margin: 4px 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 2px;
+}
+
+.t-phases p {
+  margin: 4px 0 0;
+}
+
+/* ---------- Asisten Belajar (docs/AI-TUTOR.md) — ringkas, hanya token warna ---------- */
+.assist-open {
+  align-self: flex-start;
+  min-height: var(--tap);
+  color: var(--primary-ink);
+  font-weight: 800;
+}
+
+.assist {
+  display: grid;
+  gap: 10px;
+  border-left: 4px solid var(--primary);
+}
+
+.assist__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.assist__title {
+  margin: 0;
+  font-weight: 900;
+  color: var(--primary-ink);
+}
+
+.assist__badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+.assist__close {
+  min-height: var(--tap);
+}
+
+.assist__log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  max-height: min(460px, 62vh);
+  overflow-y: auto;
+}
+
+.assist__msg {
+  max-width: 88%;
+  padding: 8px 12px;
+  border-radius: var(--radius-s);
+  line-height: 1.45;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.assist__msg--ai {
+  justify-self: start;
+  background: var(--primary-soft);
+  color: var(--text);
+}
+
+.assist__msg--me {
+  justify-self: end;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.assist__msg--wait {
+  color: var(--text-muted);
+}
+
+.assist__error {
+  margin: 0;
+  color: var(--error);
+  font-weight: 700;
+}
+
+.assist__form {
+  display: flex;
+  gap: 8px;
+}
+
+.assist__form input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--tap);
+  padding: 8px 12px;
+  border-radius: var(--radius-s);
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+
+.assist__form input:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* ---------- Asisten Belajar: tombol pembuka & visual matematika (23 Nov 2026) ---------- */
+.assist__starters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.assist__starter {
+  min-height: var(--tap);
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 2px solid var(--primary-soft);
+  background: var(--surface);
+  color: var(--primary-ink);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.assist__starter:hover,
+.assist__starter:focus-visible {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.assist__visual {
+  justify-self: stretch;
+  min-width: 0;
+}
+
+.av {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-s);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.av__cap {
+  font-weight: 800;
+  color: var(--primary-ink);
+  font-size: 0.9rem;
+}
+
+.av__tag {
+  margin-left: 4px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--hint-soft);
+  color: var(--hint);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.av__body {
+  min-width: 0;
+}
+
+.av-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.av-d {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--text);
+}
+
+.av-d--first {
+  color: var(--lead-digit);
+}
+
+.av-d--zero {
+  color: var(--zero);
+}
+
+.av-d--middle {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--lead-digit);
+}
+
+.av-comma {
+  color: var(--comma);
+  font-weight: 900;
+  font-family: var(--font-mono);
+}
+
+.av-comma--old {
+  opacity: 0.35;
+}
+
+.av-note {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.av-eq {
+  margin: 0;
+  font-weight: 800;
+}
+
+.av-math {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.av-math--end {
+  color: var(--lead-digit);
+}
+
+.av-table {
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.av-table th,
+.av-table td {
+  padding: 4px 8px;
+  text-align: center;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.av-table th {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.av-table--pmstp th {
+  text-align: left;
+  color: var(--primary-ink);
+  white-space: nowrap;
+}
+
+.av-table--pmstp td {
+  text-align: left;
+}
+
+.av-groups {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.av-group {
+  display: inline-flex;
+  padding: 2px 6px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px dashed var(--zero);
+}
+
+.av-sep {
+  margin-left: 4px;
+  color: var(--text-muted);
+}
+
+.av-pos {
+  display: inline-grid;
+  justify-items: center;
+}
+
+.av-pos__n {
+  font-size: 0.7rem;
+  color: var(--hint);
+  font-weight: 700;
+}
+
+.av-line {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border-top: 3px solid var(--primary);
+  margin-top: 22px;
+}
+
+.av-line__pt {
+  display: grid;
+  justify-items: center;
+  position: relative;
+  min-width: 0;
+}
+
+.av-line__pow {
+  position: absolute;
+  top: -24px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.av-line__tick {
+  width: 2px;
+  height: 8px;
+  background: var(--primary);
+}
+
+.av-line__val {
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.av-line__dir {
+  margin: 6px 0 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.av-shift {
+  display: inline-flex;
+  gap: 2px;
+  padding-top: 2px;
+}
+
+.av-shift__cell {
+  display: grid;
+  justify-items: center;
+}
+
+.av-shift__jump {
+  min-height: 1.1em;
+  font-size: 0.72rem;
+  color: var(--comma);
+  font-weight: 800;
+}
+
+.av-shift__row {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.av-steps,
+.av-flow {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+
+.av-steps li {
+  display: grid;
+  gap: 2px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.av-steps {
+  counter-reset: step;
+}
+
+.av-steps__label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.av-steps__label::before {
+  counter-increment: step;
+  content: counter(step) '. ';
+}
+
+.av-flow__step {
+  display: grid;
+  gap: 2px;
+}
+
+.av-flow__arrow {
+  font-size: 0.78rem;
+  color: var(--primary-ink);
+  font-weight: 700;
+}
+
+/* ---------- Asisten Belajar: teks berformat (tabel, diagram, daftar) — 25 Nov 2026 ---------- */
+.assist__msg--ai:has(.assist-md__table, .assist-md__pre) {
+  max-width: 100%;
+}
+
+.assist-md {
+  display: grid;
+  gap: 6px;
+  white-space: normal;
+  min-width: 0;
+}
+
+.assist-md__p {
+  margin: 0;
+}
+
+.assist-md__list {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.assist-md__table th,
+.assist-md__table td {
+  text-align: left;
+}
+
+.assist-md__pre {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  white-space: pre;
+  overflow-x: auto;
+  max-width: 100%;
 }

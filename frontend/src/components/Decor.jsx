@@ -1,3 +1,4 @@
+import SkyFx from './SkyFx.jsx';
 /**
  * Hiasan latar: taburan bintang/kilau dengan ukuran & jarak bervariasi, ditambah sedikit angka,
  * simbol matematika, bentuk geometri, dan titik-titik. Dipakai di kepala halaman/latar sambutan,
@@ -40,7 +41,7 @@ export function scatterStars({ seed, count, zone = [55, 97, 8, 90], minDist = 11
 }
 
 const SETS = {
-  home: { seed: 11, count: 8, zone: [50, 97, 6, 92], items: [{ t: 'text', v: '10³', x: 84, y: 60, s: 22 }, { t: 'ring', x: 72, y: 78, s: 26 }, { t: 'dots', x: 56, y: 84, s: 40 }], meteor: true },
+  home: { seed: 11, count: 8, zone: [50, 97, 6, 92], items: [{ t: 'text', v: '10³', x: 84, y: 60, s: 22 }, { t: 'ring', x: 72, y: 78, s: 26 }, { t: 'dots', x: 56, y: 84, s: 40 }, { t: 'cloud', x: 60, y: 14, s: 22 }], meteor: true },
   book: { seed: 23, count: 6, items: [{ t: 'text', v: 'a²', x: 70, y: 22, s: 24 }, { t: 'tri', x: 62, y: 70, s: 18 }, { t: 'dots', x: 80, y: 82, s: 36 }] },
   path: { seed: 37, count: 6, items: [{ t: 'plus', x: 88, y: 62, s: 16 }, { t: 'sq', x: 64, y: 72, s: 16 }, { t: 'text', v: '10⁶', x: 80, y: 28, s: 18 }] },
   notes: { seed: 41, count: 6, items: [{ t: 'text', v: '=', x: 70, y: 24, s: 24 }, { t: 'ring', x: 62, y: 70, s: 20 }, { t: 'dots', x: 80, y: 76, s: 36 }] },
@@ -49,7 +50,24 @@ const SETS = {
   profile: { seed: 71, count: 9, zone: [3, 97, 6, 92], minDist: 13, items: [{ t: 'text', v: '10²', x: 84, y: 72, s: 18 }, { t: 'sq', x: 14, y: 78, s: 14 }, { t: 'dots', x: 68, y: 86, s: 36 }], meteor: true },
   lab: { seed: 83, count: 7, items: [{ t: 'text', v: ',', x: 74, y: 30, s: 30 }, { t: 'plus', x: 90, y: 70, s: 14 }, { t: 'dots', x: 62, y: 78, s: 34 }] },
   side: { seed: 131, count: 4, zone: [8, 92, 52, 92], minDist: 22, items: [{ t: 'text', v: '×10²', x: 6, y: 74, s: 14 }, { t: 'ring', x: 82, y: 56, s: 16 }, { t: 'plus', x: 14, y: 56, s: 12 }] },
-  welcome: { seed: 97, count: 14, zone: [2, 98, 3, 97], minDist: 12, items: [], meteor: true },
+  welcome: {
+    seed: 97,
+    count: 14,
+    zone: [2, 98, 3, 97],
+    minDist: 12,
+    items: [
+      { t: 'cloud', x: 10, y: 22, s: 30 },
+      { t: 'cloud', x: 88, y: 40, s: 24 },
+      { t: 'cloud', x: 16, y: 78, s: 20 },
+    ],
+    meteor: true,
+  },
+  // Dashboard Guru (21 Nov 2026): kepala halaman guru memakai gaya taburan yang sama dengan siswa
+  guru: { seed: 151, count: 8, zone: [50, 97, 6, 92], items: [{ t: 'text', v: '×10²', x: 82, y: 64, s: 20 }, { t: 'ring', x: 70, y: 80, s: 24 }, { t: 'cloud', x: 58, y: 16, s: 22 }], meteor: true },
+  kelas: { seed: 163, count: 6, items: [{ t: 'text', v: 'A', x: 72, y: 24, s: 22 }, { t: 'sq', x: 62, y: 72, s: 16 }, { t: 'dots', x: 82, y: 80, s: 36 }] },
+  siswa: { seed: 173, count: 6, items: [{ t: 'ring', x: 86, y: 66, s: 20 }, { t: 'text', v: '★', x: 64, y: 70, s: 18 }, { t: 'dots', x: 78, y: 20, s: 34 }] },
+  progres: { seed: 181, count: 6, items: [{ t: 'text', v: '%', x: 72, y: 24, s: 22 }, { t: 'tri', x: 62, y: 72, s: 18 }, { t: 'dots', x: 82, y: 80, s: 34 }] },
+  hasil: { seed: 191, count: 6, items: [{ t: 'text', v: '✓', x: 70, y: 22, s: 22 }, { t: 'plus', x: 88, y: 66, s: 14 }, { t: 'dots', x: 64, y: 82, s: 34 }] },
 };
 
 const STAR = 'M12 1.5l2.6 6.6 6.9.6-5.3 4.6 1.6 6.9L12 16.6l-5.8 3.6 1.6-6.9L2.5 8.7l6.9-.6z';
@@ -119,11 +137,22 @@ const BACKDROP = [
   { t: 'text', v: '+', x: 48, y: 1.4, s: 22, c: 'teal' },
   { t: 'glint', x: 74, y: 1.6, s: 8, c: 'gold', dur: 2.6, delay: 1.4 },
   { t: 'ring', x: 20, y: 99.2, s: 18, c: 'pink' },
+  // Awan pastel di tepi (21 Nov 2026)
+  { hp: true, t: 'cloud', x: 97, y: 33, s: 22, c: 'violet' },
+  { t: 'cloud', x: 3, y: 39, s: 26, c: 'blue' },
+  { t: 'cloud', x: 97.4, y: 92, s: 24, c: 'pink' },
+  { hp: true, t: 'cloud', x: 2.6, y: 96, s: 20, c: 'blue' },
 ];
 
-export function DashBackdrop() {
+/**
+ * @param {{ variant?: 'dash'|'study' }} props
+ * 'study' (21 Nov 2026) = latar lembut untuk layar belajar (soal, modul): hiasan yang sama di tepi layar
+ * (di HP hanya yang bertanda hp) + gumpalan warna, tanpa bintang jatuh — tidak pernah di area soal/teks.
+ */
+export function DashBackdrop({ variant = 'dash' }) {
   return (
-    <div className="dash-backdrop" aria-hidden="true">
+    <div className={`dash-backdrop dash-backdrop--${variant}`} aria-hidden="true">
+      <SkyFx tone="dash" />
       <span className="dash-backdrop__blob dash-backdrop__blob--sun" />
       <span className="dash-backdrop__blob dash-backdrop__blob--teal" />
       <span className="dash-backdrop__blob dash-backdrop__blob--pink" />

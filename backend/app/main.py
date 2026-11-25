@@ -1,14 +1,15 @@
-"""KomaKu API (Alpha).
+"""NoBaku API (Alpha).
 
-Alpha hanya menyediakan layanan pengecekan notasi ilmiah. Login, kelas, progres,
-dan Asisten AI menyusul sesuai docs/ROADMAP.md.
+Layanan pengecekan notasi ilmiah + akun siswa/guru, kelas VIII-A–E, sinkronisasi ringkasan belajar,
+dan laporan guru (17 Nov 2026). Asisten Belajar (Groq, 21 Nov 2026): /api/v1/ai/* — mati secara bawaan,
+diaktifkan lewat backend/.env (AI_ENABLED, GROQ_API_KEY, GROQ_MODEL); lihat docs/AI-TUTOR.md.
+Skema database dibuat lewat migrasi Alembic:  alembic upgrade head
 
 Jalankan:  uvicorn app.main:app --reload   → dokumentasi di http://localhost:8000/docs
 """
 
 from __future__ import annotations
 
-import os
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException
@@ -16,16 +17,19 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from . import sci
+from .core.config import settings
+from .routers import ai, auth, classes, reports
 
-app = FastAPI(title="KomaKu API", version="0.1.0-alpha")
+app = FastAPI(title="NoBaku API", version="0.2.0-alpha")
 
-_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://localhost:4173").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[o.strip() for o in _origins if o.strip()],
-    allow_methods=["GET", "POST"],
+    allow_origins=list(settings.cors_origins),
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     allow_headers=["*"],
 )
+for _router in (auth.router, classes.router, reports.router, ai.router):
+    app.include_router(_router, prefix="/api/v1")
 
 
 class ConvertRequest(BaseModel):

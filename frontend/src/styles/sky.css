@@ -1,0 +1,204 @@
+/* =====================================================================
+ * LANGIT BERHIAS (SkyFx): bintang berkelap-kelip, bintang jatuh, kilauan.
+ * Hanya layar non-soal. Di belakang konten, tidak bisa diklik. Gerak hanya bila
+ * [data-motion='on']; bila animasi nonaktif, bintang tampil diam & redup.
+ * ===================================================================== */
+
+.sky-fx {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Warna: latar pucat (Dashboard) memakai token warna; latar ungu (Sambutan) putih-emas */
+.sky-fx--dash {
+  --sky-0: var(--tone-install);
+  --sky-1: var(--primary);
+  --sky-2: var(--star-pink);
+  --sky-3: var(--deco-blue);
+  --sky-trail: var(--primary);
+}
+
+.sky-fx--light {
+  --sky-0: var(--sky-white);
+  --sky-1: var(--sky-gold);
+  --sky-2: var(--sky-white);
+  --sky-3: var(--sky-blush);
+  --sky-trail: var(--sky-white);
+}
+
+.sky-c0 {
+  --c: var(--sky-0);
+}
+
+.sky-c1 {
+  --c: var(--sky-1);
+}
+
+.sky-c2 {
+  --c: var(--sky-2);
+}
+
+.sky-c3 {
+  --c: var(--sky-3);
+}
+
+/* ---------- bintang berkelap-kelip ---------- */
+.sky-twinkle {
+  position: absolute;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 calc(var(--s) * 1.6) var(--c);
+  opacity: 0.45;
+}
+
+[data-motion='on'] .sky-twinkle {
+  animation: sky-twinkle 4.5s ease-in-out infinite;
+}
+
+@keyframes sky-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1);
+  }
+}
+
+/* ---------- bintang jatuh (sesekali) ---------- */
+.sky-shoot {
+  position: absolute;
+  width: 130px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--sky-trail), transparent);
+  transform-origin: left center;
+  opacity: 0;
+  display: none;
+}
+
+.sky-shoot::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sky-trail);
+  box-shadow: 0 0 10px 2px var(--sky-trail);
+}
+
+[data-motion='on'] .sky-shoot {
+  display: block;
+  animation: sky-shoot 17s linear infinite;
+}
+
+/* Sebagian besar waktu tak terlihat; melintas pelan ke kiri-bawah dalam ±8% durasi */
+@keyframes sky-shoot {
+  0%,
+  90% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(-28deg);
+  }
+  91.5% {
+    opacity: 0.9;
+  }
+  98% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-320px, 170px) rotate(-28deg);
+  }
+}
+
+/* ---------- kilauan (sparkle) ---------- */
+.sky-sparkle {
+  position: absolute;
+  width: var(--s);
+  height: var(--s);
+  background: var(--c);
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+  opacity: 0;
+  display: none;
+}
+
+[data-motion='on'] .sky-sparkle {
+  display: block;
+  animation: sky-sparkle 12s ease-in-out infinite;
+}
+
+@keyframes sky-sparkle {
+  0%,
+  80%,
+  100% {
+    opacity: 0;
+    transform: scale(0.2) rotate(0deg);
+  }
+  86% {
+    opacity: 0.95;
+    transform: scale(1) rotate(45deg);
+  }
+  92% {
+    opacity: 0;
+    transform: scale(0.3) rotate(90deg);
+  }
+}
+
+/* HP: lebih sedikit agar tidak ramai */
+@media (max-width: 959px) {
+  .sky-twinkle:nth-of-type(3n) {
+    display: none;
+  }
+
+  .sky-shoot ~ .sky-shoot {
+    display: none !important;
+  }
+
+  .sky-shoot {
+    width: 90px;
+  }
+
+  @keyframes sky-shoot {
+    0%,
+    90% {
+      opacity: 0;
+      transform: translate(0, 0) rotate(-28deg);
+    }
+    91.5% {
+      opacity: 0.9;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-200px, 106px) rotate(-28deg);
+    }
+  }
+}
+
+/* Sambutan: sakelar Musik & Animasi berdampingan di kanan atas (turun ke baris baru bila sempit) */
+.welcome-screen__toggles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Langit di Sambutan & Masuk/Daftar berada di belakang isi */
+.welcome-screen > .sky-fx,
+.auth-art > .sky-fx {
+  z-index: 0;
+}
+
+/* Pemberitahuan lencana baru */
+.toast--badge {
+  background: linear-gradient(120deg, var(--primary-strong), var(--primary));
+  color: #fff;
+}

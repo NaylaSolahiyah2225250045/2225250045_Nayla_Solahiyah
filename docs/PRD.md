@@ -152,7 +152,7 @@ Kolom "Sumber" merujuk kode wawancara di [RESEARCH-INSIGHTS.md](RESEARCH-INSIGHT
 | FR-22 | Modul 7: perkalian & pembagian bentuk baku dengan normalisasi hasil. | — (prasyarat FR-23) | M |
 | FR-23 | Pemodelan terbimbing (Modul 8): siklus PMSTP 5 langkah dengan kartu besaran dan pemeriksaan tiap langkah. | EL05, DS01 | M |
 | FR-24 | Ragam jenis model (KONVERSI, SATUAN, KALI, BAGI, PER_UNIT, KAPASITAS, BANDING, URUT) dan format soal AKM (PG, PG kompleks, menjodohkan, isian, uraian). | EL05 | M |
-| FR-25 | Asisten AI siswa: soal cerita teks → spesifikasi model (Claude API) → diverifikasi mesin → bimbingan per langkah tanpa membocorkan jawaban. | DS01, DS03 | S |
+| FR-25 | Asisten AI siswa: soal cerita teks → spesifikasi model (Groq API) → diverifikasi mesin → bimbingan per langkah tanpa membocorkan jawaban. | DS01, DS03 | S |
 | FR-26 | Asisten AI guru: draf soal pemodelan dari teks guru → verifikasi mesin → tinjau & setujui → bank soal kelas. | — | S |
 | FR-27 | Profil literasi siswa & kelas (per proses, konteks, kategori). | — | M |
 | FR-28 | Pengaturan AI per kelas (aktif/nonaktif, kuota harian) dan batas anggaran global. | — | S |
@@ -229,5 +229,5 @@ Detail jadwal: [ROADMAP.md](ROADMAP.md).
 3. Nama final aplikasi dan identitas visual.
 4. Instrumen beban kognitif final: skala Paas saja atau kuesioner 3 dimensi (IL/EL/GL, Leppink dkk.)?
 5. Siapa yang menanggung biaya API Asisten AI selama uji coba, dan berapa batas anggarannya?
-6. Apakah sekolah/orang tua menyetujui penggunaan layanan AI pihak ketiga (Anthropic) untuk teks soal?
+6. Apakah sekolah/orang tua menyetujui penggunaan layanan AI pihak ketiga (Groq) untuk teks soal? (Uji coba Asisten Belajar: persetujuan ditangani di luar aplikasi.)
 7. Apakah instrumen tes literasi akan diadaptasi dari soal AKM/PISA yang dirilis publik atau disusun sendiri lalu divalidasi ahli?

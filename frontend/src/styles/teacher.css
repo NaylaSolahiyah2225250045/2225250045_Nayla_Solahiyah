@@ -1,0 +1,870 @@
+/* =====================================================================
+ * DASHBOARD GURU & peran Guru (17 Nov 2026). Warna hanya dari token (tokens.css).
+ * Kerangka (shell, sidebar, navigasi bawah, page-hero) memakai gaya Dashboard Siswa.
+ * ===================================================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Daftar: pilihan jenis akun & server sekolah ---------- */
+.role-pick {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 4px 0 14px;
+}
+
+.role-pick__opt {
+  display: grid;
+  gap: 2px;
+  min-height: var(--tap);
+  padding: 10px 12px;
+  text-align: left;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-m);
+  cursor: pointer;
+}
+
+.role-pick__opt .small {
+  color: var(--text-muted);
+}
+
+.role-pick__opt.is-on {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+.role-pick__opt:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.server-setting {
+  margin-top: 10px;
+  color: var(--text-muted);
+}
+
+.server-setting summary {
+  cursor: pointer;
+  min-height: 32px;
+}
+
+.server-setting__form {
+  display: grid;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.server-setting__form .row {
+  flex-wrap: nowrap;
+}
+
+.server-setting__form .input {
+  min-width: 0;
+  flex: 1;
+}
+
+/* ---------- Profil Siswa: Kelas Saya ---------- */
+.join-class__current {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.join-class__badge,
+.t-class__badge {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  font-weight: 800;
+  font-size: 1.3rem;
+  color: var(--on-primary);
+  background: var(--hero-grad);
+}
+
+.join-class__form .row {
+  flex-wrap: nowrap;
+}
+
+.join-class__input {
+  min-width: 0;
+  flex: 1;
+  font-family: var(--font-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* ---------- Kerangka guru ---------- */
+.sidenav__role {
+  margin: -4px 0 6px;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.t-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: 50%;
+  font-weight: 800;
+  color: var(--on-primary);
+  background: var(--hero-grad);
+  box-shadow: var(--shadow);
+}
+
+.t-avatar--lg {
+  width: 64px;
+  height: 64px;
+  font-size: 1.6rem;
+}
+
+.t-page h2 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* ---------- Sambutan Beranda Guru & Profil Guru ---------- */
+.t-welcome {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border-radius: var(--radius-l);
+  background: var(--welcome-grad);
+  color: var(--on-primary);
+  box-shadow: var(--hero-shadow);
+  overflow: hidden;
+}
+
+.t-welcome__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.t-welcome__text h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.t-welcome__text p {
+  margin: 4px 0 0;
+  opacity: 0.92;
+}
+
+.t-welcome__kicker {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.t-welcome__actions {
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.t-welcome__art {
+  flex: none;
+}
+
+.t-chips {
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+@media (max-width: 599px) {
+  .t-welcome__art {
+    display: none;
+  }
+}
+
+.t-pending {
+  border-left: 5px solid var(--hint);
+  background: var(--hint-soft);
+}
+
+.t-mode {
+  text-align: center;
+}
+
+/* ---------- Kartu angka ---------- */
+.t-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.t-stat {
+  display: grid;
+  gap: 2px;
+  padding: 14px;
+  border-radius: var(--radius-m);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 5px solid var(--t, var(--primary));
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+
+.t-stat--learn {
+  --t: var(--tone-learn);
+}
+
+.t-stat--progress {
+  --t: var(--tone-progress);
+}
+
+.t-stat--install {
+  --t: var(--tone-install);
+}
+
+.t-stat--account {
+  --t: var(--tone-account);
+}
+
+.t-stat__label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 650;
+}
+
+.t-stat__value {
+  font-size: 1.7rem;
+  line-height: 1.1;
+}
+
+.t-stat__note {
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Tata letak ---------- */
+.t-grid {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 900px) {
+  .t-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .t-grid__wide {
+    grid-column: 1 / -1;
+  }
+}
+
+.t-empty {
+  text-align: center;
+  justify-items: center;
+}
+
+.t-back {
+  justify-self: start;
+}
+
+.t-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.t-search {
+  flex: 1 1 220px;
+  max-width: 320px;
+}
+
+.t-wrap {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---------- Pilihan kelas / jenis (chip) ---------- */
+.t-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.t-filter button {
+  min-height: 40px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.t-filter--sm button {
+  min-height: 34px;
+  padding: 4px 12px;
+  font-size: 0.9rem;
+}
+
+.t-filter button[aria-pressed='true'] {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--on-primary);
+}
+
+.t-filter button:focus-visible,
+.t-create__names button:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ---------- Grafik batang (satu seri) ---------- */
+.t-bars {
+  margin: 0;
+}
+
+.t-bars ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.t-bars li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'label value'
+    'track track';
+  gap: 4px 10px;
+  align-items: center;
+}
+
+.t-bars__label {
+  grid-area: label;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.t-bars__value {
+  grid-area: value;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.t-bars__track {
+  grid-area: track;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.t-bars__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+.t-bars li:hover .t-bars__fill {
+  background: var(--primary-strong);
+}
+
+/* ---------- Meter kecil ---------- */
+.t-meter {
+  display: inline-block;
+  width: 100%;
+  min-width: 60px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.t-meter > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--success);
+}
+
+.t-cellmeter {
+  display: grid;
+  grid-template-columns: minmax(60px, 90px) auto;
+  gap: 6px;
+  align-items: center;
+}
+
+/* ---------- Tabel ---------- */
+.t-table th[scope='row'],
+.t-table td:first-child {
+  text-align: left;
+}
+
+.t-table thead th:first-child {
+  text-align: left;
+}
+
+.t-name {
+  display: grid;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.t-table td {
+  white-space: nowrap;
+}
+
+.t-matrix td,
+.t-matrix th {
+  padding: 8px 5px;
+}
+
+.t-cell {
+  display: inline-block;
+  min-width: 46px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.t-cell.is-done {
+  background: var(--success-soft);
+  color: var(--text);
+}
+
+.t-cell.is-part {
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+}
+
+.t-cell.is-none {
+  color: var(--text-muted);
+}
+
+/* ---------- Aktivitas terbaru ---------- */
+.t-feed {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+
+.t-feed li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.t-feed li:last-child {
+  border-bottom: 0;
+}
+
+.t-feed__who {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.t-feed__what,
+.t-feed__when {
+  grid-column: 1;
+  overflow-wrap: anywhere;
+}
+
+.t-feed .badge {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  align-self: center;
+}
+
+.t-classmini {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.t-classmini a {
+  display: grid;
+  gap: 2px;
+  padding: 12px;
+  border-radius: var(--radius-m);
+  background: var(--surface-2);
+  color: var(--text);
+  text-decoration: none;
+  min-height: var(--tap);
+}
+
+.t-classmini a:hover {
+  background: var(--primary-soft);
+}
+
+/* ---------- Kelas Saya ---------- */
+.t-create {
+  display: grid;
+  gap: 12px;
+}
+
+.t-create__names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.t-create__names button {
+  min-width: 78px;
+  min-height: var(--tap);
+  border-radius: var(--radius-m);
+  border: 2px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.t-create__names button[aria-checked='true'] {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary-ink);
+}
+
+.t-create__names button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.t-create__year {
+  display: grid;
+  gap: 4px;
+  max-width: 200px;
+}
+
+.t-create .btn {
+  justify-self: start;
+}
+
+.t-classes {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 900px) {
+  .t-classes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.t-class {
+  display: grid;
+  gap: 10px;
+}
+
+.t-class__head {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.t-class__head h2 {
+  margin: 0;
+}
+
+.t-class__head p {
+  margin: 2px 0 0;
+}
+
+.t-class__code {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-m);
+  background: var(--surface-2);
+}
+
+.t-code {
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  letter-spacing: 0.2em;
+  color: var(--primary-ink);
+}
+
+.t-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--tap);
+  cursor: pointer;
+}
+
+.t-switch input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--primary);
+}
+
+.t-class__actions {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.t-danger {
+  background: var(--error-soft);
+  color: var(--error);
+  border-color: var(--error);
+}
+
+.t-warn {
+  color: var(--error);
+}
+
+.t-class__students ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+
+.t-class__students li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+}
+
+.t-class__students a {
+  display: grid;
+  color: var(--text);
+  text-decoration: none;
+  min-width: 0;
+}
+
+/* ---------- Detail siswa ---------- */
+.t-student-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.t-student-head h1 {
+  margin: 0;
+  font-size: clamp(1.3rem, 5vw, 1.8rem);
+}
+
+.t-student-head p {
+  margin: 2px 0 0;
+}
+
+.t-topics {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.t-topics li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 10px;
+  align-items: center;
+}
+
+.t-topics__name {
+  grid-column: 1 / -1;
+  font-weight: 650;
+}
+
+.t-topics .t-meter {
+  grid-column: 1;
+}
+
+.t-topics li > .small {
+  grid-column: 2;
+}
+
+.t-topics .chip {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.t-chip-ok {
+  background: var(--success-soft);
+}
+
+.t-nodes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 6px;
+}
+
+.t-nodes li,
+.t-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--surface-2);
+  color: var(--text-muted);
+}
+
+.t-nodes li.is-done,
+.t-dot.is-done {
+  background: var(--success);
+  color: var(--on-primary);
+}
+
+.t-nodes li.is-current,
+.t-dot.is-current {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.t-dot {
+  width: 14px;
+  min-height: 14px;
+  height: 14px;
+  border-radius: 4px;
+  margin: 0 4px 0 10px;
+  vertical-align: middle;
+}
+
+.t-dot:first-child {
+  margin-left: 0;
+}
+
+.t-badges {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 10px;
+}
+
+.t-badges li {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.t-sessions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+
+.t-session {
+  border-top: 1px solid var(--border);
+}
+
+.t-session:first-child {
+  border-top: 0;
+}
+
+.t-session summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0 10px;
+  padding: 10px 0;
+  cursor: pointer;
+  list-style: none;
+  min-height: var(--tap);
+}
+
+.t-session summary::-webkit-details-marker {
+  display: none;
+}
+
+.t-session summary .small {
+  grid-column: 1;
+}
+
+.t-session summary .badge {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+.t-session__title {
+  overflow-wrap: anywhere;
+}
+
+.t-items {
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+
+.t-items li {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: var(--radius-s);
+  border-left: 4px solid var(--success);
+  background: var(--surface-2);
+}
+
+.t-items li.is-bad {
+  border-left-color: var(--error);
+}
+
+.t-field {
+  display: grid;
+  gap: 4px;
+}

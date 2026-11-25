@@ -191,6 +191,12 @@ Urutan kolom kanan diacak saat ditampilkan.
 
 ## 4. Komposisi Bank Soal per Modul (minimal)
 
+> **Perubahan 23 Nov 2026 (1 level × 10 soal per topik (disetujui pengembang, 23 Nov 2026)):** `BANK[t].levels` hanya `{1: [10 soal]}` (helper `graded()` memberi `tier` 3 mudah / 4 sedang / 3 sulit sesuai urutan). Soal dipilih dari bank lama yang sudah teruji (tanpa mengubah kalimat, angka, pilihan, kunci, dan pembahasannya) lalu diurutkan bertahap; satu pola dan satu model cerita hanya sekali per topik. Kuis topik & Kuis Akhir tidak berubah. `content.test.js` mengunci 10 soal per topik dan urutan tier.
+>
+> **Kompetensi per topik (23 Nov 2026):** latihan tiap topik hanya melatih kompetensinya sendiri — T1 pangkat 10, nilai tempat, dekomposisi & pergeseran nilai tempat; T2 bilangan sangat besar/kecil, perbandingan, urutan, skala; T3 konversi bentuk biasa ⇄ baku & aturan penulisan (satu-satunya topik dengan soal isian konversi); T4 kali, bagi, tambah, kurang, normalisasi; T5 soal kontekstual PMSTP. Dikunci tes "setiap topik hanya melatih kompetensinya sendiri" di `content.test.js`.
+>
+> **Berlaku sejak 16 Nov 2026 (`content/bank.js`):** 5 topik (t1–t5) × Level 1–4 berisi 4–5 soal (semua dikerjakan) + kuis topik 5 soal, ditambah `FINAL_QUIZ` 10 soal (2 per topik). Aturan yang diuji `content.test.js`: tidak ada soal kembar (keterampilan + bilangan yang sama) di seluruh bank; soal latihan tidak memakai bilangan contoh terurai di materi; setiap level punya ≥ 2 jenis soal; soal cerita berlabel `literacy`; kunci & pengecoh pilihan ganda numerik diperiksa mesin. Jenis soal baru: `place_value`, `normalize`, `operation` (kali/bagi, `text`/`unit`/`traps` untuk soal cerita & satuan), dan pilihan ganda `focus: 'compare'`. Audit variasi 17 Nov 2026: jumlah soal per level tetap (t1 5/5/5/5, t2 4/5/5/5, t3 4/5/5/5, t4 4/5/5/4, t5 4/5/5/4; Kuis Akhir 10), tetapi soal yang hanya berganti angka/konteks dari soal lain diganti soal berpola baru (menafsirkan, memberi alasan, mencari kesalahan, mengurutkan, menyusun dari nilai tempat, mencari faktor yang hilang, operasi campuran, soal dua langkah). Setiap pilihan ganda konsep memakai `form` (nama pola), `hints` (3 tingkat) dan `explain`; helper `mc(form, text, [[teks, kode?]…], explain, hints, extra)` menandai pilihan tanpa kode kesalahan sebagai jawaban benar. `content.test.js` menolak pola kembar dalam satu topik (L1–L4) maupun dalam satu kuis. Tabel di bawah adalah rancangan awal per modul.
+
 | Modul | L1 | L2 | L3 | L4 | Kuis | Cadangan |
 |---|---|---|---|---|---|---|
 | M1 Prasyarat | 5 | 5 | 5 | 5 | 5 | 5 |
@@ -245,3 +251,17 @@ M3 diberi soal lebih banyak karena merupakan kesulitan utama (IL01).
 ## 6. Konteks Soal Cerita yang Dianjurkan
 
 Uang & anggaran (familier — K01), jumlah penduduk Indonesia, jarak antarplanet, ukuran sel/virus/bakteri, massa partikel, kecepatan cahaya/suara, kapasitas penyimpanan data (byte). Hindari konteks yang sensitif atau asing bagi siswa SMP.
+
+## 7. Konten Mediasi RMT (`content/rmt.js`)
+
+Konten Rigorous Mathematical Thinking ditulis **terpisah dari bank soal** — bank soal (`content/bank.js`) tidak boleh diubah untuk keperluan ini (tes sidik isi di `content/rmt.test.js`). Acuan & alasan: [RMT.md](RMT.md).
+
+| Konten | Kunci | Aturan |
+|---|---|---|
+| Tujuan & alasan penting | `LEVEL_GOALS[topik][level]`, `QUIZ_GOAL`, `FINAL_GOAL` | ≤ 20 kata, diakhiri titik; sesuai karakter level (L1 mengenali · L2 alasan · L3 menghitung · L4 penalaran) dan isi soal level itu |
+| Pertanyaan pemandu | `SKILLS[keterampilan].guide`, `TOPIC_RULES[topik].guide` | ≤ 16 kata, berbentuk pertanyaan, tidak memuat jawaban; mengarah ke alat psikologis (nilai tempat, letak koma, tanda pangkat, satuan) |
+| Aturan umum (Transendensi) | `SKILLS[keterampilan].rule`, `TOPIC_RULES[topik].rule` | ≤ 28 kata, prinsip/rumus umum tanpa angka soal (hanya 1 dan 10); kebenarannya diuji dengan `lib/sci` |
+| Pertanyaan balik | `ERROR_MESSAGES[kode].ask` (`content/messages.js`) | ≤ 16 kata, memuat "?", mengajak memeriksa & menjelaskan alasan; judul/teks pesan lama tidak diubah |
+| Fase fungsi kognitif | `ERROR_PHASES[kode]` | `phases` boleh lebih dari satu atau kosong; wajib `evidence` dari cara mesin mendiagnosis |
+
+Contoh baik (pertanyaan pemandu, bilangan kecil): "Di mana angka bukan nol pertamanya? Bilangan ini 10 atau lebih, atau kurang dari 1?" — bukan "Pangkatnya −4."

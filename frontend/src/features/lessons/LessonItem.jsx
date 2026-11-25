@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { backSteps, workedSteps, zeroSteps } from '../../lib/sci/index.js';
+import { backSteps, operationSteps, workedSteps, zeroSteps } from '../../lib/sci/index.js';
 import { Sci } from '../../components/Sci.jsx';
 import BackVisualizer from '../../components/BackVisualizer.jsx';
 import CommaVisualizer from '../../components/CommaVisualizer.jsx';
@@ -12,18 +12,38 @@ import Visual from './Visual.jsx';
 const stepsOf = (item) => {
   if (item.steps) return item.steps;
   if (item.qtype === 'to_standard') return backSteps(item.a, item.n);
+  if (item.qtype === 'operation') return operationSteps(item);
   if (item.focus === 'zero') return zeroSteps(item.value);
   return workedSteps(item.value);
 };
 
-const PROMPT = { power_of_ten: 'Tulis sebagai 10 pangkat berapa:', to_standard: 'Tulis dalam bentuk biasa:' };
+const PROMPT = {
+  power_of_ten: 'Tulis sebagai 10 pangkat berapa:',
+  to_standard: 'Tulis dalam bentuk biasa:',
+  operation: 'Hitung, lalu tulis hasilnya dalam bentuk baku:',
+};
+
+/** Soal yang ditampilkan di kartu contoh. */
+function ExampleValue({ item }) {
+  if (item.qtype === 'to_standard') return <Sci a={item.a} n={item.n} />;
+  if (item.qtype === 'operation') {
+    return (
+      <>
+        (<Sci a={item.x.a} n={item.x.n} />) {item.op === 'kali' ? '×' : ':'} (<Sci a={item.y.a} n={item.y.n} />)
+      </>
+    );
+  }
+  return item.value;
+}
 
 /** Kartu soal di contoh terurai / setengah jadi. */
 function ExampleHead({ item }) {
   return (
     <div className="card stack-s">
-      <p className="muted">{PROMPT[item.qtype] ?? 'Tulis dalam bentuk baku:'}</p>
-      <p className="big-number">{item.qtype === 'to_standard' ? <Sci a={item.a} n={item.n} /> : item.value}</p>
+      <p className={item.text ? 'lead' : 'muted'}>{item.text ?? PROMPT[item.qtype] ?? 'Tulis dalam bentuk baku:'}</p>
+      <p className={`big-number${item.qtype === 'operation' ? ' big-number--expr' : ''}`}>
+        <ExampleValue item={item} />
+      </p>
     </div>
   );
 }
@@ -79,7 +99,7 @@ function Worked({ item }) {
         </button>
       ) : item.qtype === 'to_standard' ? (
         <BackVisualizer a={item.a} n={item.n} autoPlay />
-      ) : (
+      ) : item.qtype === 'operation' ? null : (
         <CommaVisualizer value={item.value} autoPlay />
       )}
     </div>
@@ -89,7 +109,12 @@ function Worked({ item }) {
 function Faded({ item }) {
   const steps = stepsOf(item);
   const shown = item.shown ?? steps.length - 1;
-  const q = item.qtype === 'to_standard' ? { type: item.qtype, a: item.a, n: item.n, focus: 'back' } : { type: item.qtype, value: item.value, focus: item.focus };
+  const q =
+    item.qtype === 'to_standard'
+      ? { type: item.qtype, a: item.a, n: item.n, focus: 'back' }
+      : item.qtype === 'operation'
+        ? { type: 'operation', op: item.op, x: item.x, y: item.y, text: item.text, unit: item.unit }
+        : { type: item.qtype, value: item.value, focus: item.focus };
   return (
     <div className="stack">
       <ExampleHead item={item} />
@@ -120,7 +145,7 @@ function Practice({ module }) {
   return (
     <div className="stack">
       <h2 className="concept-title">Saatnya berlatih!</h2>
-      <p className="lead">Ada 4 level, dari mudah ke sulit. Setiap level berisi 5 soal. Jawab benar minimal 3 soal untuk membuka level berikutnya.</p>
+      <p className="lead">Ada 10 soal, berurutan dari mudah ke sulit. Jawab benar minimal 6 soal untuk menuntaskan latihan topik ini.</p>
       <Link className="btn btn--primary btn--block" to={`/modul/${module.id}/latihan`}>
         Mulai latihan
       </Link>

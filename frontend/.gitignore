@@ -4,3 +4,7 @@ dev-dist
 *.local
 dist-preview
 preview
+
+# Pengaman: jangan pernah meng-commit file lingkungan. Kunci AI (GROQ_API_KEY) hanya boleh ada di backend/.env.
+.env
+.env.*

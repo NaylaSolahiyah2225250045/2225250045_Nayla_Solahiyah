@@ -2,11 +2,30 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AppBar from '../../components/AppBar.jsx';
 import MascotLive from '../../components/MascotLive.jsx';
-import QuestionCard from './QuestionCard.jsx';
+import QuestionCard, { RuleBox } from './QuestionCard.jsx';
+import { topicMediation } from '../../lib/rmt.js';
 import { progress } from '../../lib/progress.js';
 import { logActivity } from '../../lib/activity.js';
 import { recordSession } from '../../lib/history.js';
 import { XP_PER_CORRECT } from '../../lib/rewards.js';
+import { playSfx } from '../../lib/audio.js';
+
+/**
+ * Tujuan level yang ringkas: satu baris terlipat (tidak menambah langkah, tidak menutupi soal).
+ * Dipakai juga di halaman lain (mis. kartu "Lanjutkan" pada Jalur Latihan) dengan `open`.
+ */
+export function GoalNote({ goal, open = false }) {
+  return (
+    <details className="goal-note" open={open}>
+      <summary>
+        <b>Tujuan:</b> {goal.goal}
+      </summary>
+      <p>
+        <b>Kenapa penting?</b> {goal.why}
+      </p>
+    </details>
+  );
+}
 
 /**
  * Menjalankan satu sesi soal (titik jalur Latihan atau "coba lagi" dari Riwayat).
@@ -15,9 +34,11 @@ import { XP_PER_CORRECT } from '../../lib/rewards.js';
  *
  * @param {{ questions: object[], title: string, kind: 'latihan'|'ulang', nodeId?: string|null,
  *   moduleId?: string|null, passCount?: number, backTo: string, onPassed?: () => void,
- *   next?: { to: string, label: string } | null, onRestart: () => void }} props
+ *   next?: { to: string, label: string } | null, onRestart: () => void,
+ *   goal?: { goal: string, why: string } | null }} props
+ * `goal` (RMT — Intensionalitas & Makna): tujuan level, tampil ringkas (terlipat) di atas soal pertama.
  */
-export default function SessionRunner({ questions, title, kind, nodeId = null, moduleId = null, passCount, backTo, onPassed, next, onRestart, backLabel = 'Kembali ke jalur latihan' }) {
+export default function SessionRunner({ questions, title, kind, nodeId = null, moduleId = null, passCount, backTo, onPassed, next, onRestart, backLabel = 'Kembali ke jalur latihan', goal = null }) {
   const [index, setIndex] = useState(0);
   const [items, setItems] = useState([]);
   const saved = useRef(false);
@@ -31,6 +52,7 @@ export default function SessionRunner({ questions, title, kind, nodeId = null, m
     saved.current = true;
     recordSession({ kind, nodeId, moduleId, title, items });
     if (passed) onPassed?.();
+    if (passed) setTimeout(() => playSfx('level'), 450); // setelah bunyi jawaban terakhir
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finished]);
 
@@ -63,6 +85,7 @@ export default function SessionRunner({ questions, title, kind, nodeId = null, m
               <b>{Math.round((correct / items.length) * 100)}</b>nilai
             </span>
           </div>
+          <RuleBox rule={topicMediation(moduleId)?.rule} />
           {passCount !== undefined && !passed && (
             <p className="muted center">
               Perlu {passCount} jawaban benar untuk membuka titik berikutnya. Baca pembahasan di Riwayat Latihan, lalu coba lagi.
@@ -94,9 +117,11 @@ export default function SessionRunner({ questions, title, kind, nodeId = null, m
     <>
       <AppBar title={title} back={backTo} total={questions.length} current={index} />
       <main className="page page--focus">
+        {goal && index === 0 && <GoalNote goal={goal} />}
         <QuestionCard
           key={index}
           q={q}
+          topicId={moduleId}
           maxTries={1}
           onAttempt={(d) => {
             if (moduleId) progress.recordAnswer(moduleId, { correct: d.correct, errorCode: d.errorCode });

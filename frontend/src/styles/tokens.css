@@ -86,6 +86,10 @@
   --dash-blob-pink: rgb(255 111 174 / 15%);
   --deco-blue: #4c8df6;
   --hero-shadow: 0 16px 36px rgb(98 82 220 / 28%);
+  /* Langit berhias di atas latar ungu (SkyFx tone="light") */
+  --sky-white: #ffffff;
+  --sky-gold: #ffe58a;
+  --sky-blush: #ffd1ea;
 }
 
 @media (prefers-color-scheme: dark) {

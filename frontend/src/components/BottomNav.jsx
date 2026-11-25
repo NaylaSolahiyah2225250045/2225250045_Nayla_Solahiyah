@@ -42,7 +42,7 @@ export default function BottomNav() {
       <nav className="bottomnav" aria-label="Navigasi utama">
         <div className="bottomnav__inner">
           {MAIN.map(({ to, label, Icon, tone }) => (
-            <NavLink key={to} to={to} className={`tone-${tone}`}>
+            <NavLink key={to} to={to} className={`tone-${tone}`} data-tour={to.slice(1)}>
               <span className="bottomnav__ico" aria-hidden="true">
                 <Icon />
               </span>
@@ -53,6 +53,7 @@ export default function BottomNav() {
             ref={moreBtnRef}
             type="button"
             className={`bottomnav__more tone-more${moreActive || open ? ' active' : ''}`}
+            data-tour="lainnya"
             aria-haspopup="dialog"
             aria-expanded={open}
             onClick={() => setOpen((o) => !o)}

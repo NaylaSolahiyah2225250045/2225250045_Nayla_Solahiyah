@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getSession, login, logout, register, updateProfile, validateRegister } from './account.js';
+import { completeTour, getSession, login, logout, register, updateProfile, validateRegister } from './account.js';
 
 const good = { name: 'Rani', username: 'rani_8a', password: 'rahasia1', confirm: 'rahasia1' };
 
@@ -20,7 +20,7 @@ describe('akun lokal', () => {
   it('daftar → keluar → masuk, dan menolak sandi salah', async () => {
     const r = await register(good);
     expect(r.ok).toBe(true);
-    expect(getSession()).toEqual({ name: 'Rani', username: 'rani_8a', kelas: 'VIII', avatar: 'toga' });
+    expect(getSession()).toEqual({ name: 'Rani', username: 'rani_8a', kelas: 'VIII', avatar: 'toga', tourPending: true, role: 'student', remote: false });
     logout();
     expect(getSession()).toBeNull();
     expect((await login('rani_8a', 'salah123')).ok).toBe(false);
@@ -53,5 +53,32 @@ describe('profil', () => {
     logout();
     await login('dewi', 'rahasia1');
     expect(getSession().avatar).toBe('bunga');
+  });
+});
+
+describe('panduan awal (status per akun)', () => {
+  it('akun baru: panduan tertunda; selesai sekali lalu tidak muncul lagi setelah masuk ulang', async () => {
+    await register({ name: 'Sinta', username: 'sinta', password: 'rahasia1', confirm: 'rahasia1' });
+    expect(getSession().tourPending).toBe(true);
+    logout();
+    await login('sinta', 'rahasia1');
+    expect(getSession().tourPending).toBe(true); // belum diselesaikan → masih muncul
+    completeTour();
+    expect(getSession().tourPending).toBe(false);
+    logout();
+    await login('sinta', 'rahasia1');
+    expect(getSession().tourPending).toBe(false);
+    completeTour(); // aman dipanggil lagi
+    expect(getSession().tourPending).toBe(false);
+  });
+
+  it('setiap akun punya status sendiri', async () => {
+    await register({ name: 'Tono', username: 'tono', password: 'rahasia1', confirm: 'rahasia1' });
+    completeTour();
+    await register({ name: 'Umi', username: 'umi', password: 'rahasia1', confirm: 'rahasia1' });
+    expect(getSession().tourPending).toBe(true);
+    logout();
+    await login('tono', 'rahasia1');
+    expect(getSession().tourPending).toBe(false);
   });
 });

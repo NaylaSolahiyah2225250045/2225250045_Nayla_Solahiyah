@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import MascotLive from '../components/MascotLive.jsx';
 import MotionToggle from '../components/MotionToggle.jsx';
+import AudioControl from '../components/AudioControl.jsx';
+import SkyFx from '../components/SkyFx.jsx';
 import Decor from '../components/Decor.jsx';
 import { Logo } from '../components/Mascot.jsx';
 import { IconArrowRight, IconBook, IconPencil, IconStar, IconWifiOff } from '../components/NavIcons.jsx';
@@ -28,6 +30,7 @@ export default function WelcomePage() {
   const session = useSession();
   return (
     <div className="welcome-screen">
+      <SkyFx tone="light" />
       <Decor set="welcome" />
       <div className="welcome-screen__floaters" aria-hidden="true">
         {FLOATERS.map((f, i) => (
@@ -39,7 +42,10 @@ export default function WelcomePage() {
 
       <header className="welcome-screen__top">
         <Logo size={56} />
-        <MotionToggle compact />
+        <div className="welcome-screen__toggles">
+          <AudioControl light />
+          <MotionToggle compact />
+        </div>
       </header>
 
       <main className="welcome-hero">
@@ -56,7 +62,7 @@ export default function WelcomePage() {
           <p className="welcome-hero__lead">Belajar mengubah bilangan sangat besar dan sangat kecil menjadi bentuk baku — sedikit demi sedikit, dengan cara yang seru.</p>
           <div className="welcome-hero__actions">
             {session ? (
-              <Link to="/beranda" className="btn btn--cta btn--lg btn--pop">
+              <Link to={session.role === 'teacher' ? '/guru' : '/beranda'} className="btn btn--cta btn--lg btn--pop">
                 Lanjut, {session.name}! <IconArrowRight />
               </Link>
             ) : (
@@ -107,7 +113,7 @@ export default function WelcomePage() {
       </section>
 
       <footer className="welcome-screen__foot small">
-        <p className="welcome-foot__meta">NoBaku Alpha · Modul 1–5 · Bisa dipasang di HP & laptop tanpa Play Store/App Store</p>
+        <p className="welcome-foot__meta">NoBaku Alpha · 5 Topik · Bisa dipasang di HP & laptop tanpa Play Store/App Store</p>
         <p className="welcome-credit">
           Dibuat dan dikembangkan oleh
           <br />

@@ -184,3 +184,99 @@
   bottom: -8px;
   left: 9%;
 }
+
+/* =====================================================================
+ * Dekorasi dikembalikan & diperluas (21 Nov 2026): awan pastel, latar lembut di layar belajar,
+ * taburan di Dashboard Guru. Hiasan selalu di belakang konten & di tepi; gerak hanya bila animasi aktif.
+ * ===================================================================== */
+
+/* ---------- Awan pastel ---------- */
+.deco--cloud {
+  width: calc(var(--s) * 2);
+  height: calc(var(--s) * 0.8);
+  border-radius: 999px;
+  background: currentColor;
+  color: var(--primary-soft);
+  opacity: 0.75;
+  transform: translate(-50%, -50%);
+}
+
+.deco--cloud::before,
+.deco--cloud::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.deco--cloud::before {
+  width: calc(var(--s) * 0.9);
+  height: calc(var(--s) * 0.9);
+  left: 18%;
+  bottom: 38%;
+}
+
+.deco--cloud::after {
+  width: calc(var(--s) * 0.66);
+  height: calc(var(--s) * 0.66);
+  right: 20%;
+  bottom: 42%;
+}
+
+/* Di atas latar ungu (Sambutan, kartu sambutan Beranda & Guru): awan putih transparan */
+.welcome-screen .deco--cloud,
+.home-hero .deco--cloud,
+.profile-hero .deco--cloud,
+.t-welcome .deco--cloud {
+  color: var(--on-primary);
+  opacity: 0.16;
+}
+
+.dash-backdrop .deco--cloud {
+  opacity: 0.32;
+}
+
+.dash-backdrop .deco--cloud.bd-violet {
+  color: var(--primary);
+  opacity: 0.16;
+}
+
+@keyframes cloud-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 8px -3px;
+  }
+}
+
+[data-motion='on'] .deco--cloud {
+  animation: cloud-float 9s ease-in-out infinite;
+}
+
+/* ---------- Layar belajar terfokus: latar lembut ---------- */
+.focus-shell {
+  position: relative;
+  isolation: isolate;
+  min-height: 100dvh;
+}
+
+.dash-backdrop--study .sky-shoot,
+.dash-backdrop--study .sky-sparkle {
+  display: none !important;
+}
+
+.dash-backdrop--study .dash-backdrop__blob {
+  opacity: 0.7;
+}
+
+/* ---------- Dashboard Guru: kartu sambutan bertabur bintang ---------- */
+.t-welcome > :not(.decor) {
+  position: relative;
+  z-index: 1;
+}
+
+.t-welcome .deco.is-soft {
+  color: var(--on-primary);
+}
