@@ -22,7 +22,7 @@ export function getServer() {
   } catch {
     /* penyimpanan diblokir */
   }
-  return normalizeServer(import.meta.env?.VITE_API_URL ?? '');
+  return normalizeServer('https://nobaku-backend.vercel.app');
 }
 
 export function setServer(url) {
