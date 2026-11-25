@@ -22,10 +22,20 @@ from .routers import ai, auth, classes, reports
 
 app = FastAPI(title="NoBaku API", version="0.2.0-alpha")
 
+_allowed_origins = list(
+    dict.fromkeys(
+        [
+            *settings.cors_origins,
+            "https://2225250045-nayla-solahiyah.netlify.app",
+        ]
+    )
+)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=list(settings.cors_origins),
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allow_origins=_allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 for _router in (auth.router, classes.router, reports.router, ai.router):
